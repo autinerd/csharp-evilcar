@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar
 {
-	class Program
+	class Branch
 	{
-		static void Main(string[] args)
-		{
-			var test = 1;
-		}
 	}
 }

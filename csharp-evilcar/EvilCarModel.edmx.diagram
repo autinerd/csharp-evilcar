@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a0cae2ac93754374b5bc0fdae5372dfe" Name="Diagram1" >
+        <EntityTypeShape EntityType="EvilCarModel.Database" Width="1.5" PointX="2.25" PointY="0.5" />
+        <EntityTypeShape EntityType="EvilCarModel.Customer" Width="1.5" PointX="4.25" PointY="1.875" />
+        <EntityTypeShape EntityType="EvilCarModel.Branch" Width="1.5" PointX="0.5" PointY="2.75" />
+        <AssociationConnector Association="EvilCarModel.DatabaseCustomer" />
+        <AssociationConnector Association="EvilCarModel.DatabaseBranch" />
+        <EntityTypeShape EntityType="EvilCarModel.FleetManager" Width="1.5" PointX="2.25" PointY="2.75" />
+        <AssociationConnector Association="EvilCarModel.BranchFleetManager" />
+        <EntityTypeShape EntityType="EvilCarModel.Fleet" Width="1.5" PointX="4.375" PointY="3.75" />
+        <AssociationConnector Association="EvilCarModel.FleetManagerFleet" />
+        <EntityTypeShape EntityType="EvilCarModel.Vehicle" Width="1.5" PointX="2.375" PointY="5.5" />
+        <AssociationConnector Association="EvilCarModel.FleetVehicle" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

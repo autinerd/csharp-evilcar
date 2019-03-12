@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar
 {
-	class Program
+	class FleetManager
 	{
-		static void Main(string[] args)
-		{
-			var test = 1;
-		}
 	}
 }

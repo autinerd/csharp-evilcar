@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="EvilCarModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
+        <EntityContainer Name="EvilCarModelTargetContainer" >
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="EvilCarModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="EvilCarModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DatabaseSet" EntityType="EvilCarModel.Database" />
+          <EntitySet Name="CustomerSet" EntityType="EvilCarModel.Customer" />
+          <EntitySet Name="BranchSet" EntityType="EvilCarModel.Branch" />
+          <AssociationSet Name="DatabaseCustomer" Association="EvilCarModel.DatabaseCustomer">
+            <End Role="Database" EntitySet="DatabaseSet" />
+            <End Role="Customer" EntitySet="CustomerSet" />
+          </AssociationSet>
+          <AssociationSet Name="DatabaseBranch" Association="EvilCarModel.DatabaseBranch">
+            <End Role="Database" EntitySet="DatabaseSet" />
+            <End Role="Branch" EntitySet="BranchSet" />
+          </AssociationSet>
+          <EntitySet Name="FleetManagerSet" EntityType="EvilCarModel.FleetManager" />
+          <AssociationSet Name="BranchFleetManager" Association="EvilCarModel.BranchFleetManager">
+            <End Role="Branch" EntitySet="BranchSet" />
+            <End Role="FleetManager" EntitySet="FleetManagerSet" />
+          </AssociationSet>
+          <EntitySet Name="FleetSet" EntityType="EvilCarModel.Fleet" />
+          <AssociationSet Name="FleetManagerFleet" Association="EvilCarModel.FleetManagerFleet">
+            <End Role="FleetManager" EntitySet="FleetManagerSet" />
+            <End Role="Fleet" EntitySet="FleetSet" />
+          </AssociationSet>
+          <EntitySet Name="VehicleSet" EntityType="EvilCarModel.Vehicle" />
+          <AssociationSet Name="FleetVehicle" Association="EvilCarModel.FleetVehicle">
+            <End Role="Fleet" EntitySet="FleetSet" />
+            <End Role="Vehicle" EntitySet="VehicleSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Database">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Customer" Relationship="EvilCarModel.DatabaseCustomer" FromRole="Database" ToRole="Customer" />
+          <NavigationProperty Name="Branch" Relationship="EvilCarModel.DatabaseBranch" FromRole="Database" ToRole="Branch" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Database" Relationship="EvilCarModel.DatabaseCustomer" FromRole="Customer" ToRole="Database" />
+        </EntityType>
+        <EntityType Name="Branch">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Database" Relationship="EvilCarModel.DatabaseBranch" FromRole="Branch" ToRole="Database" />
+          <NavigationProperty Name="FleetManager" Relationship="EvilCarModel.BranchFleetManager" FromRole="Branch" ToRole="FleetManager" />
+        </EntityType>
+        <Association Name="DatabaseCustomer">
+          <End Type="EvilCarModel.Database" Role="Database" Multiplicity="1" />
+          <End Type="EvilCarModel.Customer" Role="Customer" Multiplicity="*" />
+        </Association>
+        <Association Name="DatabaseBranch">
+          <End Type="EvilCarModel.Database" Role="Database" Multiplicity="1" />
+          <End Type="EvilCarModel.Branch" Role="Branch" Multiplicity="*" />
+        </Association>
+        <EntityType Name="FleetManager">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Branch" Relationship="EvilCarModel.BranchFleetManager" FromRole="FleetManager" ToRole="Branch" />
+          <NavigationProperty Name="Fleet" Relationship="EvilCarModel.FleetManagerFleet" FromRole="FleetManager" ToRole="Fleet" />
+        </EntityType>
+        <Association Name="BranchFleetManager">
+          <End Type="EvilCarModel.Branch" Role="Branch" Multiplicity="1" />
+          <End Type="EvilCarModel.FleetManager" Role="FleetManager" Multiplicity="1" />
+        </Association>
+        <EntityType Name="Fleet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="FleetManager" Relationship="EvilCarModel.FleetManagerFleet" FromRole="Fleet" ToRole="FleetManager" />
+          <NavigationProperty Name="Vehicle" Relationship="EvilCarModel.FleetVehicle" FromRole="Fleet" ToRole="Vehicle" />
+        </EntityType>
+        <Association Name="FleetManagerFleet">
+          <End Type="EvilCarModel.FleetManager" Role="FleetManager" Multiplicity="1" />
+          <End Type="EvilCarModel.Fleet" Role="Fleet" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Vehicle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Fleet" Relationship="EvilCarModel.FleetVehicle" FromRole="Vehicle" ToRole="Fleet" />
+        </EntityType>
+        <Association Name="FleetVehicle">
+          <End Type="EvilCarModel.Fleet" Role="Fleet" Multiplicity="1" />
+          <End Type="EvilCarModel.Vehicle" Role="Vehicle" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
+        <Alias Key="Model" Value="EvilCarModel" />
+        <Alias Key="Target" Value="EvilCarModel.Store" />
+        <EntityContainerMapping CdmEntityContainer="EvilCarModelContainer" StorageEntityContainer="EvilCarModelTargetContainer">
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Kein" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
