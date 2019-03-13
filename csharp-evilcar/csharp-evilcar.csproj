@@ -77,6 +77,7 @@
   <ItemGroup>
     <Compile Include="Booking.cs" />
     <Compile Include="Branch.cs" />
+    <Compile Include="CarCategory.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="EvilCarModel.Designer.cs">

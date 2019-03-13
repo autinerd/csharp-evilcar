@@ -39,7 +39,30 @@
             <End Role="Fleet" EntitySet="FleetSet" />
             <End Role="Vehicle" EntitySet="VehicleSet" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="BookingSet" EntityType="EvilCarModel.Booking" />
+          <AssociationSet Name="CustomerBooking" Association="EvilCarModel.CustomerBooking">
+            <End Role="Customer" EntitySet="CustomerSet" />
+            <End Role="Booking" EntitySet="BookingSet" />
+          </AssociationSet>
+          <AssociationSet Name="BookingVehicle" Association="EvilCarModel.BookingVehicle">
+            <End Role="Booking" EntitySet="BookingSet" />
+            <End Role="Vehicle" EntitySet="VehicleSet" />
+          </AssociationSet>
+          <EntitySet Name="CarCategorySet" EntityType="EvilCarModel.CarCategory" />
+          <AssociationSet Name="CarCategoryFleet" Association="EvilCarModel.CarCategoryFleet">
+            <End Role="CarCategory" EntitySet="CarCategorySet" />
+            <End Role="Fleet" EntitySet="FleetSet" />
+          </AssociationSet>
+          <EntitySet Name="SpecialServiceSet" EntityType="EvilCarModel.SpecialService" />
+          <AssociationSet Name="CarCategorySpecialService" Association="EvilCarModel.CarCategorySpecialService">
+            <End Role="CarCategory" EntitySet="CarCategorySet" />
+            <End Role="SpecialService" EntitySet="SpecialServiceSet" />
+          </AssociationSet>
+          <AssociationSet Name="DatabaseFleetManager" Association="EvilCarModel.DatabaseFleetManager">
+            <End Role="Database" EntitySet="DatabaseSet" />
+            <End Role="FleetManager" EntitySet="FleetManagerSet" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="Database">
           <Key>
             <PropertyRef Name="Id" />
@@ -47,6 +70,7 @@
           <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Customer" Relationship="EvilCarModel.DatabaseCustomer" FromRole="Database" ToRole="Customer" />
           <NavigationProperty Name="Branch" Relationship="EvilCarModel.DatabaseBranch" FromRole="Database" ToRole="Branch" />
+          <NavigationProperty Name="FleetManager" Relationship="EvilCarModel.DatabaseFleetManager" FromRole="Database" ToRole="FleetManager" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -54,6 +78,7 @@
           </Key>
           <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Database" Relationship="EvilCarModel.DatabaseCustomer" FromRole="Customer" ToRole="Database" />
+          <NavigationProperty Name="Booking" Relationship="EvilCarModel.CustomerBooking" FromRole="Customer" ToRole="Booking" />
         </EntityType>
         <EntityType Name="Branch">
           <Key>
@@ -62,6 +87,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Database" Relationship="EvilCarModel.DatabaseBranch" FromRole="Branch" ToRole="Database" />
           <NavigationProperty Name="FleetManager" Relationship="EvilCarModel.BranchFleetManager" FromRole="Branch" ToRole="FleetManager" />
+          <Property Name="Location" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="DatabaseCustomer">
           <End Type="EvilCarModel.Database" Role="Database" Multiplicity="1" />
@@ -78,6 +104,9 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Branch" Relationship="EvilCarModel.BranchFleetManager" FromRole="FleetManager" ToRole="Branch" />
           <NavigationProperty Name="Fleet" Relationship="EvilCarModel.FleetManagerFleet" FromRole="FleetManager" ToRole="Fleet" />
+          <Property Name="Username" Type="String" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" />
+          <NavigationProperty Name="Database" Relationship="EvilCarModel.DatabaseFleetManager" FromRole="FleetManager" ToRole="Database" />
         </EntityType>
         <Association Name="BranchFleetManager">
           <End Type="EvilCarModel.Branch" Role="Branch" Multiplicity="1" />
@@ -90,6 +119,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="FleetManager" Relationship="EvilCarModel.FleetManagerFleet" FromRole="Fleet" ToRole="FleetManager" />
           <NavigationProperty Name="Vehicle" Relationship="EvilCarModel.FleetVehicle" FromRole="Fleet" ToRole="Vehicle" />
+          <NavigationProperty Name="CarCategory" Relationship="EvilCarModel.CarCategoryFleet" FromRole="Fleet" ToRole="CarCategory" />
         </EntityType>
         <Association Name="FleetManagerFleet">
           <End Type="EvilCarModel.FleetManager" Role="FleetManager" Multiplicity="1" />
@@ -101,10 +131,56 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Fleet" Relationship="EvilCarModel.FleetVehicle" FromRole="Vehicle" ToRole="Fleet" />
+          <NavigationProperty Name="Booking" Relationship="EvilCarModel.BookingVehicle" FromRole="Vehicle" ToRole="Booking" />
         </EntityType>
         <Association Name="FleetVehicle">
           <End Type="EvilCarModel.Fleet" Role="Fleet" Multiplicity="1" />
           <End Type="EvilCarModel.Vehicle" Role="Vehicle" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Booking">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <NavigationProperty Name="Customer" Relationship="EvilCarModel.CustomerBooking" FromRole="Booking" ToRole="Customer" />
+          <NavigationProperty Name="Vehicle" Relationship="EvilCarModel.BookingVehicle" FromRole="Booking" ToRole="Vehicle" />
+        </EntityType>
+        <Association Name="CustomerBooking">
+          <End Type="EvilCarModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="EvilCarModel.Booking" Role="Booking" Multiplicity="*" />
+        </Association>
+        <Association Name="BookingVehicle">
+          <End Type="EvilCarModel.Booking" Role="Booking" Multiplicity="*" />
+          <End Type="EvilCarModel.Vehicle" Role="Vehicle" Multiplicity="1" />
+        </Association>
+        <EntityType Name="CarCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Fleet" Relationship="EvilCarModel.CarCategoryFleet" FromRole="CarCategory" ToRole="Fleet" />
+          <Property Name="Price" Type="String" Nullable="false" />
+          <NavigationProperty Name="SpecialService" Relationship="EvilCarModel.CarCategorySpecialService" FromRole="CarCategory" ToRole="SpecialService" />
+        </EntityType>
+        <Association Name="CarCategoryFleet">
+          <End Type="EvilCarModel.CarCategory" Role="CarCategory" Multiplicity="1" />
+          <End Type="EvilCarModel.Fleet" Role="Fleet" Multiplicity="*" />
+        </Association>
+        <EntityType Name="SpecialService">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="CarCategory" Relationship="EvilCarModel.CarCategorySpecialService" FromRole="SpecialService" ToRole="CarCategory" />
+          <Property Name="Price" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="CarCategorySpecialService">
+          <End Type="EvilCarModel.CarCategory" Role="CarCategory" Multiplicity="*" />
+          <End Type="EvilCarModel.SpecialService" Role="SpecialService" Multiplicity="*" />
+        </Association>
+        <Association Name="DatabaseFleetManager">
+          <End Type="EvilCarModel.Database" Role="Database" Multiplicity="1" />
+          <End Type="EvilCarModel.FleetManager" Role="FleetManager" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>

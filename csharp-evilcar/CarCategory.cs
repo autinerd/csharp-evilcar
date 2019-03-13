@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar
 {
-	internal static class Program
+	class CarCategory
 	{
-		private static void Main(string[] args)
-		{
-		}
 	}
 }
