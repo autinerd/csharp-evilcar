@@ -24,16 +24,11 @@
             <End Role="Database" EntitySet="DatabaseSet" />
             <End Role="Branch" EntitySet="BranchSet" />
           </AssociationSet>
-          <EntitySet Name="FleetManagerSet" EntityType="EvilCarModel.FleetManager" />
           <AssociationSet Name="BranchFleetManager" Association="EvilCarModel.BranchFleetManager">
             <End Role="Branch" EntitySet="BranchSet" />
-            <End Role="FleetManager" EntitySet="FleetManagerSet" />
+            <End Role="FleetManager" EntitySet="UserSet" />
           </AssociationSet>
           <EntitySet Name="FleetSet" EntityType="EvilCarModel.Fleet" />
-          <AssociationSet Name="FleetManagerFleet" Association="EvilCarModel.FleetManagerFleet">
-            <End Role="FleetManager" EntitySet="FleetManagerSet" />
-            <End Role="Fleet" EntitySet="FleetSet" />
-          </AssociationSet>
           <EntitySet Name="VehicleSet" EntityType="EvilCarModel.Vehicle" />
           <AssociationSet Name="FleetVehicle" Association="EvilCarModel.FleetVehicle">
             <End Role="Fleet" EntitySet="FleetSet" />
@@ -60,7 +55,12 @@
           </AssociationSet>
           <AssociationSet Name="DatabaseFleetManager" Association="EvilCarModel.DatabaseFleetManager">
             <End Role="Database" EntitySet="DatabaseSet" />
-            <End Role="FleetManager" EntitySet="FleetManagerSet" />
+            <End Role="FleetManager" EntitySet="UserSet" />
+          </AssociationSet>
+          <EntitySet Name="UserSet" EntityType="EvilCarModel.User" />
+          <AssociationSet Name="FleetBranch" Association="EvilCarModel.FleetBranch">
+            <End Role="Fleet" EntitySet="FleetSet" />
+            <End Role="Branch" EntitySet="BranchSet" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Database">
@@ -88,6 +88,7 @@
           <NavigationProperty Name="Database" Relationship="EvilCarModel.DatabaseBranch" FromRole="Branch" ToRole="Database" />
           <NavigationProperty Name="FleetManager" Relationship="EvilCarModel.BranchFleetManager" FromRole="Branch" ToRole="FleetManager" />
           <Property Name="Location" Type="String" Nullable="false" />
+          <NavigationProperty Name="Fleet" Relationship="EvilCarModel.FleetBranch" FromRole="Branch" ToRole="Fleet" />
         </EntityType>
         <Association Name="DatabaseCustomer">
           <End Type="EvilCarModel.Database" Role="Database" Multiplicity="1" />
@@ -97,15 +98,8 @@
           <End Type="EvilCarModel.Database" Role="Database" Multiplicity="1" />
           <End Type="EvilCarModel.Branch" Role="Branch" Multiplicity="*" />
         </Association>
-        <EntityType Name="FleetManager">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        <EntityType Name="FleetManager" BaseType="EvilCarModel.User">
           <NavigationProperty Name="Branch" Relationship="EvilCarModel.BranchFleetManager" FromRole="FleetManager" ToRole="Branch" />
-          <NavigationProperty Name="Fleet" Relationship="EvilCarModel.FleetManagerFleet" FromRole="FleetManager" ToRole="Fleet" />
-          <Property Name="Username" Type="String" Nullable="false" />
-          <Property Name="Password" Type="String" Nullable="false" />
           <NavigationProperty Name="Database" Relationship="EvilCarModel.DatabaseFleetManager" FromRole="FleetManager" ToRole="Database" />
         </EntityType>
         <Association Name="BranchFleetManager">
@@ -117,14 +111,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="FleetManager" Relationship="EvilCarModel.FleetManagerFleet" FromRole="Fleet" ToRole="FleetManager" />
           <NavigationProperty Name="Vehicle" Relationship="EvilCarModel.FleetVehicle" FromRole="Fleet" ToRole="Vehicle" />
           <NavigationProperty Name="CarCategory" Relationship="EvilCarModel.CarCategoryFleet" FromRole="Fleet" ToRole="CarCategory" />
+          <NavigationProperty Name="Branch" Relationship="EvilCarModel.FleetBranch" FromRole="Fleet" ToRole="Branch" />
         </EntityType>
-        <Association Name="FleetManagerFleet">
-          <End Type="EvilCarModel.FleetManager" Role="FleetManager" Multiplicity="1" />
-          <End Type="EvilCarModel.Fleet" Role="Fleet" Multiplicity="*" />
-        </Association>
         <EntityType Name="Vehicle">
           <Key>
             <PropertyRef Name="Id" />
@@ -181,6 +171,20 @@
         <Association Name="DatabaseFleetManager">
           <End Type="EvilCarModel.Database" Role="Database" Multiplicity="1" />
           <End Type="EvilCarModel.FleetManager" Role="FleetManager" Multiplicity="*" />
+        </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Username" Type="String" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" />
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="Administrator" BaseType="EvilCarModel.User">
+        </EntityType>
+        <Association Name="FleetBranch">
+          <End Type="EvilCarModel.Fleet" Role="Fleet" Multiplicity="*" />
+          <End Type="EvilCarModel.Branch" Role="Branch" Multiplicity="1" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
