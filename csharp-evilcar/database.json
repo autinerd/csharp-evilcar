@@ -1,12 +1,22 @@
 ﻿{
-  "Administrators": [
-    {
-      "Password": "1234567890",
-      "Username": "johannes"
-    }
-  ],
   "Branches": [
     {
+      "Fleets": [
+        {
+          "Category": 2,
+          "ID": 1,
+          "Vehicles": [
+            {
+              "ID": 1,
+              "Plate": "WN-AB-1234"
+            },
+            {
+              "ID": 2,
+              "Plate": "WN-IO-998"
+            }
+          ]
+        }
+      ],
       "FleetManager": 1,
       "ID": 1,
       "Location": "Hamburg"
@@ -26,7 +36,7 @@
         {
           "Days": 1,
           "Kilometers": 35,
-          "Startdate": "20190201T182020",
+          "Startdate": "20190201",
           "Vehicle": 2
         }
       ],
@@ -38,34 +48,25 @@
       "Zip": "10110"
     }
   ],
-  "FleetManagers": [
-    {
-      "Fleets": [
-        {
-          "Category": 2,
-          "ID": 1,
-          "Vehicles": [
-            {
-              "ID": 1,
-              "Plate": "WN-AB-1234"
-            },
-            {
-              "ID": 2,
-              "Plate": "WN-IO-998"
-            }
-          ]
-        }
-      ],
-      "ID": 1,
-      "Password": "123456",
-      "Username": "anna"
-    }
-  ],
   "Services": [
     {
       "ID": 1,
       "Name": "Navigation",
       "Price": 4.99
+    }
+  ],
+  "Users": [
+    {
+      "ID": 2,
+      "Password": "1234567890",
+      "Role": "Administrator",
+      "Username": "johannes"
+    },
+    {
+      "ID": 1,
+      "Password": "123456",
+      "Role": "Fleetmanager",
+      "Username": "anna"
     }
   ]
 }
