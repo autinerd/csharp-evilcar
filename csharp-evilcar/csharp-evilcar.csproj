@@ -86,8 +86,8 @@
     <Compile Include="Car\SmallVehicle.cs" />
     <Compile Include="Car\Vehicle.cs" />
     <Compile Include="Person\Customer.cs" />
-    <Compile Include="Database.cs" />
-    <Compile Include="DatabaseController.cs" />
+    <Compile Include="Database\Database.cs" />
+    <Compile Include="Database\DatabaseController.cs" />
     <Compile Include="EvilCarModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
