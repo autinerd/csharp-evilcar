@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsharpEvilcar
+namespace CsharpEvilcar.Person
 {
-	class CarCategory
+	class Customer :Person
 	{
+		public int ID { private set; get; }
 	}
 }
