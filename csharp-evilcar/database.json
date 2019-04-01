@@ -55,7 +55,6 @@
     {
       "ID": 1,
       "Password": "123456",
-      "Role": "Fleetmanager",
       "Username": "anna"
     }
   ]

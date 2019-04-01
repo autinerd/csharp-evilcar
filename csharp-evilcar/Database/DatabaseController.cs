@@ -11,7 +11,7 @@ namespace CsharpEvilcar.Database
 		internal static Database Database = null;
 		private static Guid currentUser = Guid.Empty;
 		private static readonly Scrypt.ScryptEncoder encoder = new Scrypt.ScryptEncoder();
-
+		public enum Color { Red, Blue, Green}
 		internal static int LoadDatabase()
 		{
 			try
