@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsharpEvilcar.Person
+namespace CsharpEvilcar.DataClasses
 {
-	class Customer :Person
+	class Branch
 	{
-		public int ID { private set; get; }
 	}
 }

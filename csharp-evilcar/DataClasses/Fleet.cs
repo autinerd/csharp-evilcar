@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsharpEvilcar
+namespace CsharpEvilcar.DataClasses
 {
-	class Branch
+	class Fleet
 	{
 	}
 }

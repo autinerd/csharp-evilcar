@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsharpEvilcar.Car
+namespace CsharpEvilcar.DataClasses
 {
 	class LargeVehicle : Vehicle
 	{
@@ -14,5 +14,6 @@ namespace CsharpEvilcar.Car
 		protected readonly static VehicleService Spotify				= new VehicleService(_Spotify,					false);
 		protected readonly static VehicleService AirConditioner			= new VehicleService(_AirConditioner,			false);
 		protected readonly static VehicleService SnowChains				= new VehicleService(_SnowChains,				false);
+		public LargeVehicle(string Numberplate) : base(Numberplate) { }
 	}
 }
