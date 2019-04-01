@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.UserInterface
 {
-	static class UserInterface
+	internal static class UserInterface
 	{
 		internal static void Main(string[] args)
 		{
@@ -21,24 +21,100 @@ namespace CsharpEvilcar.UserInterface
 		{
 			while (true)
 			{
-				Console.Write(">>> ");
-				string commands = Console.ReadLine();
-				string command = commands.Split(' ')[0];
-				int returnvalue;
-				switch (command)
+				// "enter your command (key in 'help' for all possible commands)"
+				Console.Write(">> ");
+				string commandInput = Console.ReadLine();
+				string[] commandArray = new String[3];  // one place needed for ">>"
+
+				try
+				{
+					commandArray = commandInput.Split(' ');
+				}
+				catch (OverflowException)
+				{
+					// "command has too many arguments"
+				}
+				catch (Exception)
+				{
+					// "unidentified Exception"
+				}
+
+				switch (commandArray[1])
 				{
 					case "add":
+						switch (commandArray[2])
+						{
+							case "vehicle":
+								addVehicle();
+								break;
+
+							case "customer":
+								addCustomer();
+								break;
+
+							default:
+								// "You can't combine 'add' with this command
+								break;
+						}
+						break;
+
+					case "edit":
+						break;
+
+					case "remove":
+						break;
+
+					case "rebook":
+						break;
+
+					case "view":
+						break;
+
 					case "help":
+						break;
+
+					case "logout":
+						break;
+
 					case "exit":
+						// perhaps after exit(); a return instead break
+						break;
 
 					default:
+						// command doesn't exist, please key in "help" to see all possible commands
 						break;
 				}
 			}
 		}
 
+		private static void addVehicle()
+		{
+			// Please enter the the plate of your new vehicle for example: S-XY 4589 cw(">>> "); =>
+			// be aware, that this will be Split[0]
+
+			// ReadLine() && safe/store plate
+
+			// Please enter now the other parameters in the following format: brand model class fleet
+			// for example: audi q5 electric 3 cw(">>> "); => be aware, that this will be Split[0]
+
+			// ReadLine() && Split() && brand=Split[1], ...
+			// => check Null || to many InternalLogik.addVehicle(brand, model, plate, class, fleet)
+		}
+
+		private static void addCustomer()
+		{
+			// Please enter the new Customer in the following format LastName PreName cw(">>> "); =>
+			// be aware, that this will be Split[0]
+
+			// ReadLine() && Split() && LastName = Split[1], ...
+			// => check Null || to many InternalLogic.addCustomer(Lastname, PreName)
+		}
+
 		private static bool Login()
 		{
+			// Welcome Text Please enter UserName Please enter Password (Sidney's ******-function)
+			// cw("> "); => be aware, that this will be your Split[0] InternalLogik.Login(UserName,
+			// Password) => Hash!? return true/false (get a Error back Handling?)
 			return false;
 		}
 	}
