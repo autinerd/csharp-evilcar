@@ -34,18 +34,14 @@
     {
       "Bookings": [
         {
-          "Days": 1,
-          "Kilometers": 35,
+          "Enddate": "20190202",
+          "ID": 1,
           "Startdate": "20190201",
           "Vehicle": 2
         }
       ],
       "City": "Berlin",
-      "FirstName": "Lisa",
-      "Housenumber": "20",
-      "LastName": "Müller",
-      "Street": "Teststraße",
-      "Zip": "10110"
+      "Name": "Lisa Müller"
     }
   ],
   "Services": [
@@ -56,12 +52,6 @@
     }
   ],
   "Users": [
-    {
-      "ID": 2,
-      "Password": "1234567890",
-      "Role": "Administrator",
-      "Username": "johannes"
-    },
     {
       "ID": 1,
       "Password": "123456",
