@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsharpEvilcar
+namespace CsharpEvilcar.DataClasses
 {
-	class Fleet
+	class FleetManager :Person
 	{
+        public Branch Branch { set; get; }
 	}
 }

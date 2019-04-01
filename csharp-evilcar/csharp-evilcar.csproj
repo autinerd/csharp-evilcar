@@ -78,14 +78,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Booking.cs" />
-    <Compile Include="Branch.cs" />
-    <Compile Include="Car\ElectricVehicle.cs" />
-    <Compile Include="Car\LargeVehicle.cs" />
-    <Compile Include="Car\MidsizeVehicle.cs" />
-    <Compile Include="Car\SmallVehicle.cs" />
-    <Compile Include="Car\Vehicle.cs" />
-    <Compile Include="Person\Customer.cs" />
+    <Compile Include="DataClasses\Booking.cs" />
+    <Compile Include="DataClasses\Branch.cs" />
+    <Compile Include="DataClasses\Car\ElectricVehicle.cs" />
+    <Compile Include="DataClasses\Car\LargeVehicle.cs" />
+    <Compile Include="DataClasses\Car\MidsizeVehicle.cs" />
+    <Compile Include="DataClasses\Car\SmallVehicle.cs" />
+    <Compile Include="DataClasses\Car\Vehicle.cs" />
+    <Compile Include="DataClasses\Person\Customer.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="DatabaseController.cs" />
     <Compile Include="EvilCarModel.Designer.cs">
@@ -93,9 +93,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EvilCarModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Fleet.cs" />
-    <Compile Include="Person\FleetManager.cs" />
-    <Compile Include="Person\Person.cs" />
+    <Compile Include="DataClasses\Fleet.cs" />
+    <Compile Include="DataClasses\Person\FleetManager.cs" />
+    <Compile Include="DataClasses\Person\Person.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserInterface.cs" />
