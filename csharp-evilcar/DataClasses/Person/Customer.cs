@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.DataClasses
 {
-	class Customer :Person
+	class Customer : Person
 	{
-		public int ID { private set; get; }
+		public int ID { set; get; }
+		public IEnumerable<Booking> Bookings { set; get; }
 	}
 }

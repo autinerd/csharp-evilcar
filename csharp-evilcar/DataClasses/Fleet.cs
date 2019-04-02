@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.DataClasses
 {
-	class Fleet
+	class Fleet : GuidObject
 	{
+		public IEnumerable<Vehicle> Vehicles { get; set; } = null;
 	}
 }

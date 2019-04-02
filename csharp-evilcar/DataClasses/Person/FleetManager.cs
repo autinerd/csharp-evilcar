@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.DataClasses
 {
-	class FleetManager :Person
+	class FleetManager : Person
 	{
-        public Branch Branch { set; get; }
+		public Branch Branch { set; get; }
 	}
 }

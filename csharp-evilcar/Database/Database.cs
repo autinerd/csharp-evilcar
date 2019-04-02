@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.Database
 {
-	class Database
+	internal class Database
 	{
-		public List<DataClasses.Branch> Branches { get; set; }
-		public List<DataClasses.Customer> Customers { get; set; }
+		public IEnumerable<DataClasses.Branch> Branches { get; set; }
+		public IEnumerable<DataClasses.Customer> Customers { get; set; }
 	}
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.DataClasses
 {
-	class Vehicle
+	class Vehicle : GuidObject
 	{
 		public struct _Service
 		{
@@ -51,8 +51,26 @@ namespace CsharpEvilcar.DataClasses
 		protected readonly static _Service _Spotify					= new _Service("Spotify",					 8);
 		protected readonly static _Service _AirConditioner			= new _Service("Air Conditioner",			10);
 		protected readonly static _Service _SnowChains				= new _Service("Snow Chains",				20);
-		//protected readonly static _Service[] _Services = { _Navigation, _Massage, _ChargingStationFinder, _Spotify, _AirConditioner, _SnowChains };
-		public readonly string Numberplate;
+		protected readonly static _Service[] _Services = { _Navigation, _Massage, _ChargingStationFinder, _Spotify, _AirConditioner, _SnowChains };
+		internal enum ServicesEnum
+		{
+			Navigation,
+			Massage,
+			ChargingStationFinder,
+			Spotify,
+			AirConditioner,
+			SnowChains
+		}
+
+		internal enum CategoryEnum
+		{
+			Small,
+			Midsize,
+			Large,
+			Electric
+		}
+		public string Numberplate { get; private set; }
+		public CategoryEnum Category { get; set; }
 		public Vehicle(string Numberplate)
 		{
 			this.Numberplate = Numberplate;
