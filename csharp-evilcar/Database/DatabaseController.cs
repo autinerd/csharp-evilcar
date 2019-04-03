@@ -119,7 +119,7 @@ namespace CsharpEvilcar.Database
 					Customers = jObject["Customers"].Select((customer) => new DataClasses.Customer
 					{
 						GUID = Guid.Parse((string)customer["GUID"]),
-						ID = (int)customer["CustomerID"],
+						CustomerID = (int)customer["CustomerID"],
 						Name = (string)customer["Name"],
 						Residence = (string)customer["Residence"],
 						Bookings = customer["Bookings"].Select((booking) => new DataClasses.Booking
@@ -134,9 +134,14 @@ namespace CsharpEvilcar.Database
 					Branches = jObject["Branches"].Select((branch) => new DataClasses.Branch
 					{
 						GUID = Guid.Parse((string)branch["GUID"]),
+						FleetManager = new DataClasses.FleetManager
+						{
+							GUID = Guid.Parse((string)branch["FleetManager"])
+						},
 						Fleets = branch["Fleets"].Select((fleet) => new DataClasses.Fleet
 						{
 							GUID = Guid.Parse((string)fleet["GUID"]),
+							Location = (string)fleet["Location"],
 							Vehicles = fleet["Vehicles"].Select<JToken, DataClasses.Vehicle>((vehicle) =>
 							{
 								switch ((DataClasses.Vehicle.CategoryEnum)(int)vehicle["Category"])
@@ -232,7 +237,7 @@ namespace CsharpEvilcar.Database
 						},
 						{
 							"ID",
-							customer.ID
+							customer.CustomerID
 						},
 						{
 							"Name",
