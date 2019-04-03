@@ -7,9 +7,19 @@ using System.Linq;
 
 namespace CsharpEvilcar.Database
 {
+	/// <summary>
+	/// The DatabaseController controls the communication between the Database object and the database file.
+	/// </summary>
 	internal static class DatabaseController
 	{
+		/// <summary>
+		/// The database object which represents the contents of the database file.
+		/// </summary>
 		internal static Database Database { get; private set; } = null;
+
+		/// <summary>
+		/// The current logged in user.
+		/// </summary>
 		internal static Guid CurrentUser
 		{
 			get
@@ -25,6 +35,10 @@ namespace CsharpEvilcar.Database
 
 		private static readonly Scrypt.ScryptEncoder encoder = new Scrypt.ScryptEncoder();
 
+		/// <summary>
+		/// Loads the database file contents into the <see cref="Database"/> object.
+		/// </summary>
+		/// <returns>Error code</returns>
 		internal static int LoadDatabase()
 		{
 			try
@@ -37,6 +51,10 @@ namespace CsharpEvilcar.Database
 			}
 		}
 
+		/// <summary>
+		/// Saves the <see cref="Database"/> object into the database file.
+		/// </summary>
+		/// <returns></returns>
 		internal static int SaveDatabase()
 		{
 			try
@@ -256,6 +274,12 @@ namespace CsharpEvilcar.Database
 			return 0;
 		}
 
+		/// <summary>
+		/// Checks if the given <paramref name="username"/> is in the database and the given <paramref name="password"/> is correct.
+		/// </summary>
+		/// <param name="username">The username to check against</param>
+		/// <param name="password">The password to check against</param>
+		/// <returns>True when succeeded, False when failed</returns>
 		internal static bool CheckUserCredentials(string username, string password)
 		{
 			IEnumerable<JToken> users = from user in ReadDatabaseFile()["FleetManagers"] where (string)user["Username"] == username && encoder.Compare(password, (string)user["Password"]) select user;

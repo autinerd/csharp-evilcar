@@ -10,11 +10,12 @@ namespace CsharpEvilcar.UserInterface
 	{
 		internal static void Main(string[] args)
 		{
-			if (Login() == true)
+			if (!Login())
 			{
-				// LoadDatabase();
-				Prompt();
+				return;
 			}
+			int loaded = Database.DatabaseController.LoadDatabase();
+			Prompt();
 		}
 
 		private static void Prompt()
@@ -24,20 +25,7 @@ namespace CsharpEvilcar.UserInterface
 				// "enter your command (key in 'help' for all possible commands)"
 				Console.Write(">> ");
 				string commandInput = Console.ReadLine();
-				string[] commandArray = new String[3];  // one place needed for ">>"
-
-				try
-				{
-					commandArray = commandInput.Split(' ');
-				}
-				catch (OverflowException)
-				{
-					// "command has too many arguments"
-				}
-				catch (Exception)
-				{
-					// "unidentified Exception"
-				}
+				string[] commandArray = commandInput.Split(' ');
 
 				switch (commandArray[1])
 				{
@@ -45,11 +33,11 @@ namespace CsharpEvilcar.UserInterface
 						switch (commandArray[2])
 						{
 							case "vehicle":
-								addVehicle();
+								AddVehicle();
 								break;
 
 							case "customer":
-								addCustomer();
+								AddCustomer();
 								break;
 
 							default:
@@ -87,7 +75,7 @@ namespace CsharpEvilcar.UserInterface
 			}
 		}
 
-		private static void addVehicle()
+		private static void AddVehicle()
 		{
 			// Please enter the the plate of your new vehicle for example: S-XY 4589 cw(">>> "); =>
 			// be aware, that this will be Split[0]
@@ -101,7 +89,7 @@ namespace CsharpEvilcar.UserInterface
 			// => check Null || to many InternalLogik.addVehicle(brand, model, plate, class, fleet)
 		}
 
-		private static void addCustomer()
+		private static void AddCustomer()
 		{
 			// Please enter the new Customer in the following format LastName PreName cw(">>> "); =>
 			// be aware, that this will be Split[0]
