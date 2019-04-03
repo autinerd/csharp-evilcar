@@ -43,7 +43,7 @@
   "FleetManagers": [
     {
       "GUID": "9917F566-E103-4454-8A5D-2B227AA67DAC",
-      "Password": "123456",
+      "Password": "$s2$16384$8$1$M5+4B7ady+wIt5dXPYstLDtw8RH9KtNA21aeGcYpFaU=$2vZl32inmhNoG8NlBlWJ5BgeU3S0qN70rI+6Lh05jEw=", // 123456
       "Username": "anna"
     }
   ]
