@@ -117,5 +117,29 @@ namespace CsharpEvilcar.UserInterface
 			// Password) => Hash!? return true/false (get a Error back Handling?)
 			return false;
 		}
+
+		private static bool InputAndCheckPassword(string username)
+		{
+			string password = "";
+			string passwordPrompt = "Password: ";
+			Console.Write(passwordPrompt);
+			while (true)
+			{
+				ConsoleKeyInfo key = Console.ReadKey(true);
+				if (key.Key == ConsoleKey.Enter)
+				{
+					break;
+				}
+				else if (key.Key == ConsoleKey.Backspace)
+				{
+					password = password.Length == 0 ? "" : password.Remove(password.Length - 1, 1);
+				}
+				else
+				{
+					password += key.KeyChar;
+				}
+			}
+			return Database.DatabaseController.CheckUserCredentials(username, password);
+		}
 	}
 }
