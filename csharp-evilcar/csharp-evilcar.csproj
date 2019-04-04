@@ -99,6 +99,7 @@
     <Compile Include="DataClasses\Person\Person.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserInterface\Info.cs" />
     <Compile Include="UserInterface\UserInterface.cs" />
   </ItemGroup>
   <ItemGroup>

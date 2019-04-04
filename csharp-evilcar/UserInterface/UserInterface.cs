@@ -24,7 +24,7 @@ namespace CsharpEvilcar.UserInterface
 				// "enter your command (key in 'help' for all possible commands)"
 				Console.Write(">> ");
 				string commandInput = Console.ReadLine();
-				string[] commandArray = new String[3];  // one place needed for ">>"
+				string[] commandArray = new String[2];
 
 				try
 				{
@@ -39,10 +39,10 @@ namespace CsharpEvilcar.UserInterface
 					// "unidentified Exception"
 				}
 
-				switch (commandArray[1])
+				switch (commandArray[0])
 				{
 					case "add":
-						switch (commandArray[2])
+						switch (commandArray[1])
 						{
 							case "vehicle":
 								addVehicle();
@@ -89,32 +89,47 @@ namespace CsharpEvilcar.UserInterface
 
 		private static void addVehicle()
 		{
-			// Please enter the the plate of your new vehicle for example: S-XY 4589 cw(">>> "); =>
-			// be aware, that this will be Split[0]
+			// Please enter the the plate of your new vehicle for example: S-XY 4589 cw(">>> ");
 
 			// ReadLine() && safe/store plate
 
 			// Please enter now the other parameters in the following format: brand model class fleet
-			// for example: audi q5 electric 3 cw(">>> "); => be aware, that this will be Split[0]
+			// for example: audi q5 electric 3 cw(">>> ");
 
-			// ReadLine() && Split() && brand=Split[1], ...
+			// ReadLine() && Split() && brand=Split[0], ...
 			// => check Null || to many InternalLogik.addVehicle(brand, model, plate, class, fleet)
 		}
 
 		private static void addCustomer()
 		{
-			// Please enter the new Customer in the following format LastName PreName cw(">>> "); =>
-			// be aware, that this will be Split[0]
-
-			// ReadLine() && Split() && LastName = Split[1], ...
-			// => check Null || to many InternalLogic.addCustomer(Lastname, PreName)
+			Info.addCustomer();
+			string customerInput = Console.ReadLine();
+			string[] customerArray = new String[2];
+			try
+			{
+				customerArray = customerInput.Split(' ');
+			}
+			catch (ArgumentNullException)
+			{
+				// ErrorMessage: Input necessary
+			}
+			catch (OverflowException)
+			{
+				// ErrorMessage: to long Input
+			}
+			string lastName = customerArray[0];
+			string firstName = customerArray[1];
+			// InternalLogic.addCustomer(lastName, firstName)
 		}
 
 		private static bool Login()
 		{
-			// Welcome Text Please enter UserName Please enter Password (Sidney's ******-function)
-			// cw("> "); => be aware, that this will be your Split[0] InternalLogik.Login(UserName,
-			// Password) => Hash!? return true/false (get a Error back Handling?)
+			Info.WelcomeUsername();
+			string username = Console.ReadLine();
+			Info.PasswordQuestion();
+			string password = Console.ReadLine();
+			// (Sidney's ******-function) InternalLogik.Login(UserName, Password) => Hash!? return
+			// true/false (get a Error back Handling?)
 			return false;
 		}
 	}
