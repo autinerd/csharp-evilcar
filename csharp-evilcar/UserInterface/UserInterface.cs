@@ -22,12 +22,15 @@ namespace CsharpEvilcar.UserInterface
 		{
 			while (true)
 			{
-				// "enter your command (key in 'help' for all possible commands)"
-				Console.Write(">> ");
-				string commandInput = Console.ReadLine();
-				string[] commandArray = commandInput.Split(' ');
+				Console.Write(Strings.OfferHelp);
+				string[] commandArray = GetInput();
 
-				switch (commandArray[1])
+				if (!CheckLength(commandArray, 2))
+				{
+					return;     // not good yet because new Login necessary
+				}
+
+				switch (commandArray[0])
 				{
 					case "add":
 						switch (commandArray[1])
@@ -41,15 +44,43 @@ namespace CsharpEvilcar.UserInterface
 								break;
 
 							default:
-								// "You can't combine 'add' with this command
+								Console.WriteLine(Errors.Combine);
 								break;
 						}
 						break;
 
 					case "edit":
+						switch (commandArray[1])
+						{
+							case "vehicle":
+								EditVehicle();
+								break;
+
+							case "customer":
+								EditCustomer();
+								break;
+
+							default:
+								Console.WriteLine(Errors.Combine);
+								break;
+						}
 						break;
 
 					case "remove":
+						switch (commandArray[1])
+						{
+							case "vehicle":
+								RemoveVehicle();
+								break;
+
+							case "customer":
+								RemoveCustomer();
+								break;
+
+							default:
+								Console.WriteLine(Errors.Combine);
+								break;
+						}
 						break;
 
 					case "rebook":
@@ -69,56 +100,102 @@ namespace CsharpEvilcar.UserInterface
 						break;
 
 					default:
-						// command doesn't exist, please key in "help" to see all possible commands
+						Console.WriteLine(Errors.Existence);
 						break;
 				}
 			}
 		}
 
+		#region commandArray[0] = "remove"
+
+		private static void RemoveCustomer()
+		{
+			throw new NotImplementedException();
+		}
+
+		private static void RemoveVehicle()
+		{
+			throw new NotImplementedException();
+		}
+
+		#endregion commandArray[0] = "remove"
+
+		#region commandArray[0] = "edit"
+
+		private static void EditCustomer()
+		{
+			throw new NotImplementedException();
+		}
+
+		private static void EditVehicle()
+		{
+			throw new NotImplementedException();
+		}
+
+		#endregion commandArray[0] = "edit"
+
+		#region commandArray[0] = "add"
+
 		private static void AddVehicle()
 		{
-			// Please enter the the plate of your new vehicle for example: S-XY 4589 cw(">>> ");
+			Console.Write(Strings.Numberplate);
+			string numberplate = Console.ReadLine();    // no ErrorHandling yet
+			Console.Write(Strings.VehicleParameters);
+			string[] vehicleParamArray = GetInput();
 
-			// ReadLine() && safe/store plate
-
-			// Please enter now the other parameters in the following format: brand model class fleet
-			// for example: audi q5 electric 3 cw(">>> ");
-
-			// ReadLine() && Split() && brand=Split[0], ...
-			// => check Null || to many InternalLogik.addVehicle(brand, model, plate, class, fleet)
+			if (CheckLength(vehicleParamArray, 4))
+			{
+				// InternalLogik.addVehicle(brand, model, plate, class, fleet);
+				// IntternalLogic.addVehicle(vehicleParamArray[0], ..., numberplate, ...);
+			}
 		}
 
 		private static void AddCustomer()
 		{
-			Info.addCustomer();
-			string customerInput = Console.ReadLine();
-			string[] customerArray = new String[2];
-			try
+			Console.Write(Strings.AddCustomer);
+			string[] customerArray = GetInput();
+
+			if (CheckLength(customerArray, 2))
 			{
-				customerArray = customerInput.Split(' ');
+				string lastName = customerArray[0];
+				string firstName = customerArray[1];
+				// InternalLogic.addCustomer(lastName, firstName);
+				// InternalLogic.addCustomer(customerArray[0], customerArray[1]);
 			}
-			catch (ArgumentNullException)
+		}
+
+		#endregion commandArray[0] = "add"
+
+		private static string[] GetInput()
+		{
+			string input = Console.ReadLine();
+			return input.Split(' ');
+		}
+
+		private static bool CheckLength(string[] inputArray, int length)
+		{
+			if (inputArray.Length > length)
 			{
-				// ErrorMessage: Input necessary
+				Console.WriteLine(Errors.TooLong);
+				return false;
 			}
-			catch (OverflowException)
-			{
-				// ErrorMessage: to long Input
-			}
-			string lastName = customerArray[0];
-			string firstName = customerArray[1];
-			// InternalLogic.addCustomer(lastName, firstName)
+			return true;
 		}
 
 		private static bool Login()
 		{
-			Info.WelcomeUsername();
+			Console.Write(Strings.WelcomeUsername);
 			string username = Console.ReadLine();
-			Info.PasswordQuestion();
-			string password = Console.ReadLine();
-			// (Sidney's ******-function) InternalLogik.Login(UserName, Password) => Hash!? return
-			// true/false (get a Error back Handling?)
-			return false;
+			if (InputAndCheckPassword(username))
+			{
+				// InternalLogik.Login(UserName, Password);
+				return true;
+			}
+			else
+			{
+				Console.WriteLine(Errors.LoginFailed);
+				return false;
+			}
 		}
 
 		private static bool InputAndCheckPassword(string username)
