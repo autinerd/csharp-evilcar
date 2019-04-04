@@ -19,5 +19,6 @@ namespace CsharpEvilcar.DataClasses
 		internal Guid VehicleGuid { get; set; }
 		public DateTime Startdate { get; set; } = default(DateTime);
 		public DateTime Enddate { get; set; } = default(DateTime);
+		public int BookingID { get; set; }
 	}
 }

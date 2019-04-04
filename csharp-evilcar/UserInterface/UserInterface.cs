@@ -10,11 +10,12 @@ namespace CsharpEvilcar.UserInterface
 	{
 		internal static void Main(string[] args)
 		{
-			if (Login() == true)
+			if (!Login())
 			{
-				// LoadDatabase();
-				Prompt();
+				return;
 			}
+			int loaded = Database.DatabaseController.LoadDatabase();
+			Prompt();
 		}
 
 		private static void Prompt()
@@ -24,32 +25,19 @@ namespace CsharpEvilcar.UserInterface
 				// "enter your command (key in 'help' for all possible commands)"
 				Console.Write(">> ");
 				string commandInput = Console.ReadLine();
-				string[] commandArray = new String[2];
+				string[] commandArray = commandInput.Split(' ');
 
-				try
-				{
-					commandArray = commandInput.Split(' ');
-				}
-				catch (OverflowException)
-				{
-					// "command has too many arguments"
-				}
-				catch (Exception)
-				{
-					// "unidentified Exception"
-				}
-
-				switch (commandArray[0])
+				switch (commandArray[1])
 				{
 					case "add":
 						switch (commandArray[1])
 						{
 							case "vehicle":
-								addVehicle();
+								AddVehicle();
 								break;
 
 							case "customer":
-								addCustomer();
+								AddCustomer();
 								break;
 
 							default:
@@ -87,7 +75,7 @@ namespace CsharpEvilcar.UserInterface
 			}
 		}
 
-		private static void addVehicle()
+		private static void AddVehicle()
 		{
 			// Please enter the the plate of your new vehicle for example: S-XY 4589 cw(">>> ");
 
@@ -100,7 +88,7 @@ namespace CsharpEvilcar.UserInterface
 			// => check Null || to many InternalLogik.addVehicle(brand, model, plate, class, fleet)
 		}
 
-		private static void addCustomer()
+		private static void AddCustomer()
 		{
 			Info.addCustomer();
 			string customerInput = Console.ReadLine();
@@ -131,6 +119,30 @@ namespace CsharpEvilcar.UserInterface
 			// (Sidney's ******-function) InternalLogik.Login(UserName, Password) => Hash!? return
 			// true/false (get a Error back Handling?)
 			return false;
+		}
+
+		private static bool InputAndCheckPassword(string username)
+		{
+			string password = "";
+			string passwordPrompt = "Password: ";
+			Console.Write(passwordPrompt);
+			while (true)
+			{
+				ConsoleKeyInfo key = Console.ReadKey(true);
+				if (key.Key == ConsoleKey.Enter)
+				{
+					break;
+				}
+				else if (key.Key == ConsoleKey.Backspace)
+				{
+					password = password.Length == 0 ? "" : password.Remove(password.Length - 1, 1);
+				}
+				else
+				{
+					password += key.KeyChar;
+				}
+			}
+			return Database.DatabaseController.CheckUserCredentials(username, password);
 		}
 	}
 }

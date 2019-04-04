@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,10 +7,20 @@ using System.Linq;
 
 namespace CsharpEvilcar.Database
 {
+	/// <summary>
+	/// The DatabaseController controls the communication between the Database object and the database file.
+	/// </summary>
 	internal static class DatabaseController
 	{
-		public static Database Database { get; private set; } = null;
-		public static Guid CurrentUser
+		/// <summary>
+		/// The database object which represents the contents of the database file.
+		/// </summary>
+		internal static Database Database { get; private set; } = null;
+
+		/// <summary>
+		/// The current logged in user.
+		/// </summary>
+		internal static Guid CurrentUser
 		{
 			get
 			{
@@ -24,6 +35,10 @@ namespace CsharpEvilcar.Database
 
 		private static readonly Scrypt.ScryptEncoder encoder = new Scrypt.ScryptEncoder();
 
+		/// <summary>
+		/// Loads the database file contents into the <see cref="Database"/> object.
+		/// </summary>
+		/// <returns>Error code</returns>
 		internal static int LoadDatabase()
 		{
 			try
@@ -36,9 +51,43 @@ namespace CsharpEvilcar.Database
 			}
 		}
 
+		/// <summary>
+		/// Saves the <see cref="Database"/> object into the database file.
+		/// </summary>
+		/// <returns></returns>
 		internal static int SaveDatabase()
 		{
+			try
+			{
+				return SaveDatabaseFile();
+			}
+			catch (Exception)
+			{
+				return 1;
+			}
+		}
 
+		private static int SaveDatabaseFile()
+		{
+			JObject jObject;
+			int returnval = MapToJSON(out jObject);
+			if (returnval != 0)
+			{
+				return returnval;
+			}
+			try
+			{
+				using (StreamWriter sw = new StreamWriter("database.json"))
+				using (JsonTextWriter writer = new JsonTextWriter(sw))
+				{
+					jObject.WriteTo(writer);
+				}
+				return 0;
+			}
+			catch (Exception)
+			{
+				throw;
+			}
 		}
 
 		private static JObject ReadDatabaseFile()
@@ -69,11 +118,14 @@ namespace CsharpEvilcar.Database
 				{
 					Customers = jObject["Customers"].Select((customer) => new DataClasses.Customer
 					{
-						ID = (int)customer["ID"],
+						GUID = Guid.Parse((string)customer["GUID"]),
+						CustomerID = (int)customer["CustomerID"],
 						Name = (string)customer["Name"],
 						Residence = (string)customer["Residence"],
 						Bookings = customer["Bookings"].Select((booking) => new DataClasses.Booking
 						{
+							GUID = Guid.Parse((string)booking["GUID"]),
+							BookingID = (int)booking["BookingID"],
 							Startdate = DateTime.ParseExact((string)booking["Startdate"], "yyyyMMdd", null),
 							Enddate = DateTime.ParseExact((string)booking["Enddate"], "yyyyMMdd", null),
 							VehicleGuid = Guid.Parse((string)booking["Vehicle"])
@@ -81,20 +133,39 @@ namespace CsharpEvilcar.Database
 					}),
 					Branches = jObject["Branches"].Select((branch) => new DataClasses.Branch
 					{
+						GUID = Guid.Parse((string)branch["GUID"]),
+						FleetManager = new DataClasses.FleetManager
+						{
+							GUID = Guid.Parse((string)branch["FleetManager"])
+						},
 						Fleets = branch["Fleets"].Select((fleet) => new DataClasses.Fleet
 						{
+							GUID = Guid.Parse((string)fleet["GUID"]),
+							Location = (string)fleet["Location"],
 							Vehicles = fleet["Vehicles"].Select<JToken, DataClasses.Vehicle>((vehicle) =>
 							{
 								switch ((DataClasses.Vehicle.CategoryEnum)(int)vehicle["Category"])
 								{
 									case DataClasses.Vehicle.CategoryEnum.Small:
-										return new DataClasses.SmallVehicle((string)vehicle["Numberplate"]);
+										return new DataClasses.SmallVehicle((string)vehicle["Numberplate"])
+										{
+											GUID = Guid.Parse((string)vehicle["GUID"])
+										};
 									case DataClasses.Vehicle.CategoryEnum.Midsize:
-										return new DataClasses.MidsizeVehicle((string)vehicle["Numberplate"]);
+										return new DataClasses.MidsizeVehicle((string)vehicle["Numberplate"])
+										{
+											GUID = Guid.Parse((string)vehicle["GUID"])
+										};
 									case DataClasses.Vehicle.CategoryEnum.Large:
-										return new DataClasses.LargeVehicle((string)vehicle["Numberplate"]);
+										return new DataClasses.LargeVehicle((string)vehicle["Numberplate"])
+										{
+											GUID = Guid.Parse((string)vehicle["GUID"])
+										};
 									case DataClasses.Vehicle.CategoryEnum.Electric:
-										return new DataClasses.ElectricVehicle((string)vehicle["Numberplate"]);
+										return new DataClasses.ElectricVehicle((string)vehicle["Numberplate"])
+										{
+											GUID = Guid.Parse((string)vehicle["GUID"])
+										};
 									default:
 										return null;
 								}
@@ -157,7 +228,8 @@ namespace CsharpEvilcar.Database
 					}))
 				},
 				{
-					"Customers", new JArray(Database.Customers.Select(customer => new JObject
+					"Customers",
+					new JArray(Database.Customers.Select(customer => new JObject
 					{
 						{
 							"GUID",
@@ -165,7 +237,7 @@ namespace CsharpEvilcar.Database
 						},
 						{
 							"ID",
-							customer.ID
+							customer.CustomerID
 						},
 						{
 							"Name",
@@ -198,10 +270,21 @@ namespace CsharpEvilcar.Database
 							}))
 						}
 					}))
+				},
+				{
+					"FleetManagers",
+					ReadDatabaseFile()["FleetManagers"]
 				}
 			};
+			return 0;
 		}
 
+		/// <summary>
+		/// Checks if the given <paramref name="username"/> is in the database and the given <paramref name="password"/> is correct.
+		/// </summary>
+		/// <param name="username">The username to check against</param>
+		/// <param name="password">The password to check against</param>
+		/// <returns>True when succeeded, False when failed</returns>
 		internal static bool CheckUserCredentials(string username, string password)
 		{
 			IEnumerable<JToken> users = from user in ReadDatabaseFile()["FleetManagers"] where (string)user["Username"] == username && encoder.Compare(password, (string)user["Password"]) select user;
