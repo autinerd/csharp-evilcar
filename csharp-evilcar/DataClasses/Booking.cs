@@ -8,11 +8,19 @@ namespace CsharpEvilcar.DataClasses
 {
 	class Booking
 	{
-		public CsharpEvilcar.Person.Customer customer	= null;
-		public CsharpEvilcar.Car.Vehicle vehicle		= null;
-		public DateTime Startdate	= default(DateTime);
-		public DateTime Enddate		= default(DateTime);
+		readonly public CsharpEvilcar.DataClasses.Customer Customer	= null;
+		readonly public CsharpEvilcar.DataClasses.Vehicle Vehicle	= null;
+		readonly public DateTime Startdate	= default(DateTime);
+		public DateTime Enddate				= default(DateTime);
 
-		public Booking(CsharpEvilcar.Person.Customer)
+		public Booking(Customer Customer,Vehicle Vehicle, DateTime Startdate) {
+			this.Customer	= Customer;
+			this.Vehicle	= Vehicle;
+			this.Startdate	= Startdate;
+		}
+		public void ReturnVehicle(DateTime Enddate){
+
+		}
+
 	}
 }

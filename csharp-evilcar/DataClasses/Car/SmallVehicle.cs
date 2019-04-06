@@ -8,12 +8,8 @@ namespace CsharpEvilcar.DataClasses
 {
 	class SmallVehicle : Vehicle
 	{
-		protected readonly static VehicleService Navigation				= new VehicleService(_Navigation,			true );
-		protected readonly static VehicleService Massage				= new VehicleService(_Massage,				false);
-		protected readonly static VehicleService ChargingStationFinder	= new VehicleService(_ChargingStationFinder,false);
-		protected readonly static VehicleService Spotify				= new VehicleService(_Spotify,				false);
-		protected readonly static VehicleService AirConditioner			= new VehicleService(_AirConditioner,		false);
-		protected readonly static VehicleService SnowChains				= new VehicleService(_SnowChains,			false);
-		public SmallVehicle(string Numberplate) : base(Numberplate) { }
+		public new static readonly decimal DayPrice = 30;
+		public new static readonly _Service[] Services = { _Navigation };
+		public SmallVehicle(string Numberplate, string Type, string Brand) : base(Numberplate, Type, Brand) { }
 	}
 }
