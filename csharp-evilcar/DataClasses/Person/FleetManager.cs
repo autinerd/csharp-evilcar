@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace CsharpEvilcar.DataClasses
 {
-	class FleetManager :Person
+	/// <summary>
+	/// Represents a fleet manager.
+	/// </summary>
+	class FleetManager : Person
 	{
-        public Branch Branch { set; get; }
+		/// <summary>
+		/// The branch associated with the fleet manager.
+		/// </summary>
+		public Branch Branch => ( from b in Database.DatabaseController.Database.Branches where b.FleetManager == this select b ).Single();
 	}
 }

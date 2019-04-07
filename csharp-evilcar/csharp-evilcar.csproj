@@ -85,6 +85,7 @@
     <Compile Include="DataClasses\Car\MidsizeVehicle.cs" />
     <Compile Include="DataClasses\Car\SmallVehicle.cs" />
     <Compile Include="DataClasses\Car\Vehicle.cs" />
+    <Compile Include="DataClasses\GuidObject.cs" />
     <Compile Include="DataClasses\Person\Customer.cs" />
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\DatabaseController.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="DataClasses\Person\Person.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserInterface\UserMessages.cs" />
     <Compile Include="UserInterface\UserInterface.cs" />
   </ItemGroup>
   <ItemGroup>

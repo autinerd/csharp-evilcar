@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CsharpEvilcar.DataClasses
 {
-	class Fleet
+	/// <summary>
+	/// Represents a fleet
+	/// </summary>
+	class Fleet : GuidObject
 	{
+		/// <summary>
+		/// List of vehicles.
+		/// </summary>
+		public IEnumerable<Vehicle> Vehicles { get; set; } = null;
+		/// <summary>
+		/// Location of the fleet.
+		/// </summary>
+		public string Location { get; set; }
 	}
 }

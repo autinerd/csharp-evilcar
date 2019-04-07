@@ -1,60 +1,50 @@
 ﻿{
   "Branches": [
     {
+      "FleetManager": "9917F566-E103-4454-8A5D-2B227AA67DAC",
       "Fleets": [
         {
-          "Category": 2,
-          "ID": 1,
+          "GUID": "75CDFB3A-643A-40F1-9261-5514EE499414",
+          "Location": "Hoheluft-Ost",
           "Vehicles": [
             {
-              "ID": 1,
-              "Plate": "WN-AB-1234"
+              "Category": 1,
+              "GUID": "99A37FD6-06EB-419A-8C42-B6315D3504FD",
+              "Numberplate": "WN-AB-1234"
             },
             {
-              "ID": 2,
-              "Plate": "WN-IO-998"
+              "Category": 2,
+              "GUID": "2682A940-C649-4A1F-B1E5-8155A93F1E7B",
+              "Numberplate": "WN-IO-998"
             }
           ]
         }
       ],
-      "FleetManager": 1,
-      "ID": 1,
+      "GUID": "5E2E17C9-BB5F-4B4D-B961-5EB47E8F5A8D",
       "Location": "Hamburg"
-    }
-  ],
-  "Categories": [
-    {
-      "ID": 2,
-      "Name": "small",
-      "Price": 25.99,
-      "Services": [ 1, 3 ]
     }
   ],
   "Customers": [
     {
       "Bookings": [
         {
+          "BookingID": 20000,
           "Enddate": "20190202",
-          "ID": 1,
+          "GUID": "E17684D6-302B-4CA9-983D-072159CEB7A3",
           "Startdate": "20190201",
-          "Vehicle": 2
+          "Vehicle": "99A37FD6-06EB-419A-8C42-B6315D3504FD"
         }
       ],
       "City": "Berlin",
+      "CustomerID": 10000,
+      "GUID": "658542EE-521C-47F3-847D-A514A250AFBE",
       "Name": "Lisa Müller"
     }
   ],
-  "Services": [
+  "FleetManagers": [
     {
-      "ID": 1,
-      "Name": "Navigation",
-      "Price": 4.99
-    }
-  ],
-  "Users": [
-    {
-      "ID": 1,
-      "Password": "123456",
+      "GUID": "9917F566-E103-4454-8A5D-2B227AA67DAC",
+      "Password": "$s2$16384$8$1$M5+4B7ady+wIt5dXPYstLDtw8RH9KtNA21aeGcYpFaU=$2vZl32inmhNoG8NlBlWJ5BgeU3S0qN70rI+6Lh05jEw=", // 123456
       "Username": "anna"
     }
   ]
