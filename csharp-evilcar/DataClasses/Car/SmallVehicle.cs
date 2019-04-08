@@ -10,6 +10,9 @@ namespace CsharpEvilcar.DataClasses
 	{
 		public new static readonly decimal DayPrice = 30;
 		public new static readonly _Service[] Services = { _Navigation };
-		public SmallVehicle(string Numberplate, string Type, string Brand) : base(Numberplate, Type, Brand) { }
+		public SmallVehicle(string Numberplate, string Type, string Brand) : base(Numberplate, Type, Brand)
+		{
+			Category = CategoryEnum.Small;
+		}
 	}
 }
