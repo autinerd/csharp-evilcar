@@ -10,6 +10,8 @@ namespace CsharpEvilcar.DataClasses
 		/// <summary>
 		/// The branch associated with the fleet manager.
 		/// </summary>
-		public Branch Branch => ( from b in Database.DatabaseController.Database.Branches where b.FleetManager == this select b ).Single();
+		public Branch Branch => ( from b in Database.DatabaseController.Database.Branches
+								  where b.FleetManager == this
+								  select b ).Single();
 	}
 }
