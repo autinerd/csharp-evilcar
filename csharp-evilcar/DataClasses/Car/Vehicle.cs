@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System;
 
 namespace CsharpEvilcar.DataClasses
 {
@@ -27,8 +28,10 @@ namespace CsharpEvilcar.DataClasses
 		public string Numberplate { get; private set; }
 		public string Model { get; private set; }
 		public string Brand { get; private set; }
-		public int VehicleID { get; private set; }
+		public int VehicleID { get; set; }
 		public CategoryEnum Category { get; protected set; }
+
+		public decimal TotalDayPrice => ( from svc in Services select svc.Price ).Sum() + DayPrice;
 
 		internal enum CategoryEnum
 		{
@@ -51,5 +54,7 @@ namespace CsharpEvilcar.DataClasses
 							  select v.VehicleID ).Max() + 1;
 			}
 		}
-	}
+
+        public override sealed string ToString() => $"{Enum.GetName(typeof(CategoryEnum), Category)} Vehicle {VehicleID}: {Brand} {Model} ({Numberplate})";
+    }
 }

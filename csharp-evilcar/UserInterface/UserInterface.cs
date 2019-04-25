@@ -17,7 +17,7 @@ namespace CsharpEvilcar.UserInterface
 			// login and run the prompt
 			if (Login())
 			{
-				int loaded = Database.DatabaseController.LoadDatabase();
+				ErrorCode loaded = Database.DatabaseController.LoadDatabase();
 				Prompt();
 			}
 			else { Console.WriteLine(OutputStrings.Login.Failed); }

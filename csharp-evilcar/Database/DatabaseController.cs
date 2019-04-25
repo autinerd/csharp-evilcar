@@ -149,27 +149,30 @@ namespace CsharpEvilcar.Database
 									case DataClasses.Vehicle.CategoryEnum.Small:
 										return new DataClasses.SmallVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"], true)
 										{
-											GUID = Guid.Parse((string)vehicle["GUID"])
+											GUID = Guid.Parse((string)vehicle["GUID"]),
+											VehicleID = (int)vehicle["VehicleID"]
 										};
 									case DataClasses.Vehicle.CategoryEnum.Midsize:
 										return new DataClasses.MidsizeVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"], true)
 										{
-											GUID = Guid.Parse((string)vehicle["GUID"])
+											GUID = Guid.Parse((string)vehicle["GUID"]),
+											VehicleID = (int)vehicle["VehicleID"]
 										};
 									case DataClasses.Vehicle.CategoryEnum.Large:
 										return new DataClasses.LargeVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"], true)
 										{
-											GUID = Guid.Parse((string)vehicle["GUID"])
+											GUID = Guid.Parse((string)vehicle["GUID"]),
+											VehicleID = (int)vehicle["VehicleID"]
 										};
 									case DataClasses.Vehicle.CategoryEnum.Electric:
 										return new DataClasses.ElectricVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"], true)
 										{
-											GUID = Guid.Parse((string)vehicle["GUID"])
+											GUID = Guid.Parse((string)vehicle["GUID"]),
+											VehicleID = (int)vehicle["VehicleID"]
 										};
 									default:
 										return null;
 								}
-#warning Vehicle ID
 							}).ToList()
 						}).ToList()
 					})

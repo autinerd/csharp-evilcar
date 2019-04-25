@@ -17,12 +17,9 @@ namespace CsharpEvilcar
 		/// <returns>Error code</returns>
 		internal UserInterface.ErrorCode AddVehicle(string numberplate, string brand, string model, string category, string fleet)
 		{
-			if (!Regex.IsMatch(numberplate, "^[A-Z]{1,3}-[A-Z]{1,2}-[0-9]{1,4}$"))
-			{
-				return UserInterface.ErrorCode.WrongArgument;
-			}
-			int fleetnum = int.Parse(fleet);
-			if (DatabaseController.Database.MyBranch.Fleets.Count() >= fleetnum)
+			int fleetnum;
+			bool success = int.TryParse(fleet, out fleetnum);
+			if (!Regex.IsMatch(numberplate, "^[A-Z]{1,3}-[A-Z]{1,2}-[0-9]{1,4}$") || !success || DatabaseController.Database.MyBranch.Fleets.Count() >= fleetnum)
 			{
 				return UserInterface.ErrorCode.WrongArgument;
 			}
@@ -55,7 +52,7 @@ namespace CsharpEvilcar
 			return UserInterface.ErrorCode.Success;
 		}
 
-		internal UserInterface.ErrorCode AddBooking(string custID, string vehID)
+		internal UserInterface.ErrorCode AddBooking(string custID, string vehID, string startdate, string enddate)
 		{
 			return UserInterface.ErrorCode.Success;
 		}

@@ -2,7 +2,7 @@
 root = true
 
 # C#-Dateien
-[*.cs]
+[*.*]
 
 #### Wichtige EditorConfig-Optionen ####
 
@@ -13,8 +13,9 @@ tab_width = 4
 
 # Einstellungen für neue Zeilen
 end_of_line = crlf
-insert_final_newline = false
+insert_final_newline = true
 
+[*.cs]
 #### .NET-Codierungskonventionen ####
 
 # this.- und Me.-Einstellungen

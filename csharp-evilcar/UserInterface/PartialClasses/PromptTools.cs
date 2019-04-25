@@ -16,7 +16,7 @@ namespace CsharpEvilcar.UserInterface
 
 		private static bool CheckLength(string[] inputArray, int MinLength = 0, int MaxLength = -1)
 		{
-			if (MaxLength > 0 & inputArray.Length > MaxLength)
+			if (MaxLength > 0 && inputArray.Length > MaxLength)
 			{
 				Console.WriteLine(OutputStrings.MainLevel.CommandTooLong);
 				return false;

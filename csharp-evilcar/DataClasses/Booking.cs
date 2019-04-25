@@ -28,5 +28,22 @@ namespace CsharpEvilcar.DataClasses
 							  select b.BookingID ).Max() + 1;
 			}
 		}
+
+		public override string ToString() => ToString(false);
+
+		public string ToString(bool fullDetails)
+		{
+			if (fullDetails)
+			{
+				return $@"Booking {BookingID}:
+	Vehicle {Vehicle}
+	from {Startdate} to {Enddate}
+	Total cost: {Vehicle.TotalDayPrice * (decimal)Math.Floor((Enddate - Startdate).TotalDays)} EUR";
+			}
+			else
+			{
+				return $"Booking {BookingID}: Vehicle {VehicleID}, from {Startdate} to {Enddate}";
+			}
+		}
 	}
 }
