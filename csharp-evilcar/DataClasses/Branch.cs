@@ -18,7 +18,7 @@ namespace CsharpEvilcar.DataClasses
 		/// <summary>
 		/// List of fleets.
 		/// </summary>
-		public IEnumerable<Fleet> Fleets { get; set; } = null;
+		public List<Fleet> Fleets { get; set; } = null;
 
 		/// <summary>
 		/// The associated fleet manager.

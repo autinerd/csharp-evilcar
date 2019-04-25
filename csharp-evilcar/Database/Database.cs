@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace CsharpEvilcar.Database
 {
@@ -15,5 +16,7 @@ namespace CsharpEvilcar.Database
 		/// List of customers
 		/// </summary>
 		public IEnumerable<DataClasses.Customer> Customers { get; set; }
+
+		public DataClasses.Branch MyBranch => (from b in DatabaseController.Database.Branches where b.Editable select b).Single();
 	}
 }
