@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CsharpEvilcar.DataClasses
+﻿namespace CsharpEvilcar.DataClasses
 {
 	internal class Vehicle : GuidObject
 	{
-		public struct _Service
+		public struct Service
 		{
-			readonly public decimal Price ;
+			readonly public decimal Price;
 			readonly public string Name;
-			public _Service(string Name, decimal Price):this()
+			public Service(string Name, decimal Price) : this()
 			{
-				this.Name	= Name;
-				this.Price	= Price;
+				this.Name = Name;
+				this.Price = Price;
 			}
 		}
 
-		public readonly static _Service _Navigation				= new _Service("Navigation",				 5);
-		public readonly static _Service _Massage				= new _Service("Massage",					15);
-		public readonly static _Service _ChargingStationFinder	= new _Service("Charging Station Finder",	10);
-		public readonly static _Service _Spotify				= new _Service("Spotify",					 8);
-		public readonly static _Service _AirConditioner			= new _Service("Air Conditioner",			10);
-		public readonly static _Service _SnowChains				= new _Service("Snow Chains",				20);
+		public readonly static Service Navigation = new Service("Navigation", 5);
+		public readonly static Service Massage = new Service("Massage", 15);
+		public readonly static Service ChargingStationFinder = new Service("Charging Station Finder", 10);
+		public readonly static Service Spotify = new Service("Spotify", 8);
+		public readonly static Service AirConditioner = new Service("Air Conditioner", 10);
+		public readonly static Service SnowChains = new Service("Snow Chains", 20);
 
-		public readonly static _Service[] Services = { }; 
+		public readonly static Service[] Services = { };
 		public readonly static decimal DayPrice;
 		public readonly string Numberplate;
 		public readonly string Type;
@@ -42,10 +36,11 @@ namespace CsharpEvilcar.DataClasses
 		}
 
 
-		public Vehicle(string Numberplate,string Type, string Brand) {
+		public Vehicle(string Numberplate, string Type, string Brand)
+		{
 			this.Numberplate = Numberplate;
-			this.Type		 = Type;
-			this.Brand		 = Brand;
+			this.Type = Type;
+			this.Brand = Brand;
 		}
 	}
 }

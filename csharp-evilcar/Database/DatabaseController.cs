@@ -287,8 +287,12 @@ namespace CsharpEvilcar.Database
 		/// <returns>True when succeeded, False when failed</returns>
 		internal static bool CheckUserCredentials(string username, string password)
 		{
-			IEnumerable<JToken> users = from user in ReadDatabaseFile()["FleetManagers"] where (string)user["Username"] == username && encoder.Compare(password, (string)user["Password"]) select user;
-			return users.Count() != 1 ? false : Guid.TryParse((string)users.Single()["GUID"], out currentUser);
+			IEnumerable<JToken> users = from user in ReadDatabaseFile()["FleetManagers"]
+										where (string)user["Username"] == username && encoder.Compare(password, (string)user["Password"])
+										select user;
+			return users.Count() != 1 
+				? false 
+				: Guid.TryParse((string)users.Single()["GUID"], out currentUser);
 		}
 	}
 }
