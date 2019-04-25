@@ -23,7 +23,11 @@ namespace CsharpEvilcar.DataClasses
 		{
 			if (fullDetails)
 			{
-				return "";
+				return $@"Fleet {Location}:
+	{Vehicles.Count} cars ({string.Join(", ", (from v in Vehicles group v by v.Category into newGroup select newGroup.Count()+" "+System.Enum.GetName(typeof(Vehicle.CategoryEnum), newGroup.Key)))})
+	Cars:
+		{string.Join("\n\t\t", (from v in Vehicles select v.ToString()))}
+";
 			}
 			else
 			{
