@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace CsharpEvilcar.DataClasses
 {
@@ -15,6 +16,14 @@ namespace CsharpEvilcar.DataClasses
 		/// <summary>
 		/// List of bookings.
 		/// </summary>
-		public IEnumerable<Booking> Bookings { set; get; }
+		public List<Booking> Bookings { set; get; }
+
+		public Customer(bool hasCustID) : base()
+		{
+			if (!hasCustID)
+			{
+				CustomerID = ( from c in Database.DatabaseController.Database.Customers select c.CustomerID ).Max() + 1;
+			}
+		}
 	}
 }

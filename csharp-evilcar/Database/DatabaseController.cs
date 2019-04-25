@@ -39,7 +39,7 @@ namespace CsharpEvilcar.Database
 		/// Loads the database file contents into the <see cref="Database"/> object.
 		/// </summary>
 		/// <returns>Error code</returns>
-		internal static int LoadDatabase()
+		internal static UserInterface.ErrorCode LoadDatabase()
 		{
 			try
 			{
@@ -47,7 +47,7 @@ namespace CsharpEvilcar.Database
 			}
 			catch (Exception)
 			{
-				return 1;
+				return UserInterface.ErrorCode.DatabaseError;
 			}
 		}
 
@@ -55,7 +55,7 @@ namespace CsharpEvilcar.Database
 		/// Saves the <see cref="Database"/> object into the database file.
 		/// </summary>
 		/// <returns></returns>
-		internal static int SaveDatabase()
+		internal static UserInterface.ErrorCode SaveDatabase()
 		{
 			try
 			{
@@ -63,14 +63,14 @@ namespace CsharpEvilcar.Database
 			}
 			catch (Exception)
 			{
-				return 1;
+				return UserInterface.ErrorCode.DatabaseError;
 			}
 		}
 
-		private static int SaveDatabaseFile()
+		private static UserInterface.ErrorCode SaveDatabaseFile()
 		{
 			JObject jObject;
-			int returnval = MapToJSON(out jObject);
+			UserInterface.ErrorCode returnval = MapToJSON(out jObject);
 			if (returnval != 0)
 			{
 				return returnval;
@@ -82,7 +82,7 @@ namespace CsharpEvilcar.Database
 				{
 					jObject.WriteTo(writer);
 				}
-				return 0;
+				return UserInterface.ErrorCode.Success;
 			}
 			catch (Exception)
 			{
@@ -106,31 +106,31 @@ namespace CsharpEvilcar.Database
 
 		}
 
-		private static int MapToDatabase(JObject jObject)
+		private static UserInterface.ErrorCode MapToDatabase(JObject jObject)
 		{
 			if (CurrentUser == Guid.Empty)
 			{
-				return 154;
+				return UserInterface.ErrorCode.NoUserLoggedIn;
 			}
 			else
 			{
 				Database = new Database
 				{
-					Customers = jObject["Customers"].Select((customer) => new DataClasses.Customer
+					Customers = jObject["Customers"].Select((customer) => new DataClasses.Customer(true)
 					{
 						GUID = Guid.Parse((string)customer["GUID"]),
 						CustomerID = (int)customer["CustomerID"],
 						Name = (string)customer["Name"],
 						Residence = (string)customer["Residence"],
-						Bookings = customer["Bookings"].Select((booking) => new DataClasses.Booking
+						Bookings = customer["Bookings"].Select((booking) => new DataClasses.Booking(true)
 						{
 							GUID = Guid.Parse((string)booking["GUID"]),
 							BookingID = (int)booking["BookingID"],
 							Startdate = DateTime.ParseExact((string)booking["Startdate"], "yyyyMMdd", null),
 							Enddate = DateTime.ParseExact((string)booking["Enddate"], "yyyyMMdd", null),
-							VehicleGuid = Guid.Parse((string)booking["Vehicle"])
-						})
-					}),
+							VehicleID = (int)booking["Vehicle"]
+						}).ToList()
+					}).ToList(),
 					Branches = jObject["Branches"].Select((branch) => new DataClasses.Branch
 					{
 						GUID = Guid.Parse((string)branch["GUID"]),
@@ -147,42 +147,43 @@ namespace CsharpEvilcar.Database
 								switch ((DataClasses.Vehicle.CategoryEnum)(int)vehicle["Category"])
 								{
 									case DataClasses.Vehicle.CategoryEnum.Small:
-										return new DataClasses.SmallVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"])
+										return new DataClasses.SmallVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"], true)
 										{
 											GUID = Guid.Parse((string)vehicle["GUID"])
 										};
 									case DataClasses.Vehicle.CategoryEnum.Midsize:
-										return new DataClasses.MidsizeVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"])
+										return new DataClasses.MidsizeVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"], true)
 										{
 											GUID = Guid.Parse((string)vehicle["GUID"])
 										};
 									case DataClasses.Vehicle.CategoryEnum.Large:
-										return new DataClasses.LargeVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"])
+										return new DataClasses.LargeVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"], true)
 										{
 											GUID = Guid.Parse((string)vehicle["GUID"])
 										};
 									case DataClasses.Vehicle.CategoryEnum.Electric:
-										return new DataClasses.ElectricVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"])
+										return new DataClasses.ElectricVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"], true)
 										{
 											GUID = Guid.Parse((string)vehicle["GUID"])
 										};
 									default:
 										return null;
 								}
-							})
-						})
+#warning Vehicle ID
+							}).ToList()
+						}).ToList()
 					})
 				};
 			}
-			return 0;
+			return UserInterface.ErrorCode.Success;
 		}
 
-		private static int MapToJSON(out JObject jObject)
+		private static UserInterface.ErrorCode MapToJSON(out JObject jObject)
 		{
 			jObject = null;
 			if (currentUser == Guid.Empty)
 			{
-				return 154;
+				return UserInterface.ErrorCode.NoUserLoggedIn;
 			}
 			jObject = new JObject {
 				{
@@ -265,7 +266,7 @@ namespace CsharpEvilcar.Database
 								},
 								{
 									"Vehicle",
-									booking.VehicleGuid.ToString()
+									booking.VehicleID
 								}
 							}))
 						}
@@ -276,7 +277,7 @@ namespace CsharpEvilcar.Database
 					ReadDatabaseFile()["FleetManagers"]
 				}
 			};
-			return 0;
+			return UserInterface.ErrorCode.Success;
 		}
 
 		/// <summary>
@@ -290,8 +291,8 @@ namespace CsharpEvilcar.Database
 			IEnumerable<JToken> users = from user in ReadDatabaseFile()["FleetManagers"]
 										where (string)user["Username"] == username && encoder.Compare(password, (string)user["Password"])
 										select user;
-			return users.Count() != 1 
-				? false 
+			return users.Count() != 1
+				? false
 				: Guid.TryParse((string)users.Single()["GUID"], out currentUser);
 		}
 	}

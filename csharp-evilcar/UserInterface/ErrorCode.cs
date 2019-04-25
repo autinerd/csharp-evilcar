@@ -9,6 +9,8 @@ namespace CsharpEvilcar.UserInterface
 	enum ErrorCode
 	{
 		Success,
-		WrongArgument
+		WrongArgument,
+		DatabaseError,
+		NoUserLoggedIn
 	}
 }

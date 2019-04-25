@@ -14,7 +14,7 @@ namespace CsharpEvilcar.UserInterface
 			{
 				return;
 			}
-			int loaded = Database.DatabaseController.LoadDatabase();
+			ErrorCode loaded = Database.DatabaseController.LoadDatabase();
 			Prompt();
 		}
 

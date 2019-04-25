@@ -15,8 +15,10 @@ namespace CsharpEvilcar.Database
 		/// <summary>
 		/// List of customers
 		/// </summary>
-		public IEnumerable<DataClasses.Customer> Customers { get; set; }
-
+		public List<DataClasses.Customer> Customers { get; set; }
+		/// <summary>
+		/// Branch of the current user
+		/// </summary>
 		public DataClasses.Branch MyBranch => (from b in DatabaseController.Database.Branches where b.Editable select b).Single();
 	}
 }

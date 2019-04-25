@@ -10,12 +10,14 @@
             {
               "Category": 1,
               "GUID": "99A37FD6-06EB-419A-8C42-B6315D3504FD",
-              "Numberplate": "WN-AB-1234"
+              "Numberplate": "WN-AB-1234",
+              "VehicleID": 1
             },
             {
               "Category": 2,
               "GUID": "2682A940-C649-4A1F-B1E5-8155A93F1E7B",
-              "Numberplate": "WN-IO-998"
+              "Numberplate": "WN-IO-998",
+              "VehicleID": 2
             }
           ]
         }

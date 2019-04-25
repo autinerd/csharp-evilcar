@@ -8,9 +8,9 @@ namespace CsharpEvilcar.DataClasses
 {
 	class ElectricVehicle : Vehicle
 	{
-		public new static readonly decimal DayPrice = 130;
-		public new static readonly Service[] Services = { Navigation, ChargingStationFinder, Spotify, AirConditioner, SnowChains };
-		public ElectricVehicle(string Numberplate, string Type, string Brand) : base(Numberplate, Type, Brand)
+		public new static decimal DayPrice => 130;
+		public new static Service[] Services => new Service[] { Navigation, ChargingStationFinder, Spotify, AirConditioner, SnowChains };
+		public ElectricVehicle(string numberplate, string type, string brand, bool hasVehID) : base(numberplate, type, brand, hasVehID)
 		{
 			Category = CategoryEnum.Electric;
 		}

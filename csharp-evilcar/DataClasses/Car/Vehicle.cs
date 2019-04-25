@@ -1,17 +1,20 @@
-﻿namespace CsharpEvilcar.DataClasses
+﻿using System.Linq;
+
+namespace CsharpEvilcar.DataClasses
 {
-	internal class Vehicle : GuidObject
+	internal abstract class Vehicle : GuidObject
 	{
 		public struct Service
 		{
-			readonly public decimal Price;
-			readonly public string Name;
-			public Service(string Name, decimal Price) : this()
+			public decimal Price { get; private set; }
+			public string Name { get; private set; }
+			public Service(string name, decimal price)
 			{
-				this.Name = Name;
-				this.Price = Price;
+				Name = name;
+				Price = price;
 			}
 		}
+		public static Service[] Services { get; private set; }
 
 		public readonly static Service Navigation = new Service("Navigation", 5);
 		public readonly static Service Massage = new Service("Massage", 15);
@@ -20,11 +23,11 @@
 		public readonly static Service AirConditioner = new Service("Air Conditioner", 10);
 		public readonly static Service SnowChains = new Service("Snow Chains", 20);
 
-		public readonly static Service[] Services = { };
-		public readonly static decimal DayPrice;
-		public readonly string Numberplate;
-		public readonly string Type;
-		public readonly string Brand;
+		public static decimal DayPrice { get; private set; }
+		public string Numberplate { get; private set; }
+		public string Model { get; private set; }
+		public string Brand { get; private set; }
+		public int VehicleID { get; private set; }
 		public CategoryEnum Category { get; protected set; }
 
 		internal enum CategoryEnum
@@ -35,12 +38,18 @@
 			Electric
 		}
 
-
-		public Vehicle(string Numberplate, string Type, string Brand)
+		protected Vehicle(string numberplate, string model, string brand, bool hasVehID) : base()
 		{
-			this.Numberplate = Numberplate;
-			this.Type = Type;
-			this.Brand = Brand;
+			Numberplate = numberplate;
+			Model = model;
+			Brand = brand;
+			if (hasVehID)
+			{
+				VehicleID = ( from b in Database.DatabaseController.Database.Branches
+							  from f in b.Fleets
+							  from v in f.Vehicles
+							  select v.VehicleID ).Max() + 1;
+			}
 		}
 	}
 }

@@ -12,11 +12,21 @@ namespace CsharpEvilcar.DataClasses
 		public Vehicle Vehicle => ( from b in Database.DatabaseController.Database.Branches
 									from f in b.Fleets
 									from v in f.Vehicles
-									where v.GUID == VehicleGuid
+									where v.VehicleID == VehicleID
 									select v ).Single();
-		internal Guid VehicleGuid { get; set; }
+		internal int VehicleID { get; set; }
 		public DateTime Startdate { get; set; } = default(DateTime);
 		public DateTime Enddate { get; set; } = default(DateTime);
 		public int BookingID { get; set; }
+
+		public Booking(bool hasBookID)
+		{
+			if (!hasBookID)
+			{
+				BookingID = ( from c in Database.DatabaseController.Database.Customers
+							  from b in c.Bookings
+							  select b.BookingID ).Max() + 1;
+			}
+		}
 	}
 }

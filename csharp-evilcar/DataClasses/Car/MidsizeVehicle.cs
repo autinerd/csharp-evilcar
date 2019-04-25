@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CsharpEvilcar.DataClasses
+﻿namespace CsharpEvilcar.DataClasses
 {
 	class MidsizeVehicle : Vehicle
 	{
-		public new static readonly decimal DayPrice = 60;
-		public new static readonly Service[] Services = { Navigation, Spotify, AirConditioner };
-		public MidsizeVehicle(string Numberplate, string Type, string Brand) : base(Numberplate, Type, Brand)
+		public new static decimal DayPrice => 60;
+		public new static Service[] Services => new Service[] { Navigation, Spotify, AirConditioner };
+		public MidsizeVehicle(string numberplate, string type, string brand, bool hasVehID) : base(numberplate, type, brand, hasVehID)
 		{
 			Category = CategoryEnum.Midsize;
 		}
