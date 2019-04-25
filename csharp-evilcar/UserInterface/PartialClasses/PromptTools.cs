@@ -11,6 +11,8 @@ namespace CsharpEvilcar.UserInterface
 		private static string[] GetInput(int MinLength = 0, int Maxlength = -1)
 		{
 			string[] input = Console.ReadLine().Split(' ');
+			if (!CheckLength(input, MinLength, Maxlength))
+			{throw new AbortCommandExecution();}
 			return input;
 		}
 
@@ -25,7 +27,6 @@ namespace CsharpEvilcar.UserInterface
 			{
 				Console.WriteLine(OutputStrings.MainLevel.CommandTooShort);
 				return false;
-
 			}
 			return true;
 		}

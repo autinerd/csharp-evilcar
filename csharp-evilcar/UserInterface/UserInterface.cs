@@ -17,6 +17,7 @@ namespace CsharpEvilcar.UserInterface
 			// login and run the prompt
 			if (Login())
 			{
+				Console.Write(OutputStrings.Login.Successful);
 				ErrorCode loaded = Database.DatabaseController.LoadDatabase();
 				Prompt();
 			}
@@ -32,48 +33,57 @@ namespace CsharpEvilcar.UserInterface
 		{
 			while (true)
 			{
-				// read in command and separate selection from parameters
-				Console.Write(OutputStrings.Prompt);
-				string[] parameters = GetInput();
-				string selection = parameters[0].ToLower();
-				parameters = parameters.Skip(1).ToArray();
-
-			
-				// execute command
-				switch (selection)
+				try
 				{
-					case "add":
-						AddCase(parameters);
-						break;
+					// read in command and separate selection from parameters
+					Console.Write(OutputStrings.Prompt);
+					string[] parameters = GetInput();
 
-					case "edit":
-						EditCase(parameters);
-						break;
+					string selection = parameters[0].ToLower();
+					parameters = parameters.Skip(1).ToArray();
 
-					case "remove":
-						RemoveCase(parameters);
-						#region
-						#endregion
-						break;
 
-					case "rebook":
-						RebookCase(parameters);
-						break;
+					// execute command
+					switch (selection)
+					{
+						case "add":
+							AddCase(parameters);
+							continue;
 
-					case "view":
-						ViewCase(parameters);
-						break;
+						case "edit":
+							EditCase(parameters);
+							continue;
 
-					case "?":
-					case "help":
-						break;
-					case "logout":
-					case "exit":
-						return;
+						case "remove":
+							RemoveCase(parameters);
+							continue;
 
-					default:
-						Console.WriteLine(Errors.Existence);
-						continue;
+						case "rebook":
+							RebookCase(parameters);
+							continue;
+
+						case "view":
+							ViewCase(parameters);
+							continue;
+
+						case "?":
+						case "help":
+							Console.Write(OutputStrings.MainLevel.Help);
+							continue;
+
+						case "logout":
+						case "exit":
+							return;
+
+						default:
+							Console.WriteLine(OutputStrings.MainLevel.CommandNotExisting);
+							continue;
+					}
+				}
+				catch (AbortCommandExecution)
+				{
+					Console.Write(OutputStrings.MainLevel.CommandAbort);
+					continue;
 				}
 			}
 		}

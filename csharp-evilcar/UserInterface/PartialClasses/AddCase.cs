@@ -11,43 +11,22 @@ namespace CsharpEvilcar.UserInterface
 		// case method
 		private static void AddCase(string[] parameters)
 		{
+			if (parameters.Length == 0)
+			{
+				Console.Write(OutputStrings.Add.AskForSelection);
+				parameters = GetInput(1, 1);
+			}
 			string selection = parameters[0].ToLower();
 			parameters = parameters.Skip(1).ToArray();
 
 			switch (selection)
 			{
 				case "vehicle":
-					switch (parameters.Length)
-					{
-
-						case 0:
-							Console.Write(OutputStrings.Add.Vehicle.AskForNumberplate);
-							string numberplate = Console.ReadLine();    // no ErrorHandling yet
-							Console.Write(OutputStrings.Add.Vehicle.AskForVehicleParameters);
-							parameters = GetInput();
-							goto case 5;
-						case 5:
-							//Add vehicle
-							#warning Hier muss ich noch das Auto erzeugen.
-							break;
-						case 1:
-						case 2:
-						case 3:
-						case 4:
-							if (parameters.Last() == "?")
-							{
-								Console.Write(OutputStrings.Add.Vehicle.Help);
-								break;
-							}
-							else { goto default; }
-						default:
-							Console.Write(OutputStrings.Add.Vehicle.Error);
-							break;
-					}
+					AddVehicle(parameters);
 					break;
 
 				case "customer":
-					AddCustomer();
+					AddCustomer(parameters);
 					break;
 
 				case "?":
@@ -62,13 +41,58 @@ namespace CsharpEvilcar.UserInterface
 		}
 
 		// tool methods for case method
-		private static void AddVehicle()
+		private static void AddVehicle(string[] parameters)
 		{
+			switch (parameters.Length)
+			{
+				case 0:
+					Console.Write(OutputStrings.Add.Vehicle.AskForVehicleParameters);
+					parameters = GetInput();
+					goto case 5;
+				case 5:
+					//Add vehicle
+					#warning Hier muss ich noch das Auto erzeugen.
+					break;
 
+				case 1:
+				case 2:
+				case 3:
+				case 4:
+					if (parameters.Last() == "?")
+					{
+						Console.Write(OutputStrings.Add.Vehicle.Help);
+						break;
+					}
+					else { goto default; }
+				default:
+					Console.Write(OutputStrings.Add.Vehicle.Error);
+					break;
+			}
 		}
 
-		private static void AddCustomer()
+		private static void AddCustomer(string[] parameters)
 		{
+
+			switch (parameters.Length) {
+				case 0:
+					Console.Write(OutputStrings.Add.Customer.AskForCustomerParameters);
+					parameters = GetInput(2, 2);
+					goto case 2;
+				case 2:
+					//Add customer
+					break;
+				case 1:
+					if(parameters.Last() == "?")
+					{
+						Console.Write(OutputStrings.Add.Customer.Help);
+						break;
+					}
+					else { goto default; }
+				default:
+					Console.Write(OutputStrings.Add.Customer.Error);
+					break;
+			}
+			/*
 			Console.Write(OutputStrings.AddCustomer);
 			string[] customerArray = GetInput();
 
@@ -78,7 +102,7 @@ namespace CsharpEvilcar.UserInterface
 				string firstName = customerArray[1];
 				// InternalLogic.addCustomer(lastName, firstName);
 				// InternalLogic.addCustomer(customerArray[0], customerArray[1]);
-			}
+			}*/
 		}
 
 	}
