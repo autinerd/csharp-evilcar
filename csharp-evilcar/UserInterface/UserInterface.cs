@@ -22,7 +22,7 @@ namespace CsharpEvilcar.UserInterface
 		{
 			while (true)
 			{
-				Console.Write(Strings.OfferHelp);
+				Console.Write(Strings.Prompt);
 				string[] commandArray = GetInput();
 
 				if (!CheckLength(commandArray, 2))
@@ -208,6 +208,7 @@ namespace CsharpEvilcar.UserInterface
 				ConsoleKeyInfo key = Console.ReadKey(true);
 				if (key.Key == ConsoleKey.Enter)
 				{
+					Console.WriteLine();
 					break;
 				}
 				else if (key.Key == ConsoleKey.Backspace)

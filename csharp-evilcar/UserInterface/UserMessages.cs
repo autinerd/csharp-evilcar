@@ -4,11 +4,12 @@ namespace CsharpEvilcar.UserInterface
 {
 	internal static class Strings
 	{
-		public static string WelcomeUsername => "Welcome to EvilCar\nPlease enter your Username:\n> ";
+		public static string Prompt => "> ";
+		public static string WelcomeUsername => "Welcome to EvilCar!\nlogin as: ";
 
-		public static string PasswordQuestion => "Please enter your Password:\n> ";
+		public static string PasswordQuestion => "password: ";
 
-		public static string OfferHelp => "enter your command (key in 'help' for all possible commands)\n>> ";
+		public static string OfferHelp => "Enter your commands (type 'help' for all possible commands)\n";
 
 		public static string Numberplate => "Please enter the numberplate of the new vehicle for example: S-XY 4589\n>>> ";
 

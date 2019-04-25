@@ -97,6 +97,7 @@
     <Compile Include="DataClasses\Fleet.cs" />
     <Compile Include="DataClasses\Person\FleetManager.cs" />
     <Compile Include="DataClasses\Person\Person.cs" />
+    <Compile Include="InternalLogic\Add.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserInterface\UserMessages.cs" />
