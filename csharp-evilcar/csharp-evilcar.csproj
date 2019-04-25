@@ -100,6 +100,13 @@
     <Compile Include="InternalLogic\Add.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserInterface\PartialClasses\AddCase.cs" />
+    <Compile Include="UserInterface\PartialClasses\EditCase.cs" />
+    <Compile Include="UserInterface\PartialClasses\Login.cs" />
+    <Compile Include="UserInterface\PartialClasses\RebookCase.cs" />
+    <Compile Include="UserInterface\PartialClasses\RemoveCase.cs" />
+    <Compile Include="UserInterface\PartialClasses\ViewCase.cs" />
+    <Compile Include="UserInterface\PartialClasses\PromptTools.cs" />
     <Compile Include="UserInterface\UserMessages.cs" />
     <Compile Include="UserInterface\UserInterface.cs" />
   </ItemGroup>

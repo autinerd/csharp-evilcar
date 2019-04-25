@@ -6,221 +6,76 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.UserInterface
 {
-	internal static class UserInterface
+	internal static partial class UserInterface
 	{
 		internal static void Main(string[] args)
 		{
-			if (!Login())
+			// print programm begin info
+			Console.Write(OutputStrings.EvilCarLogo);
+			Console.Write(OutputStrings.MainLevel.ProgrammBegin);
+
+			// login and run the prompt
+			if (Login())
 			{
-				return;
+				int loaded = Database.DatabaseController.LoadDatabase();
+				Prompt();
 			}
-			int loaded = Database.DatabaseController.LoadDatabase();
-			Prompt();
+			else { Console.WriteLine(OutputStrings.Login.Failed); }
+
+			// close the programm
+			Console.Write(OutputStrings.MainLevel.ProgrammEnd);
+			Console.ReadKey();
 		}
+
 
 		private static void Prompt()
 		{
 			while (true)
 			{
-				Console.Write(Strings.Prompt);
-				string[] commandArray = GetInput();
+				// read in command and separate selection from parameters
+				Console.Write(OutputStrings.Prompt);
+				string[] parameters = GetInput();
+				string selection = parameters[0].ToLower();
+				parameters = parameters.Skip(1).ToArray();
 
-				if (!CheckLength(commandArray, 2))
-				{
-					return;     // not good yet because new Login necessary
-				}
-
-				switch (commandArray[0])
+			
+				// execute command
+				switch (selection)
 				{
 					case "add":
-						switch (commandArray[1])
-						{
-							case "vehicle":
-								AddVehicle();
-								break;
-
-							case "customer":
-								AddCustomer();
-								break;
-
-							default:
-								Console.WriteLine(Errors.Combine);
-								break;
-						}
+						AddCase(parameters);
 						break;
 
 					case "edit":
-						switch (commandArray[1])
-						{
-							case "vehicle":
-								EditVehicle();
-								break;
-
-							case "customer":
-								EditCustomer();
-								break;
-
-							default:
-								Console.WriteLine(Errors.Combine);
-								break;
-						}
+						EditCase(parameters);
 						break;
 
 					case "remove":
-						switch (commandArray[1])
-						{
-							case "vehicle":
-								RemoveVehicle();
-								break;
-
-							case "customer":
-								RemoveCustomer();
-								break;
-
-							default:
-								Console.WriteLine(Errors.Combine);
-								break;
-						}
+						RemoveCase(parameters);
+						#region
+						#endregion
 						break;
 
 					case "rebook":
+						RebookCase(parameters);
 						break;
 
 					case "view":
+						ViewCase(parameters);
 						break;
 
+					case "?":
 					case "help":
 						break;
-
 					case "logout":
-						break;
-
 					case "exit":
-						// perhaps after exit(); a return instead break
-						break;
+						return;
 
 					default:
 						Console.WriteLine(Errors.Existence);
-						break;
+						continue;
 				}
 			}
-		}
-
-		#region commandArray[0] = "remove"
-
-		private static void RemoveCustomer()
-		{
-			throw new NotImplementedException();
-		}
-
-		private static void RemoveVehicle()
-		{
-			throw new NotImplementedException();
-		}
-
-		#endregion commandArray[0] = "remove"
-
-		#region commandArray[0] = "edit"
-
-		private static void EditCustomer()
-		{
-			throw new NotImplementedException();
-		}
-
-		private static void EditVehicle()
-		{
-			throw new NotImplementedException();
-		}
-
-		#endregion commandArray[0] = "edit"
-
-		#region commandArray[0] = "add"
-
-		private static void AddVehicle()
-		{
-			Console.Write(Strings.Numberplate);
-			string numberplate = Console.ReadLine();    // no ErrorHandling yet
-			Console.Write(Strings.VehicleParameters);
-			string[] vehicleParamArray = GetInput();
-
-			if (CheckLength(vehicleParamArray, 4))
-			{
-				// InternalLogik.addVehicle(brand, model, plate, class, fleet);
-				// IntternalLogic.addVehicle(vehicleParamArray[0], ..., numberplate, ...);
-			}
-		}
-
-		private static void AddCustomer()
-		{
-			Console.Write(Strings.AddCustomer);
-			string[] customerArray = GetInput();
-
-			if (CheckLength(customerArray, 2))
-			{
-				string lastName = customerArray[0];
-				string firstName = customerArray[1];
-				// InternalLogic.addCustomer(lastName, firstName);
-				// InternalLogic.addCustomer(customerArray[0], customerArray[1]);
-			}
-		}
-
-		#endregion commandArray[0] = "add"
-
-		private static string[] GetInput()
-		{
-			string input = Console.ReadLine();
-			return input.Split(' ');
-		}
-
-		private static bool CheckLength(string[] inputArray, int length)
-		{
-			if (inputArray.Length > length)
-			{
-				Console.WriteLine(Errors.TooLong);
-				return false;
-			}
-			return true;
-		}
-
-		private static bool Login()
-		{
-			Console.Write(Strings.WelcomeUsername);
-			string username = Console.ReadLine();
-			if (InputAndCheckPassword(username))
-			{
-				// InternalLogik.Login(UserName, Password);
-				return true;
-			}
-			else
-			{
-				Console.WriteLine(Errors.LoginFailed);
-				return false;
-			}
-		}
-
-		private static bool InputAndCheckPassword(string username)
-		{
-			string password = "";
-			string passwordPrompt = "Password: ";
-			Console.Write(passwordPrompt);
-			while (true)
-			{
-				ConsoleKeyInfo key = Console.ReadKey(true);
-				if (key.Key == ConsoleKey.Enter)
-				{
-					Console.WriteLine();
-					break;
-				}
-				else if (key.Key == ConsoleKey.Backspace)
-				{
-					password = password.Length == 0 ? "" : password.Remove(password.Length - 1, 1);
-				}
-				else
-				{
-					password += key.KeyChar;
-				}
-			}
-			return Database.DatabaseController.CheckUserCredentials(username, password);
 		}
 	}
 }
