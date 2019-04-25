@@ -10,7 +10,7 @@ namespace CsharpEvilcar.DataClasses
 		/// <summary>
 		/// List of vehicles.
 		/// </summary>
-		public IEnumerable<Vehicle> Vehicles { get; set; } = null;
+		public List<Vehicle> Vehicles { get; set; } = null;
 		/// <summary>
 		/// Location of the fleet.
 		/// </summary>
