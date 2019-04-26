@@ -25,12 +25,26 @@ namespace CsharpEvilcar.UserInterface
 		{
 			if (MaxLength > 0 && inputArray.Length > MaxLength)
 			{
-				Console.WriteLine(OutputStrings.MainLevel.CommandTooLong);
+				Console.WriteLine(Output.Error.CommandTooLong);
 				return false;
 			}
 			if (inputArray.Length < MinLength)
 			{
-				Console.WriteLine(OutputStrings.MainLevel.CommandTooShort);
+				Console.WriteLine(Output.Error.CommandTooShort);
+				return false;
+			}
+			return true;
+		}
+		private static bool CheckLength(IEnumerable<string> inputArray, int MinLength = 0, int MaxLength = -1)
+		{
+			if (MaxLength > 0 && inputArray.Count() > MaxLength)
+			{
+				Console.WriteLine(Output.Error.CommandTooLong);
+				return false;
+			}
+			if (inputArray.Count() < MinLength)
+			{
+				Console.WriteLine(Output.Error.CommandTooShort);
 				return false;
 			}
 			return true;

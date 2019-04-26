@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.UserInterface
 {
+#if q
 	internal static partial class UserInterface
 	{
 		// case method
@@ -37,4 +38,5 @@ namespace CsharpEvilcar.UserInterface
 		}
 
 	}
+#endif
 }

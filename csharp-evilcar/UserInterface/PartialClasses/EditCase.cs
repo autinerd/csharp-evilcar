@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.UserInterface
 {
-	
+
+#if q
 	internal static partial class UserInterface
 	{
 		// case method
@@ -14,7 +15,7 @@ namespace CsharpEvilcar.UserInterface
 		{
 			if (parameters.Length == 0)
 			{
-				Console.Write(OutputStrings.Edit.AskForSelection);
+				Console.Write(Output.Edit.AskForSelection);
 				parameters = GetInput(1, 1);
 			}
 			string selection = parameters[0].ToLower();
@@ -23,34 +24,25 @@ namespace CsharpEvilcar.UserInterface
 			switch (selection)
 			{
 				case "vehicle":
-					SubCase(OutputStrings.Edit.Vehicle, 2, DummyFunc, parameters);
+					SubCase(Output.Edit.Vehicle, parameters);
 					break;
 
 				case "customer":
-					SubCase(OutputStrings.Edit.Customer, 2, DummyFunc, parameters);
+					SubCase(Output.Edit.Customer,parameters);
 					break;
 
 				case "?":
 				case "help":
 					// help information
-					Console.Write(OutputStrings.Edit.Help);
+					Console.Write(Output.Edit.Help);
 					break;
 				default:
-					Console.WriteLine(Errors.Combine);
+					Console.WriteLine(Output.Error.Combine);
 					break;
 			}
 			return;
 		}
-
-		// tool methods for case method
-		private static void EditCustomer()
-		{
-			throw new NotImplementedException();
-		}
-
-		private static void EditVehicle()
-		{
-			throw new NotImplementedException();
-		}
+		
 	}
+#endif
 }

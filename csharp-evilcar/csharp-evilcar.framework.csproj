@@ -86,7 +86,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserInterface\*.cs" />
-    <Compile Include="UserInterface\PartialClasses\*.cs" />
+    <Compile Include="UserInterface\PartialClasses\DummyFunc.cs" />
+    <Compile Include="UserInterface\PartialClasses\Login.cs" />
+    <Compile Include="UserInterface\PartialClasses\MainCase.cs" />
+    <Compile Include="UserInterface\PartialClasses\PromptTools.cs" />
+    <Compile Include="UserInterface\PartialClasses\SubCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

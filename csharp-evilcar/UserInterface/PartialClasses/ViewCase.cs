@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.UserInterface
 {
+#if q
 	internal static partial class UserInterface
 	{
 		private static void ViewCase(string[] parameters)
@@ -14,4 +15,5 @@ namespace CsharpEvilcar.UserInterface
 			parameters = parameters.Skip(1).ToArray();
 		}
 	}
+#endif
 }

@@ -11,20 +11,20 @@ namespace CsharpEvilcar.UserInterface
 		internal static void Main(string[] args)
 		{
 			// print programm begin info
-			Console.Write(OutputStrings.EvilCarLogo);
-			Console.Write(OutputStrings.MainLevel.ProgrammBegin);
+			Console.Write(Output.Main.EvilCarLogo);
+			Console.Write(Output.Main.ProgrammBegin);
 
 			// login and run the prompt
 			if (Login())
 			{
-				Console.Write(OutputStrings.Login.Successful);
+				Console.Write(Output.Login.Successful);
 				ErrorCode loaded = Database.DatabaseController.LoadDatabase();
 				Prompt();
 			}
-			else { Console.WriteLine(OutputStrings.Login.Failed); }
+			else { Console.WriteLine(Output.Login.Failed); }
 
 			// close the programm
-			Console.Write(OutputStrings.MainLevel.ProgrammEnd);
+			Console.Write(Output.Main.ProgrammEnd);
 			Console.ReadKey();
 		}
 
@@ -36,85 +36,48 @@ namespace CsharpEvilcar.UserInterface
 				try
 				{
 					// read in command and separate selection from parameters
-					Console.Write(OutputStrings.Prompt);
+					Console.Write(Output.Prompt);
 					string[] parameters = GetInput();
 
 					string selection = parameters[0].ToLower();
 					parameters = parameters.Skip(1).ToArray();
 
-
-					// execute command
-					switch (selection)
-					{
-						case "add":
-							/*
-							 * vehicle		<numberplate> <brand> <model> <category> <fleet_ID>
-							 * customer		<name> <residence>
-							 */
-							AddCase(parameters);
-							continue;
-
-						case "edit":
-							/*
-							 * vehicle		<vehicle_ID> (numberplate|brand|model|category|fleet_ID) <new_value>
-							 * customer		<customer_ID> (name|residence) <new_value>
-							 */
-							EditCase(parameters);
-							continue;
-
-						case "remove":
-							/*
-							 * vehicle		<vehicle_ID>
-							 * customer		<customer_ID>
-							 */
-							RemoveCase(parameters);
-							continue;
-
-						case "view":
-							/*
-							 * branch	
-							 * fleet		[<branch_ID>]
-							 * vehicle		<none>
-							 *				| <branch_ID> [<fleet_ID>]
-							 *				| single <vehicle_ID>
-							 *				
-							 * customer		[ <customer_ID>]
-							 * 
-							 * bookings		<none>
-							 *				| <branch_ID> [<fleet_ID>]
-							 *				| vehicle <vehicle_ID>
-							 *				| customer <customer_ID>
-							 *				| booking <booking_ID>
-							 * 
-							 */
-							ViewCase(parameters);
-							continue;
-
-						case "booking":
-							/*
-							 * rent <vehicle_ID> <customer_ID>
-							 * return <vehicle_ID>
-							 */
-							BookCase(parameters);
-							continue;
-
-						case "?":
-						case "help":
-							Console.Write(OutputStrings.MainLevel.Help);
-							continue;
-
-						case "logout":
-						case "exit":
-							return;
-
-						default:
-							Console.WriteLine(OutputStrings.MainLevel.CommandNotExisting);
-							continue;
+					// serach and select main case
+					IEnumerable<Output.MainCase> cases = from s in Output.MainCases
+														 where s.CaseName == selection
+														 select s;
+					if (cases.Count() == 1)
+					{	// if one main case was detected execute this main case
+						MainCase(cases.Single(), parameters);
+						continue;
+					}
+					else if (selection == "?" || selection == "help")
+					{	//asked for help
+						Console.Write(Output.Main.Help);
+						Console.Write(Output.Add.Syntax);
+						Console.Write(Output.Edit.Syntax);
+						Console.Write(Output.Delete.Syntax);
+						Console.Write(Output.Booking.Syntax);
+						Console.Write(Output.View.Syntax);
+						continue;
+					}
+					else if (selection == "")
+					{	// skip empty new line
+						continue;
+					}
+					else if (selection == "logout" || selection == "exit")
+					{	// logout
+						return;
+					}
+					else
+					{	// error case
+						Console.WriteLine(Output.Error.CommandNotExisting);
+						continue;
 					}
 				}
 				catch (AbortCommandExecution)
 				{
-					Console.Write(OutputStrings.MainLevel.CommandAbort);
+					Console.Write(Output.Error.CommandAbort);
 					continue;
 				}
 			}
