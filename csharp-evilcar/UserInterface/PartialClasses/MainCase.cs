@@ -11,18 +11,19 @@ namespace CsharpEvilcar.UserInterface
 		// interface
 		internal abstract class MainCase
 		{
+			public static string SyntaxHead = " MainCase\tSubCase\t\tParameter 1\tParameter 2\t\tParameter 3\tParameter 4\t\tParameter 5\n";
 			public virtual string AskForSelection { get; }
 			public virtual string Help { get; }
 			public virtual string CaseName { get; }
 			public virtual IEnumerable<SubCase> SubCases { get; }
-			public virtual string Syntax { get {
-					string str = "";
+			public virtual string Syntax (bool withHead ){
+					string str = withHead ? SyntaxHead : "";
 					foreach (SubCase Case in SubCases)
 					{
-						str = str + Case.Syntax+ "\n";
+						str = str + Case.Syntax;
 					}
-					return" MainCase\tSubCase\t\tParameter 1\tParameter 2\t\tParameter 3\tParameter 4\tParameter 5\n"+str;
-				} }
+					return str;
+				} 
 		}
 	}
 	internal static partial class UserInterface

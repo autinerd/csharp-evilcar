@@ -53,13 +53,16 @@ namespace CsharpEvilcar.UserInterface
 					}
 					else if (selection == "?" || selection == "help")
 					{	//asked for help
-						Console.Write(Output.Main.Help);
-						Console.Write(Output.Add.Syntax);
-						Console.Write(Output.Edit.Syntax);
-						Console.Write(Output.Delete.Syntax);
-						Console.Write(Output.Booking.Syntax);
-						Console.Write(Output.View.Syntax);
 						continue;
+					}
+					else if(selection == "syntax")
+					{
+						Console.Write(Output.Main.Help);
+						Console.Write(Output.Add.Syntax(true));
+						Console.Write(Output.Edit.Syntax(false));
+						Console.Write(Output.Delete.Syntax(false));
+						Console.Write(Output.Booking.Syntax(false));
+						Console.Write(Output.View.Syntax(false));
 					}
 					else if (selection == "")
 					{	// skip empty new line
