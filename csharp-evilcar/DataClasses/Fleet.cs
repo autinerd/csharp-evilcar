@@ -19,20 +19,12 @@ namespace CsharpEvilcar.DataClasses
 
 		public override string ToString() => ToString(false);
 
-		public string ToString(bool fullDetails)
-		{
-			if (fullDetails)
-			{
-				return $@"Fleet {Location}:
-	{Vehicles.Count} cars ({string.Join(", ", (from v in Vehicles group v by v.Category into newGroup select newGroup.Count()+" "+System.Enum.GetName(typeof(Vehicle.CategoryEnum), newGroup.Key)))})
+		public string ToString(bool fullDetails) => fullDetails
+				? $@"Fleet {Location}:
+	{Vehicles.Count} cars ({string.Join(", ",  from v in Vehicles group v by v.Category into newGroup select newGroup.Count() + " " + System.Enum.GetName(typeof(Vehicle.CategoryEnum), newGroup.Key) )})
 	Cars:
-		{string.Join("\n\t\t", (from v in Vehicles select v.ToString()))}
-";
-			}
-			else
-			{
-				return $"Fleet {Location}: {Vehicles.Count} cars ({string.Join(", ", (from v in Vehicles group v by v.Category into newGroup select newGroup.Count()+" "+System.Enum.GetName(typeof(Vehicle.CategoryEnum), newGroup.Key)))})";
-			}
-		}
+		{string.Join("\n\t\t",  from v in Vehicles select v.ToString() )}
+"
+				: $"Fleet {Location}: {Vehicles.Count} cars ({string.Join(", ",  from v in Vehicles group v by v.Category into newGroup select newGroup.Count() + " " + System.Enum.GetName(typeof(Vehicle.CategoryEnum), newGroup.Key) )})";
 	}
 }

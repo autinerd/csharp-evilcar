@@ -31,19 +31,11 @@ namespace CsharpEvilcar.DataClasses
 
 		public override string ToString() => ToString(false);
 
-		public string ToString(bool fullDetails)
-		{
-			if (fullDetails)
-			{
-				return $@"Booking {BookingID}:
+		public string ToString(bool fullDetails) => fullDetails
+				? $@"Booking {BookingID}:
 	Vehicle {Vehicle}
 	from {Startdate} to {Enddate}
-	Total cost: {Vehicle.TotalDayPrice * (decimal)Math.Floor((Enddate - Startdate).TotalDays)} EUR";
-			}
-			else
-			{
-				return $"Booking {BookingID}: Vehicle {VehicleID}, from {Startdate} to {Enddate}";
-			}
-		}
+	Total cost: {Vehicle.TotalDayPrice * (decimal)Math.Floor(( Enddate - Startdate ).TotalDays)} EUR"
+				: $"Booking {BookingID}: Vehicle {VehicleID}, from {Startdate} to {Enddate}";
 	}
 }
