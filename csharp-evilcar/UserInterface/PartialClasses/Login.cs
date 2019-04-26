@@ -14,7 +14,7 @@ namespace CsharpEvilcar.UserInterface
 		/// <returns>returns if the login was successful</returns>
 		private static bool Login()
 		{
-			Console.Write(OutputStrings.Login.AskForUsername);
+			Console.Write(Output.Login.AskForUsername);
 			return InputAndCheckPassword(Console.ReadLine()); // read username and go on with password query and password check
 		}
 

@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.UserInterface
 {
+#if q
 	internal static partial class UserInterface
 	{
 		private static void AddCase(string[] parameters)
 		{
 			if (parameters.Length == 0)
 			{
-				Console.Write(OutputStrings.Add.AskForSelection);
+				Console.Write(Output.Add.AskForSelection);
 				parameters = GetInput(1, 1);
 			}
 			string selection = parameters[0].ToLower();
@@ -22,23 +23,24 @@ namespace CsharpEvilcar.UserInterface
 			switch (selection)
 			{
 				case "vehicle":
-					SubCase(OutputStrings.Add.Vehicle, 5, DummyFunc, parameters);
+					SubCase(Output.Add.Vehicle, parameters);
 					break;
 
 				case "customer":
-					SubCase(OutputStrings.Add.Customer, 2, DummyFunc, parameters);
+					SubCase(Output.Add.Customer, parameters);
 					break;
 
 				case "?":
 				case "help":
 					// help information
-					Console.Write(OutputStrings.Add.Help);
+					Console.Write(Output.Add.Help);
 					break;
 				default:
-					Console.WriteLine(Errors.Combine);
+					Console.WriteLine(Output.Error.Combine);
 					break;
 			}
 			return;
 		}
 	}
+#endif
 }
