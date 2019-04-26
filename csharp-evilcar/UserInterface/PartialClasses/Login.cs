@@ -39,10 +39,12 @@ namespace CsharpEvilcar.UserInterface
 				}
 				else if (key.Key == ConsoleKey.Backspace)
 				{
+					if (password.Length > 0) { Console.Write("\b \b"); }
 					password = password.Length == 0 ? "" : password.Remove(password.Length - 1, 1);
 				}
 				else
 				{
+					Console.Write("*");
 					password += key.KeyChar;
 				}
 			}

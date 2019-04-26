@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.UserInterface
 {
+
+	using Local = OutputStrings.Add.Vehicle;
 	internal static partial class UserInterface
 	{
 		// case method

@@ -4,6 +4,12 @@ namespace CsharpEvilcar.UserInterface
 {
 	internal static class OutputStrings
 	{
+		internal interface SubCase
+		{
+			string AskForParameters { get; }
+			string Help { get; }
+			string Error { get; }
+		}
 
 		public const string EvilCarLogo =
 			#region Logo
@@ -50,32 +56,38 @@ exit | logout
 		}
 		internal static class Add
 		{
-			public const string AskForSelection = "do you want to add a 'vehicle' or a 'costumer': ";
+			public const string AskForSelection = "do you want to add a 'vehicle' or a 'costumer':\n>>>";
 			internal const string Help =
 				"help for 'add'\n" +
 				"you can use 'add vehicle' or 'add customer'\n";
 
-			internal static class Vehicle
+
+			internal static readonly _Vehicle Vehicle = new _Vehicle();
+			internal class _Vehicle: SubCase
 			{
-				public const string AskForVehicleParameters = "Please enter now the parameters of the new vehicle in the following format:  brand model class fleetNr for example: S-XY-4589 audi q5 electric 3\n>>> ";
-				public const string Help =
+				public string AskForParameters =>
+					"Please enter now the parameters of the new vehicle in the following format:\n"+
+					"numberplate brand model class fleetNr for example: S-XY-4589 audi q5 electric 3\n>>> ";
+				public string Help =>
 					"help for 'add vehicle'\n" +
 					"full command: add vehicle [ numberplate brand model class fleetNr]\n" +
 					"In brand, model and class none space allowed\n" +
 					"If you only use 'add vehicle' you will be ask for more information about the vehicle.\n" +
 					"If you want to do this at ones use the full command\n";
-				public const string Error = "Your input wasn't correct\n" + OutputStrings.RemindHelp;
+				public string Error => "Your input wasn't correct\n" + OutputStrings.RemindHelp;
 			}
-			internal static class Customer
+
+			internal static readonly _Customer Customer = new _Customer();
+			internal class _Customer : SubCase
 			{
-				public const string AskForCustomerParameters = "Please enter your Lastname Firstname: ";
-				public const string Help =
+				public string AskForParameters => "Please enter your Name Residence:\n>>>";
+				public string Help =>
 					"help for 'add customer'\n" +
-					"full command: add customer [ Lastname Firstname]\n" +
+					"full command: add customer [ Name Residence]\n" +
 					"In Lastname and Firstname none space allowed.\n"+
 					"If you only use 'add customer' you will be ask for more information about the coustomer.\n"+
 					"If you want to do this at ones use the full command\n";
-				public const string Error = "Your input wasn't correct\n" + OutputStrings.RemindHelp;
+				public string Error => "Your input wasn't correct\n" + OutputStrings.RemindHelp;
 			}
 		}
 
@@ -86,25 +98,17 @@ exit | logout
 		public static string Prompt => "> ";
 		public static string WelcomeUsername => "Welcome to EvilCar!\nlogin as: ";
 
-		public static string PasswordQuestion => "password: ";
-
 		public static string OfferHelp => "Enter your commands (type 'help' for all possible commands)\n";
 
 		
 		
 		
-		public static string Numberplate => "Please enter the numberplate of the new vehicle for example: S-XY 4589\n>>> ";
-
-		public static string VehicleParameters => "Please enter now the other parameters in the following format: brand model class fleet for example: audi q5 electric 3\n>>> ";
-
-		public static string AddCustomer => "Please enter the new Customer in the following format:\nLastName PreName \n>>> ";
+		
 	}
 
 	internal static class Errors
 	{
-
-		public static string TooLong => "your command is too long!";
-
 		public static string Combine => "your first command cannot be combined with your second!\n>>";
 	}
+	
 }
