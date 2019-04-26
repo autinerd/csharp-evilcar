@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CsharpEvilcar.UserInterface;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -22,14 +23,8 @@ namespace CsharpEvilcar.Database
 		/// </summary>
 		internal static Guid CurrentUser
 		{
-			get
-			{
-				return currentUser;
-			}
-			private set
-			{
-				currentUser = value;
-			}
+			get => currentUser;
+			private set => currentUser = value;
 		}
 		private static Guid currentUser = Guid.Empty;
 
@@ -39,7 +34,7 @@ namespace CsharpEvilcar.Database
 		/// Loads the database file contents into the <see cref="Database"/> object.
 		/// </summary>
 		/// <returns>Error code</returns>
-		internal static UserInterface.ErrorCode LoadDatabase()
+		internal static ErrorCode LoadDatabase()
 		{
 			try
 			{
@@ -47,7 +42,7 @@ namespace CsharpEvilcar.Database
 			}
 			catch (Exception)
 			{
-				return UserInterface.ErrorCode.DatabaseError;
+				return ErrorCode.DatabaseError;
 			}
 		}
 
@@ -55,7 +50,7 @@ namespace CsharpEvilcar.Database
 		/// Saves the <see cref="Database"/> object into the database file.
 		/// </summary>
 		/// <returns></returns>
-		internal static UserInterface.ErrorCode SaveDatabase()
+		internal static ErrorCode SaveDatabase()
 		{
 			try
 			{
@@ -63,26 +58,24 @@ namespace CsharpEvilcar.Database
 			}
 			catch (Exception)
 			{
-				return UserInterface.ErrorCode.DatabaseError;
+				return ErrorCode.DatabaseError;
 			}
 		}
 
-		private static UserInterface.ErrorCode SaveDatabaseFile()
+		private static ErrorCode SaveDatabaseFile()
 		{
-			JObject jObject;
-			UserInterface.ErrorCode returnval = MapToJSON(out jObject);
+			ErrorCode returnval = MapToJSON(out JObject jObject);
 			if (returnval != 0)
 			{
 				return returnval;
 			}
 			try
 			{
-				using (StreamWriter sw = new StreamWriter("database.json"))
-				using (JsonTextWriter writer = new JsonTextWriter(sw))
+				using (JsonTextWriter writer = new JsonTextWriter(new StreamWriter("database.json")))
 				{
 					jObject.WriteTo(writer);
 				}
-				return UserInterface.ErrorCode.Success;
+				return ErrorCode.Success;
 			}
 			catch (Exception)
 			{
@@ -106,11 +99,11 @@ namespace CsharpEvilcar.Database
 
 		}
 
-		private static UserInterface.ErrorCode MapToDatabase(JObject jObject)
+		private static ErrorCode MapToDatabase(JObject jObject)
 		{
 			if (CurrentUser == Guid.Empty)
 			{
-				return UserInterface.ErrorCode.NoUserLoggedIn;
+				return ErrorCode.NoUserLoggedIn;
 			}
 			else
 			{
@@ -178,15 +171,15 @@ namespace CsharpEvilcar.Database
 					})
 				};
 			}
-			return UserInterface.ErrorCode.Success;
+			return ErrorCode.Success;
 		}
 
-		private static UserInterface.ErrorCode MapToJSON(out JObject jObject)
+		private static ErrorCode MapToJSON(out JObject jObject)
 		{
 			jObject = null;
 			if (currentUser == Guid.Empty)
 			{
-				return UserInterface.ErrorCode.NoUserLoggedIn;
+				return ErrorCode.NoUserLoggedIn;
 			}
 			jObject = new JObject {
 				{
@@ -280,7 +273,7 @@ namespace CsharpEvilcar.Database
 					ReadDatabaseFile()["FleetManagers"]
 				}
 			};
-			return UserInterface.ErrorCode.Success;
+			return ErrorCode.Success;
 		}
 
 		/// <summary>

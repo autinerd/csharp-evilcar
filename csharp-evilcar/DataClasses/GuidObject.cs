@@ -12,9 +12,6 @@ namespace CsharpEvilcar.DataClasses
 		/// </summary>
 		public Guid GUID { get; set; } = Guid.Empty;
 
-		public GuidObject()
-		{
-			GUID = Guid.NewGuid();
-		}
+		public GuidObject() => GUID = Guid.NewGuid();
 	}
 }

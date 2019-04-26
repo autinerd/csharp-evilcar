@@ -4,7 +4,9 @@
 	{
 		public string Name { get; set; }
 		public string Residence { get; set; }
-		public Person(string name, string residence) : base()
+		public Person(
+			string name,
+			string residence) : base()
 		{
 			Name = name;
 			Residence = residence;

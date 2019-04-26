@@ -15,8 +15,7 @@ namespace CsharpEvilcar
 		/// <returns>Error code</returns>
 		internal static ErrorCode DeleteVehicle(IEnumerable<string> parameters)
 		{
-			int vehID;
-			if (!int.TryParse(parameters.ElementAt(0), out vehID))
+			if (!int.TryParse(parameters.ElementAt(0), out int vehID))
 			{
 				return ErrorCode.WrongArgument;
 			}
@@ -25,7 +24,8 @@ namespace CsharpEvilcar
 										where v.VehicleID == vehID
 										select f;
 
-			return fleets.Count() == 1 && fleets.Single().Vehicles.Count((v) => v.VehicleID == vehID) == 1
+			return fleets.Count() == 1
+				&& fleets.Single().Vehicles.Count((v) => v.VehicleID == vehID) == 1
 				? fleets.Single().Vehicles.Remove(( from ve in fleets.Single().Vehicles where ve.VehicleID == vehID select ve ).Single())
 				? ErrorCode.Success
 				: ErrorCode.DatabaseError
@@ -37,14 +37,11 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: CustomerID (0)</param>
 		/// <returns>Error code</returns>
-		internal static ErrorCode DeleteCustomer(IEnumerable<string> parameters)
-		{
-			int cusID;
-			return int.TryParse(parameters.ElementAt(0), out cusID) && DatabaseController.Database.Customers.Any((c) => c.CustomerID == cusID)
+		internal static ErrorCode DeleteCustomer(IEnumerable<string> parameters) => int.TryParse(parameters.ElementAt(0), out int cusID)
+			&& DatabaseController.Database.Customers.Any((c) => c.CustomerID == cusID)
 				? DatabaseController.Database.Customers.Remove(( from c in DatabaseController.Database.Customers where cusID == c.CustomerID select c ).Single())
 				? ErrorCode.Success
 				: ErrorCode.DatabaseError
 				: ErrorCode.WrongArgument;
-		}
 	}
 }

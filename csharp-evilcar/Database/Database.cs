@@ -19,6 +19,6 @@ namespace CsharpEvilcar.Database
 		/// <summary>
 		/// Branch of the current user
 		/// </summary>
-		public DataClasses.Branch MyBranch => (from b in DatabaseController.Database.Branches where b.Editable select b).Single();
+		public DataClasses.Branch MyBranch => ( from b in DatabaseController.Database.Branches where b.Editable select b ).Single();
 	}
 }

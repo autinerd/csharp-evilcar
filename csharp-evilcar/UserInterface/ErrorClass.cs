@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CsharpEvilcar.UserInterface
 {
@@ -12,7 +8,9 @@ namespace CsharpEvilcar.UserInterface
 		{
 			public AbortCommandExecution() { }
 			public AbortCommandExecution(string message) : base(message) { }
-			public AbortCommandExecution(string message, Exception inner): base(message, inner){}
+			public AbortCommandExecution(
+				string message,
+				Exception inner) : base(message, inner) { }
 		}
 	}
 }

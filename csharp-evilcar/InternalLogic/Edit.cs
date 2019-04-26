@@ -16,8 +16,7 @@ namespace CsharpEvilcar
 		/// <returns>Error code</returns>
 		internal static ErrorCode EditVehicle(IEnumerable<string> parameters)
 		{
-			int vehID;
-			if (!int.TryParse(parameters.ElementAt(0), out vehID))
+			if (!int.TryParse(parameters.ElementAt(0), out int vehID))
 			{
 				return ErrorCode.WrongArgument;
 			}
@@ -26,7 +25,7 @@ namespace CsharpEvilcar
 										where v.VehicleID == vehID
 										select f;
 
-			if (fleets.Count() != 1 || fleets.Single().Vehicles.Count((v) => v.VehicleID == vehID) != 1)
+			if (!( fleets.Count() == 1 && fleets.Single().Vehicles.Count((v) => v.VehicleID == vehID) == 1 ))
 			{
 				return ErrorCode.WrongArgument;
 			}
@@ -70,8 +69,8 @@ namespace CsharpEvilcar
 		/// <returns>Error code</returns>
 		internal static ErrorCode EditCustomer(IEnumerable<string> parameters)
 		{
-			int cusID;
-			if (!int.TryParse(parameters.ElementAt(0), out cusID) || !DatabaseController.Database.Customers.Any((c) => c.CustomerID == cusID))
+			if (!( int.TryParse(parameters.ElementAt(0), out int cusID)
+				&& DatabaseController.Database.Customers.Any((c) => c.CustomerID == cusID) ))
 			{
 				return ErrorCode.WrongArgument;
 			}

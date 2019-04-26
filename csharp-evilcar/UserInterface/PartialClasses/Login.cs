@@ -27,8 +27,7 @@ namespace CsharpEvilcar.UserInterface
 		private static bool InputAndCheckPassword(string username)
 		{
 			string password = ""; // empty password, will filled with the password
-			string passwordPrompt = "Password: ";
-			Console.Write(passwordPrompt);
+			Console.Write("Password: ");
 			while (true)
 			{
 				ConsoleKeyInfo key = Console.ReadKey(true);
@@ -40,7 +39,9 @@ namespace CsharpEvilcar.UserInterface
 				else if (key.Key == ConsoleKey.Backspace)
 				{
 					if (password.Length > 0) { Console.Write("\b \b"); }
-					password = password.Length == 0 ? "" : password.Remove(password.Length - 1, 1);
+					password = password.Length== 0 
+						? "" 
+						: password.Remove(password.Length - 1, 1);
 				}
 				else
 				{

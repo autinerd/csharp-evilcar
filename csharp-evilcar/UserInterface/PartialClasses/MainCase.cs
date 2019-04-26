@@ -15,14 +15,18 @@ namespace CsharpEvilcar.UserInterface
 			public virtual string Help { get; }
 			public virtual string CaseName { get; }
 			public virtual IEnumerable<SubCase> SubCases { get; }
-			public virtual string Syntax { get {
+			public virtual string Syntax
+			{
+				get
+				{
 					string str = "";
 					foreach (SubCase Case in SubCases)
 					{
-						str = str + Case.Syntax+ "\n";
+						str = str + Case.Syntax + "\n";
 					}
-					return" MainCase\tSubCase\t\tParameter 1\tParameter 2\t\tParameter 3\tParameter 4\tParameter 5\n"+str;
-				} }
+					return " MainCase\tSubCase\t\tParameter 1\tParameter 2\t\tParameter 3\tParameter 4\tParameter 5\n" + str;
+				}
+			}
 		}
 	}
 	internal static partial class UserInterface

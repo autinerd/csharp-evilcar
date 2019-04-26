@@ -27,7 +27,7 @@ namespace CsharpEvilcar.UserInterface
 				public const string ProgrammEnd = "\nSee you soon!\nYour EPT-EvilProgrammingTeam\n";
 				
 				public const string Help =
-				#region 
+				#region Help
 @"possible commands are:
 add
 edit
@@ -82,11 +82,11 @@ exit | logout
 					"In brand, model and class none space allowed\n" +
 					"If you only use 'add vehicle' you will be ask for more information about the vehicle.\n" +
 					"If you want to do this at ones use the full command\n";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => " add\t\tvehicle\t\t<numberplate>\t<brand>\t\t<model>\t\t<category>\t<fleet_ID>";
 				public override int MinParamterLength => 5;
 				public override int MaxParamterLength => 5;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.AddVehicle;
 			}
 
 			internal static readonly _Customer Customer = new _Customer();
@@ -100,11 +100,11 @@ exit | logout
 					"In Lastname and Firstname none space allowed.\n"+
 					"If you only use 'add customer' you will be ask for more information about the coustomer.\n"+
 					"If you want to do this at ones use the full command\n";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => " add\t\tcustomer\t<name>\t\t<residence>>";
 				public override int MinParamterLength => 2;
 				public override int MaxParamterLength => 2;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.AddCustomer;
 			}
 		}
 		internal static readonly _Edit Edit = new _Edit();
@@ -121,11 +121,11 @@ exit | logout
 				public override string CaseName => "vehicle";
 				public override string AskForParameters =>"edit-vehicle-AskForParameters\n";
 				public override string Help => "edit-vehicle-help";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => " edit\t\tvehicle\t\t<vehicle_ID>\t{numberplate|fleet_ID}\t<new_value>";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.EditVehicle;
 			}
 
 			internal static readonly _Customer Customer = new _Customer();
@@ -134,11 +134,11 @@ exit | logout
 				public override string CaseName => "customer";
 				public override string AskForParameters => "edit-customer-AskForParameters\n";
 				public override string Help => "edit-customer-help";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => " edit\t\tcustomer\t<customer_ID>\t{name|residence}\t<new_value>";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.EditCustomer;
 			}
 		}
 		internal static readonly _Delete Delete = new _Delete();
@@ -155,11 +155,11 @@ exit | logout
 				public override string CaseName => "vehicle";
 				public override string AskForParameters => "delete-vehicle-AskForParameters\n";
 				public override string Help => "delete-vehicle-help";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => " delete\tvehicle\t<vehicle_ID>";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.DeleteVehicle;
 			}
 
 			internal static readonly _Customer Customer = new _Customer();
@@ -168,11 +168,11 @@ exit | logout
 				public override string CaseName => "customer";
 				public override string AskForParameters => "delete-customer-AskForParameters\n";
 				public override string Help => "delete-customer-help";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => " delete\tcustomer\t<customer_ID>";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.DeleteCustomer;
 			}
 
 		}
@@ -190,7 +190,7 @@ exit | logout
 				public override string CaseName => "branch";
 				public override string AskForParameters => "View-Branch-AskForParameters\n";
 				public override string Help => "View-Branch-help";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => "view		branch";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
@@ -202,7 +202,7 @@ exit | logout
 				public override string CaseName => "fleet";
 				public override string AskForParameters => "View-Fleet-AskForParameters\n";
 				public override string Help => "View-Fleet-help";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => " view		fleet\n                     < branch_ID > ";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
@@ -214,7 +214,7 @@ exit | logout
 				public override string CaseName => "vehicle";
 				public override string AskForParameters => "View-vehicle-AskForParameters\n";
 				public override string Help => "View-vehicle-help";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => "view		vehicle\n						<branch_ID>		[<fleet_ID>]\n						single			<vehicle_ID>";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
@@ -226,7 +226,7 @@ exit | logout
 				public override string CaseName => "customer";
 				public override string AskForParameters => "View-customer-AskForParameters\n";
 				public override string Help => "View-customer-help";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => " view		customer\n                      < customer_ID >";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
@@ -238,7 +238,7 @@ exit | logout
 				public override string CaseName => "booking";
 				public override string AskForParameters => "View-booking-AskForParameters\n";
 				public override string Help => "View-booking-help";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => " view		bookings\n						<branch_ID>     [< fleet_ID >]\n						vehicle < vehicle_ID >\n						customer < customer_ID >\n						booking < booking_ID > ";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
@@ -260,11 +260,11 @@ exit | logout
 				public override string CaseName => "rent";
 				public override string AskForParameters => "booking-rent-AskForParameters\n";
 				public override string Help => "booking-rent-help";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => " booking	rent		<vehicle_ID>	<customer_ID>";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.BookingRent;
 			}
 
 			internal static readonly _Return Return = new _Return();
@@ -273,11 +273,11 @@ exit | logout
 				public override string CaseName => "return";
 				public override string AskForParameters => "booking-return-AskForParameters\n";
 				public override string Help => "booking-return-help";
-				public override string Error => "Your input wasn't correct\n" + Output.Main.RemindHelp;
+				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => "booking	return		<vehicle_ID>";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.BookingReturn;
 			}
 
 		}

@@ -16,18 +16,19 @@ namespace CsharpEvilcar
 		/// <returns>Error code</returns>
 		internal static ErrorCode BookingRent(IEnumerable<string> parameters)
 		{
-			int vehID, cusID;
-			if (!int.TryParse(parameters.ElementAt(0), out vehID) || !int.TryParse(parameters.ElementAt(1), out cusID))
+			if (!int.TryParse(parameters.ElementAt(0), out int vehID)
+				|| !int.TryParse(parameters.ElementAt(1), out int cusID))
 			{
 				return ErrorCode.WrongArgument;
 			}
 			IEnumerable<Customer> cc = from c in DatabaseController.Database.Customers
 					 where c.CustomerID == cusID
 					 select c;
-			if (( from f in DatabaseController.Database.MyBranch.Fleets
+			if (!( ( from f in DatabaseController.Database.MyBranch.Fleets
 				  from v in f.Vehicles
 				  where v.VehicleID == vehID
-				  select v ).Count() != 1 || cc.Count() != 1)
+				  select v ).Count() == 1 
+				  && cc.Count() == 1 ))
 			{
 				return ErrorCode.WrongArgument;
 			}
@@ -46,8 +47,7 @@ namespace CsharpEvilcar
 		/// <returns>Error code</returns>
 		internal static ErrorCode BookingReturn(IEnumerable<string> parameters)
 		{
-			int vehID;
-			if (!int.TryParse(parameters.ElementAt(0), out vehID))
+			if (!int.TryParse(parameters.ElementAt(0), out int vehID))
 			{
 				return ErrorCode.WrongArgument;
 			}
