@@ -25,7 +25,7 @@ namespace CsharpEvilcar.DataClasses
 		public readonly static Service SnowChains = new Service("Snow Chains", 20);
 
 		public static decimal DayPrice { get; private set; }
-		public string Numberplate { get; private set; }
+		public string Numberplate { get; set; }
 		public string Model { get; private set; }
 		public string Brand { get; private set; }
 		public int VehicleID { get; set; }

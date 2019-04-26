@@ -14,7 +14,7 @@ namespace CsharpEvilcar
 		/// <summary>
 		/// Adds a vehicle.
 		/// </summary>
-		/// <param name="parameters">Parameters: Numberplate (0), Brand (1), Model (2), Category (3), Fleet (4)</param>
+		/// <param name="parameters">Parameters: <see cref="Vehicle.Numberplate"/> (0), <see cref="Vehicle.Brand"/> (1), <see cref="Vehicle.Model"/> (2), <see cref="Vehicle.Category"/> (3), Number of <see cref="Fleet"/> (4)</param>
 		/// <returns>Error code</returns>
 		internal static ErrorCode AddVehicle(IEnumerable<string> parameters)
 		{
@@ -46,7 +46,7 @@ namespace CsharpEvilcar
 		/// <summary>
 		/// Adds a customer.
 		/// </summary>
-		/// <param name="parameters">Parameters: Name (0), Residence (1)</param>
+		/// <param name="parameters">Parameters: <see cref="Person.Name"/> (0), <see cref="Person.Residence"/> (1)</param>
 		/// <returns>Error code</returns>
 		internal static ErrorCode AddCustomer(IEnumerable<string> parameters)
 		{
@@ -55,29 +55,7 @@ namespace CsharpEvilcar
 				Name = parameters.ElementAt(0),
 				Residence = parameters.ElementAt(1)
 			});
-			return ErrorCode.Success;
-		}
 
-		/// <summary>
-		/// Adds a booking
-		/// </summary>
-		/// <param name="parameters">Parameters: Customer ID (0), Vehicle ID (1), Startdate (2), Enddate (3)</param>
-		/// <returns>Error code</returns>
-		internal static ErrorCode AddBooking(IEnumerable<string> parameters)
-		{
-			string custID = parameters.ElementAt(0), vehID = parameters.ElementAt(1), startdate = parameters.ElementAt(2), enddate = parameters.ElementAt(3);
-			DateTime start, end;
-			int cid, vid;
-			if (!DateTime.TryParseExact(startdate, "yyyyMMdd", null, DateTimeStyles.None, out start) || !DateTime.TryParseExact(enddate, "yyyyMMdd", null, DateTimeStyles.None, out end) || !int.TryParse(custID, out cid) || !int.TryParse(vehID, out vid))
-			{
-				return ErrorCode.WrongArgument;
-			}
-			DatabaseController.Database.Customers.Find(c => c.CustomerID == cid).Bookings.Add(new Booking(false)
-			{
-				VehicleID = vid,
-				Startdate = start,
-				Enddate = end
-			});
 			return ErrorCode.Success;
 		}
 	}
