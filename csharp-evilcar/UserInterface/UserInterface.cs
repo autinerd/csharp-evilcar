@@ -47,23 +47,55 @@ namespace CsharpEvilcar.UserInterface
 					switch (selection)
 					{
 						case "add":
+							/*
+							 * vehicle		<numberplate> <brand> <model> <category> <fleet_ID>
+							 * customer		<name> <residence>
+							 */
 							AddCase(parameters);
 							continue;
 
 						case "edit":
+							/*
+							 * vehicle		<vehicle_ID> (numberplate|brand|model|category|fleet_ID) <new_value>
+							 * customer		<customer_ID> (name|residence) <new_value>
+							 */
 							EditCase(parameters);
 							continue;
 
 						case "remove":
+							/*
+							 * vehicle		<vehicle_ID>
+							 * customer		<customer_ID>
+							 */
 							RemoveCase(parameters);
 							continue;
 
-						case "rebook":
-							RebookCase(parameters);
+						case "view":
+							/*
+							 * branch	
+							 * fleet		[<branch_ID>]
+							 * vehicle		<none>
+							 *				| <branch_ID> [<fleet_ID>]
+							 *				| single <vehicle_ID>
+							 *				
+							 * customer		[ <customer_ID>]
+							 * 
+							 * bookings		<none>
+							 *				| <branch_ID> [<fleet_ID>]
+							 *				| vehicle <vehicle_ID>
+							 *				| customer <customer_ID>
+							 *				| booking <booking_ID>
+							 * 
+							 */
+							ViewCase(parameters);
 							continue;
 
-						case "view":
-							ViewCase(parameters);
+						case "booking":
+							/*
+							 * rent <vehicle_ID> <customer_ID>
+							 * return <vehicle_ID>
+							 */
+							BookCase(parameters);
 							continue;
 
 						case "?":

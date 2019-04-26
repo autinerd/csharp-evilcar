@@ -15,6 +15,7 @@ namespace CsharpEvilcar.UserInterface
 			string input_str = Console.ReadLine();
 			input_str = Regex.Replace(input_str, @"(\A\s+)|(\s+\z)",""); // removing spaces at the begin and end
 			string[] input = Regex.Split(input_str , @"\s+"); // split by every occurence of one or more spaces
+			// Erkennung auf Hochkomma wenn Leerzeichen
 			if (!CheckLength(input, MinLength, Maxlength))
 			{throw new AbortCommandExecution();}
 			return input;

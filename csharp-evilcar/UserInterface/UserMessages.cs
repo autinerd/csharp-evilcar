@@ -24,7 +24,7 @@ namespace CsharpEvilcar.UserInterface
 		#endregion Logo
 			;
 
-		public const string RemindHelp = "If you want more information what parameter are possibly at this point write ?\n";
+		internal const string RemindHelp = "If you want more information what parameter are possibly at this point write ?\n";
 		internal static class MainLevel
 		{
 			public const string ProgrammBegin = "";
@@ -56,7 +56,7 @@ exit | logout
 		}
 		internal static class Add
 		{
-			public const string AskForSelection = "do you want to add a 'vehicle' or a 'costumer':\n>>>";
+			internal const string AskForSelection = "do you want to add a 'vehicle' or a 'costumer':\n>>>";
 			internal const string Help =
 				"help for 'add'\n" +
 				"you can use 'add vehicle' or 'add customer'\n";
@@ -91,19 +91,33 @@ exit | logout
 			}
 		}
 
-		
+		internal static class Edit
+		{
+			internal const string AskForSelection = "edit-AskForSelection\n";
+			internal const string Help = "edit-Help\n";
+
+			internal static readonly _Vehicle Vehicle = new _Vehicle();
+			internal class _Vehicle : SubCase
+			{
+				public string AskForParameters =>"edit-vehicle-AskForParameters\n";
+				public string Help => "edit-vehicle-help";
+				public string Error => "Your input wasn't correct\n" + OutputStrings.RemindHelp;
+			}
+
+			internal static readonly _Customer Customer = new _Customer();
+			internal class _Customer : SubCase
+			{
+				public string AskForParameters => "edit-customer-AskForParameters\n";
+				public string Help => "edit-customer-help";
+				public string Error => "Your input wasn't correct\n" + OutputStrings.RemindHelp;
+			}
+		}
+
 
 		// OLD
-
 		public static string Prompt => "> ";
 		public static string WelcomeUsername => "Welcome to EvilCar!\nlogin as: ";
-
-		public static string OfferHelp => "Enter your commands (type 'help' for all possible commands)\n";
-
-		
-		
-		
-		
+		public static string OfferHelp => "Enter your commands (type 'help' for all possible commands)\n";	
 	}
 
 	internal static class Errors

@@ -8,7 +8,7 @@ namespace CsharpEvilcar.UserInterface
 {
 	internal static partial class UserInterface
 	{
-		private static void RebookCase(string[] parameters)
+		private static void BookCase(string[] parameters)
 		{
 			string selection = parameters[0];
 			parameters = parameters.Skip(1).ToArray();

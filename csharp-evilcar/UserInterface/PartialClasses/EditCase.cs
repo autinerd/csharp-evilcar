@@ -6,26 +6,35 @@ using System.Threading.Tasks;
 
 namespace CsharpEvilcar.UserInterface
 {
-
-	using Local = OutputStrings.Add.Vehicle;
+	
 	internal static partial class UserInterface
 	{
 		// case method
 		private static void EditCase(string[] parameters)
 		{
+			if (parameters.Length == 0)
+			{
+				Console.Write(OutputStrings.Edit.AskForSelection);
+				parameters = GetInput(1, 1);
+			}
 			string selection = parameters[0].ToLower();
 			parameters = parameters.Skip(1).ToArray();
 
 			switch (selection)
 			{
 				case "vehicle":
-					EditVehicle();
+					SubCase(OutputStrings.Edit.Vehicle, 2, DummyFunc, parameters);
 					break;
 
 				case "customer":
-					EditCustomer();
+					SubCase(OutputStrings.Edit.Customer, 2, DummyFunc, parameters);
 					break;
 
+				case "?":
+				case "help":
+					// help information
+					Console.Write(OutputStrings.Edit.Help);
+					break;
 				default:
 					Console.WriteLine(Errors.Combine);
 					break;
