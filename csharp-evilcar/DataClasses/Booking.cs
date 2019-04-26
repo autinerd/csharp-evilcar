@@ -15,8 +15,8 @@ namespace CsharpEvilcar.DataClasses
 									where v.VehicleID == VehicleID
 									select v ).Single();
 		internal int VehicleID { get; set; }
-		public DateTime Startdate { get; set; } = default(DateTime);
-		public DateTime Enddate { get; set; } = default(DateTime);
+		public DateTime Startdate { get; set; } = default;
+		public DateTime Enddate { get; set; } = default;
 		public int BookingID { get; set; }
 
 		public Booking(bool hasBookID)

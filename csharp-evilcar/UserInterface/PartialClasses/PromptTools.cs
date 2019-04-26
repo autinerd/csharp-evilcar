@@ -13,11 +13,11 @@ namespace CsharpEvilcar.UserInterface
 		private static string[] GetInput(int MinLength = 0, int Maxlength = -1)
 		{
 			string input_str = Console.ReadLine();
-			input_str = Regex.Replace(input_str, @"(\A\s+)|(\s+\z)",""); // removing spaces at the begin and end
-			string[] input = Regex.Split(input_str , @"\s+"); // split by every occurence of one or more spaces
-			// Erkennung auf Hochkomma wenn Leerzeichen
+			input_str = Regex.Replace(input_str, @"(\A\s+)|(\s+\z)", ""); // removing spaces at the begin and end
+			string[] input = Regex.Split(input_str, @"\s+"); // split by every occurence of one or more spaces
+															 // Erkennung auf Hochkomma wenn Leerzeichen
 			if (!CheckLength(input, MinLength, Maxlength))
-			{throw new AbortCommandExecution();}
+			{ throw new AbortCommandExecution(); }
 			return input;
 		}
 
@@ -28,7 +28,7 @@ namespace CsharpEvilcar.UserInterface
 				Console.WriteLine(Output.Error.CommandTooLong);
 				return false;
 			}
-			if (inputArray.Length < MinLength)
+			else if (inputArray.Length < MinLength)
 			{
 				Console.WriteLine(Output.Error.CommandTooShort);
 				return false;
@@ -42,7 +42,7 @@ namespace CsharpEvilcar.UserInterface
 				Console.WriteLine(Output.Error.CommandTooLong);
 				return false;
 			}
-			if (inputArray.Count() < MinLength)
+			else if (inputArray.Count() < MinLength)
 			{
 				Console.WriteLine(Output.Error.CommandTooShort);
 				return false;

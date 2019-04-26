@@ -46,12 +46,15 @@ namespace CsharpEvilcar.UserInterface
 			{ LocalOutput.ExecuteCommand(parameters); }
 			else
 			{
-				if (parameters.Last() == "?" || parameters.Last() == "help") // check if user asked for help
-				{ Console.Write(LocalOutput.Help); }
-				else
+				switch (parameters.Last()) // check if user asked for help
 				{
-					Console.Write(LocalOutput.Error);
-					throw new AbortCommandExecution();
+					case "?":
+					case "help":
+						Console.Write(LocalOutput.Help);
+						break;
+					default:
+						Console.Write(LocalOutput.Error);
+						throw new AbortCommandExecution();
 				}
 
 			}
