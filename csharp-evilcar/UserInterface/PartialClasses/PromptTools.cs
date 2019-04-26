@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 
 namespace CsharpEvilcar.UserInterface
 {
@@ -10,7 +12,9 @@ namespace CsharpEvilcar.UserInterface
 	{
 		private static string[] GetInput(int MinLength = 0, int Maxlength = -1)
 		{
-			string[] input = Console.ReadLine().Split(' ');
+			string input_str = Console.ReadLine();
+			input_str = Regex.Replace(input_str, @"(\A\s+)|(\s+\z)",""); // removing spaces at the begin and end
+			string[] input = Regex.Split(input_str , @"\s+"); // split by every occurence of one or more spaces
 			if (!CheckLength(input, MinLength, Maxlength))
 			{throw new AbortCommandExecution();}
 			return input;
