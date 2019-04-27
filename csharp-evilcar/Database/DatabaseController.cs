@@ -41,10 +41,12 @@ namespace CsharpEvilcar.Database
 			{
 				return MapToDatabase(ReadDatabaseFile());
 			}
+#pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
 			{
 				return ErrorCode.DatabaseError;
 			}
+#pragma warning restore CA1031 // Do not catch general exception types
 		}
 
 		/// <summary>
@@ -57,10 +59,12 @@ namespace CsharpEvilcar.Database
 			{
 				return SaveDatabaseFile();
 			}
+#pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
 			{
 				return ErrorCode.DatabaseError;
 			}
+#pragma warning restore CA1031 // Do not catch general exception types
 		}
 
 		private static ErrorCode SaveDatabaseFile()
@@ -130,10 +134,12 @@ namespace CsharpEvilcar.Database
 					Branches = jObject["Branches"].Select((branch) => new DataClasses.Branch
 					{
 						GUID = Guid.Parse((string)branch["GUID"]),
+						Location = (string)branch["Location"],
 						FleetManager = new DataClasses.FleetManager
 						{
-							GUID = Guid.Parse((string)branch["FleetManager"])
-#warning Fleet Manager Data
+							GUID = Guid.Parse((string)branch["FleetManager"]),
+							Name = (string)(from f in jObject["FleetManagers"] where (string)f["GUID"] == (string)branch["FleetManager"] select f).Single()["Name"],
+							Residence = (string)( from f in jObject["FleetManagers"] where (string)f["GUID"] == (string)branch["FleetManager"] select f ).Single()["Residence"]
 						},
 						Fleets = branch["Fleets"].Select((fleet) => new DataClasses.Fleet
 						{
@@ -203,7 +209,7 @@ namespace CsharpEvilcar.Database
 							new JArray(branch.Fleets.Select(fleet => new JObject
 							{
 								{
-									"ID",
+									"GUID",
 									fleet.GUID
 								},
 								{
@@ -211,7 +217,7 @@ namespace CsharpEvilcar.Database
 									new JArray(fleet.Vehicles.Select(vehicle => new JObject
 									{
 										{
-											"ID",
+											"GUID",
 											vehicle.GUID
 										},
 										{
@@ -221,10 +227,30 @@ namespace CsharpEvilcar.Database
 										{
 											"Category",
 											(int)vehicle.Category
+										},
+										{
+											"Model",
+											vehicle.Model
+										},
+										{
+											"Brand",
+											vehicle.Brand
+										},
+										{
+											"VehicleID",
+											vehicle.VehicleID
 										}
 									}))
+								},
+								{
+									"Location",
+									fleet.Location
 								}
 							}))
+						},
+						{
+							"Location",
+							branch.Location
 						}
 					}))
 				},

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace CsharpEvilcar.UserInterface
 {
 	internal static partial class Output
-	{	
+	{
 		// general
 		internal static class Main
 		{
@@ -25,11 +25,11 @@ namespace CsharpEvilcar.UserInterface
 			;
 
 			internal const string RemindHelp = "If you want more information what parameter are possibly at this point write ?\n";
-				public const string ProgrammBegin = "";
-				public const string ProgrammEnd = "\nSee you soon!\nYour EPT-EvilProgrammingTeam\n";
-				
-				public const string Help =
-				#region 
+			public const string ProgrammBegin = "";
+			public const string ProgrammEnd = "\nSee you soon!\nYour EPT-EvilProgrammingTeam\n";
+			public static string[] HelpStrings => new string[] { "help", "?" };
+			public const string Help =
+			#region 
 @"possible commands are:
 add
 edit
@@ -39,9 +39,9 @@ view
 exit | logout
 ? | help
 "
-				#endregion
+			#endregion
 				;
-			}
+		}
 		internal static class Login
 		{
 			public const string AskForUsername = "please enter username: ";
@@ -55,7 +55,7 @@ exit | logout
 			public const string CommandTooLong = "too much parameters have been inserted\n\n";
 
 			public const string CommandNotExisting = "command doesn't exist, please use '?' for help";
-			public const string CommandAbort = "your inserted command was not executet.\n";
+			public const string CommandAbort = "The command was not executed.";
 
 		}
 
@@ -72,11 +72,11 @@ exit | logout
 
 
 			internal static readonly _Vehicle Vehicle = new _Vehicle();
-			internal class _Vehicle: SubCase
+			internal class _Vehicle : SubCase
 			{
 				public override string CaseName => "vehicle";
 				public override string AskForParameters =>
-					"Please enter now the parameters of the new vehicle in the following format:\n"+
+					"Please enter now the parameters of the new vehicle in the following format:\n" +
 					"numberplate brand model class fleetNr for example: S-XY-4589 audi q5 electric 3\n>>> ";
 				public override string Help =>
 					"help for 'add vehicle'\n" +
@@ -99,14 +99,14 @@ exit | logout
 				public override string Help =>
 					"help for 'add customer'\n" +
 					"full command: add customer [ Name Residence]\n" +
-					"In Lastname and Firstname none space allowed.\n"+
-					"If you only use 'add customer' you will be ask for more information about the coustomer.\n"+
+					"In Lastname and Firstname none space allowed.\n" +
+					"If you only use 'add customer' you will be ask for more information about the coustomer.\n" +
 					"If you want to do this at ones use the full command\n";
 				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => " add\t\tcustomer\t<name>\t\t<residence>\n";
 				public override int MinParamterLength => 2;
 				public override int MaxParamterLength => 2;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.AddCustomer;
 			}
 		}
 		internal static readonly _Edit Edit = new _Edit();
@@ -121,13 +121,13 @@ exit | logout
 			internal class _Vehicle : SubCase
 			{
 				public override string CaseName => "vehicle";
-				public override string AskForParameters =>"edit-vehicle-AskForParameters\n";
+				public override string AskForParameters => "edit-vehicle-AskForParameters\n";
 				public override string Help => "edit-vehicle-help";
 				public override string Error => "Your input wasn't correct\n" + Main.RemindHelp;
 				public override string Syntax => " edit\t\tvehicle\t\t<vehicle_ID>\t{numberplate|fleet_ID}\t<new_value>\n";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.EditVehicle;
 			}
 
 			internal static readonly _Customer Customer = new _Customer();
@@ -140,7 +140,7 @@ exit | logout
 				public override string Syntax => " edit\t\tcustomer\t<customer_ID>\t{name|residence}\t<new_value>\n";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.EditCustomer;
 			}
 		}
 		internal static readonly _Delete Delete = new _Delete();
@@ -161,7 +161,7 @@ exit | logout
 				public override string Syntax => " delete\t\tvehicle\t\t<vehicle_ID>\n";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.DeleteVehicle;
 			}
 
 			internal static readonly _Customer Customer = new _Customer();
@@ -174,7 +174,7 @@ exit | logout
 				public override string Syntax => " delete\t\tcustomer\t<customer_ID>\n";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.DeleteCustomer;
 			}
 
 		}
@@ -182,7 +182,7 @@ exit | logout
 		internal class _View : MainCase
 		{
 			public override string CaseName => "view";
-			public override IEnumerable<SubCase> SubCases => new List<SubCase> {Branch,Fleet, Vehicle, Customer ,Booking};
+			public override IEnumerable<SubCase> SubCases => new List<SubCase> { Branch, Fleet, Vehicle, Customer, Booking };
 			public override string AskForSelection => "View-AskForSelection\n";
 			public override string Help => "View-Help\n";
 
@@ -266,7 +266,7 @@ exit | logout
 				public override string Syntax => " booking\trent\t\t<vehicle_ID>\t<customer_ID>\n";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.BookingRent;
 			}
 
 			internal static readonly _Return Return = new _Return();
@@ -279,7 +279,7 @@ exit | logout
 				public override string Syntax => " booking\treturn\t\t<vehicle_ID>\n";
 				public override int MinParamterLength => 0;
 				public override int MaxParamterLength => -1;
-				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => UserInterface.DummyFunc;
+				public override Func<IEnumerable<string>, ErrorCode> ExecuteCommand => InternalLogic.BookingReturn;
 			}
 
 		}
@@ -287,9 +287,9 @@ exit | logout
 		// OLD
 		public static string Prompt => "> ";
 		public static string WelcomeUsername => "Welcome to EvilCar!\nlogin as: ";
-		public static string OfferHelp => "Enter your commands (type 'help' for all possible commands)\n";	
+		public static string OfferHelp => "Enter your commands (type 'help' for all possible commands)\n";
 	}
-	
+
 }
 
 

@@ -6,12 +6,10 @@ namespace CsharpEvilcar.UserInterface
 {
 	internal static partial class Output
 	{
-		internal abstract class SubCase
+		internal abstract class SubCase : HelpErrorCase
 		{
 			public virtual string CaseName { get; }
 			public virtual string AskForParameters { get; }
-			public virtual string Help { get; }
-			public virtual string Error { get; }
 			public virtual string Syntax { get; }
 			public virtual int MinParamterLength { get; }
 			public virtual int MaxParamterLength { get; }
@@ -27,32 +25,19 @@ namespace CsharpEvilcar.UserInterface
 		/// </summary>
 		/// <param name="LocalOutput">path to the output information for this subcase</param>
 		/// <param name="parameters">parameters which were entered from the user</param>
-		private static void SubCase(Output.SubCase LocalOutput, IEnumerable<string> parameters)
+		private static (ErrorCode, Output.SubCase) SubCase(Output.SubCase LocalOutput, string[] parameters)
 		{
 			if (parameters.Count() == 0) // if sub case was called without any parameters, then ask for more information
 			{
 				Console.Write(LocalOutput.AskForParameters);
-				try { parameters = GetInput(LocalOutput.MinParamterLength, LocalOutput.MaxParamterLength); }
-				catch (AbortCommandExecution) { }
+				_ = GetInput(out parameters, LocalOutput.MinParamterLength, LocalOutput.MaxParamterLength);
 			}
 
-			if (CheckLength(parameters, LocalOutput.MinParamterLength, LocalOutput.MaxParamterLength)) // if parameteres number is correct than execute
-			{ _ = LocalOutput.ExecuteCommand(parameters); }
-			else
-			{
-				switch (parameters.Last()) // check if user asked for help
-				{
-					case "?":
-					case "help":
-						Console.Write(LocalOutput.Help);
-						break;
-					default:
-						Console.Write(LocalOutput.Error);
-						throw new AbortCommandExecution();
-				}
-
-			}
-
+			return CheckLength(parameters, LocalOutput.MinParamterLength, LocalOutput.MaxParamterLength) != ErrorCode.Success
+				? !parameters.Any(s => Output.Main.HelpStrings.Contains(s))
+				? (ErrorCode.CommandAbort, LocalOutput) // no success, no help
+				: (ErrorCode.HelpNeeded, LocalOutput) // no success, but help
+				: (LocalOutput.ExecuteCommand(parameters), LocalOutput); // success
 		}
 
 	}

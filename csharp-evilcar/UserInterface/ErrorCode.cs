@@ -5,6 +5,10 @@
 		Success,
 		WrongArgument,
 		DatabaseError,
-		NoUserLoggedIn
+		NoUserLoggedIn,
+		CommandAbort,
+		CommandTooShort,
+		CommandTooLong,
+		HelpNeeded
 	}
 }

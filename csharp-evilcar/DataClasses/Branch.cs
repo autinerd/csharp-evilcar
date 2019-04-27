@@ -11,7 +11,7 @@ namespace CsharpEvilcar.DataClasses
 		/// <summary>
 		/// Whether the branch is allowed to edit or not.
 		/// </summary>
-		public bool Editable => FleetManager != null && 
+		public bool Editable => FleetManager != null &&
 			FleetManager.GUID == Database.DatabaseController.CurrentUser &&
 			Database.DatabaseController.CurrentUser != Guid.Empty;
 
@@ -24,5 +24,9 @@ namespace CsharpEvilcar.DataClasses
 		/// The associated fleet manager.
 		/// </summary>
 		public FleetManager FleetManager { get; set; } = null;
+		/// <summary>
+		/// The Location of the branch
+		/// </summary>
+		public string Location { get; set; } = null;
 	}
 }
