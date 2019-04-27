@@ -4,7 +4,8 @@ namespace CsharpEvilcar.UserInterface
 {
 	internal static partial class UserInterface
 	{
-		internal class AbortCommandExecution : Exception
+		[Serializable]
+		public class AbortCommandExecution : Exception
 		{
 			public AbortCommandExecution() { }
 			public AbortCommandExecution(string message) : base(message) { }

@@ -2,6 +2,7 @@
 using CsharpEvilcar.DataClasses;
 using CsharpEvilcar.UserInterface;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -17,13 +18,13 @@ namespace CsharpEvilcar
 		internal static ErrorCode AddVehicle(IEnumerable<string> parameters)
 		{
 			string numberplate = parameters.ElementAt(0), brand = parameters.ElementAt(1), model = parameters.ElementAt(2), category = parameters.ElementAt(3), fleet = parameters.ElementAt(4);
-			if (!( Regex.IsMatch(numberplate, "^[A-Z]{1,3}-[A-Z]{1,2}-[0-9]{1,4}$")
+			if (!( Regex.IsMatch(numberplate, "[A-Z]{1,3}-[A-Z]{1,2}-[0-9]{1,4}")
 				&& int.TryParse(fleet, out int fleetnum)
-				&& DatabaseController.Database.MyBranch.Fleets.Count() < fleetnum ))
+				&& DatabaseController.Database.MyBranch.Fleets.Count() >= fleetnum ))
 			{
 				return ErrorCode.WrongArgument;
 			}
-			switch (category.ToLower())
+			switch (category.ToLower(CultureInfo.CurrentCulture))
 			{
 				case "small":
 					DatabaseController.Database.MyBranch.Fleets[fleetnum].Vehicles.Add(new SmallVehicle(numberplate, model, brand, false));

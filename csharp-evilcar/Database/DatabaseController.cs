@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -71,7 +72,9 @@ namespace CsharpEvilcar.Database
 			}
 			try
 			{
+#pragma warning disable CA1508 // Avoid dead conditional code
 				using (JsonTextWriter writer = new JsonTextWriter(new StreamWriter("database.json")))
+#pragma warning restore CA1508 // Avoid dead conditional code
 				{
 					jObject.WriteTo(writer);
 				}
@@ -130,6 +133,7 @@ namespace CsharpEvilcar.Database
 						FleetManager = new DataClasses.FleetManager
 						{
 							GUID = Guid.Parse((string)branch["FleetManager"])
+#warning Fleet Manager Data
 						},
 						Fleets = branch["Fleets"].Select((fleet) => new DataClasses.Fleet
 						{
@@ -140,25 +144,25 @@ namespace CsharpEvilcar.Database
 								switch ((DataClasses.Vehicle.CategoryEnum)(int)vehicle["Category"])
 								{
 									case DataClasses.Vehicle.CategoryEnum.Small:
-										return new DataClasses.SmallVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"], true)
+										return new DataClasses.SmallVehicle((string)vehicle["Numberplate"], (string)vehicle["Model"], (string)vehicle["Brand"], true)
 										{
 											GUID = Guid.Parse((string)vehicle["GUID"]),
 											VehicleID = (int)vehicle["VehicleID"]
 										};
 									case DataClasses.Vehicle.CategoryEnum.Midsize:
-										return new DataClasses.MidsizeVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"], true)
+										return new DataClasses.MidsizeVehicle((string)vehicle["Numberplate"], (string)vehicle["Model"], (string)vehicle["Brand"], true)
 										{
 											GUID = Guid.Parse((string)vehicle["GUID"]),
 											VehicleID = (int)vehicle["VehicleID"]
 										};
 									case DataClasses.Vehicle.CategoryEnum.Large:
-										return new DataClasses.LargeVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"], true)
+										return new DataClasses.LargeVehicle((string)vehicle["Numberplate"], (string)vehicle["Model"], (string)vehicle["Brand"], true)
 										{
 											GUID = Guid.Parse((string)vehicle["GUID"]),
 											VehicleID = (int)vehicle["VehicleID"]
 										};
 									case DataClasses.Vehicle.CategoryEnum.Electric:
-										return new DataClasses.ElectricVehicle((string)vehicle["Numberplate"], (string)vehicle["Type"], (string)vehicle["Brand"], true)
+										return new DataClasses.ElectricVehicle((string)vehicle["Numberplate"], (string)vehicle["Model"], (string)vehicle["Brand"], true)
 										{
 											GUID = Guid.Parse((string)vehicle["GUID"]),
 											VehicleID = (int)vehicle["VehicleID"]
@@ -168,7 +172,7 @@ namespace CsharpEvilcar.Database
 								}
 							}).ToList()
 						}).ToList()
-					})
+					}).ToList()
 				};
 			}
 			return ErrorCode.Success;
@@ -250,11 +254,11 @@ namespace CsharpEvilcar.Database
 							{
 								{
 									"Startdate",
-									booking.Startdate.ToString("yyyyMMdd")
+									booking.Startdate.ToString("yyyyMMdd", CultureInfo.InvariantCulture)
 								},
 								{
 									"Enddate",
-									booking.Enddate.ToString("yyyyMMdd")
+									booking.Enddate.ToString("yyyyMMdd", CultureInfo.InvariantCulture)
 								},
 								{
 									"GUID",

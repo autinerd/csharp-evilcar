@@ -12,7 +12,7 @@ namespace CsharpEvilcar.DataClasses
 		public string Brand { get; private set; }
 		public int VehicleID { get; set; }
 		public CategoryEnum Category { get; protected set; }
-		public decimal TotalDayPrice => ( from svc in Services select svc.Price ).Sum() + DayPrice;
+		public static decimal TotalDayPrice => ( from svc in Services select svc.Price ).Sum() + DayPrice;
 
 		protected Vehicle(
 			string numberplate,
@@ -23,7 +23,7 @@ namespace CsharpEvilcar.DataClasses
 			Numberplate = numberplate;
 			Model = model;
 			Brand = brand;
-			if (hasVehID)
+			if (!hasVehID)
 			{
 				VehicleID = ( from b in Database.DatabaseController.Database.Branches
 							  from f in b.Fleets

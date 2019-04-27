@@ -11,12 +11,16 @@
               "Category": 1,
               "GUID": "99A37FD6-06EB-419A-8C42-B6315D3504FD",
               "Numberplate": "WN-AB-1234",
+			  "Brand": "Smart",
+			  "Model": "forfour",
               "VehicleID": 1
             },
             {
               "Category": 2,
               "GUID": "2682A940-C649-4A1F-B1E5-8155A93F1E7B",
               "Numberplate": "WN-IO-998",
+			  "Brand": "Ford",
+			  "Model": "Escort",
               "VehicleID": 2
             }
           ]
@@ -37,7 +41,7 @@
           "Vehicle": 1
         }
       ],
-      "City": "Berlin",
+      "Residence": "Berlin",
       "CustomerID": 10000,
       "GUID": "658542EE-521C-47F3-847D-A514A250AFBE",
       "Name": "Lisa Müller"
@@ -47,7 +51,9 @@
     {
       "GUID": "9917F566-E103-4454-8A5D-2B227AA67DAC",
       "Password": "$s2$16384$8$1$M5+4B7ady+wIt5dXPYstLDtw8RH9KtNA21aeGcYpFaU=$2vZl32inmhNoG8NlBlWJ5BgeU3S0qN70rI+6Lh05jEw=", // 123456
-      "Username": "anna"
+      "Username": "anna",
+	  "Name": "Anna Heesch",
+	  "Residence": "Affalterbach"
     }
   ]
 }

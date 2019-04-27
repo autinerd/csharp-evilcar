@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CsharpEvilcar.UserInterface
 {
@@ -11,19 +10,17 @@ namespace CsharpEvilcar.UserInterface
 		// interface
 		internal abstract class MainCase
 		{
-			public static string SyntaxHead = " MainCase\tSubCase\t\tParameter 1\tParameter 2\t\tParameter 3\tParameter 4\t\tParameter 5\n";
+			public static string SyntaxHead => " MainCase\tSubCase\t\tParameter 1\tParameter 2\t\tParameter 3\tParameter 4\t\tParameter 5\n";
 			public virtual string AskForSelection { get; }
 			public virtual string Help { get; }
 			public virtual string CaseName { get; }
 			public virtual IEnumerable<SubCase> SubCases { get; }
-			public virtual string Syntax (bool withHead ){
-					string str = withHead ? SyntaxHead : "";
-					foreach (SubCase Case in SubCases)
-					{
-						str = str + Case.Syntax;
-					}
-					return str;
-				} 
+			public virtual string Syntax(bool withHead) => string.Join("",
+				withHead
+				? SyntaxHead
+				: "",
+				(from c in SubCases
+				select c.Syntax).Aggregate((str, item) => str + item));
 		}
 	}
 	internal static partial class UserInterface
@@ -35,7 +32,7 @@ namespace CsharpEvilcar.UserInterface
 				Console.Write(Case.AskForSelection);
 				parameters = GetInput(1, 1);
 			}
-			string selection = parameters[0].ToLower();
+			string selection = parameters[0].ToLower(CultureInfo.CurrentCulture);
 			parameters = parameters.Skip(1).ToArray();
 
 			IEnumerable<Output.SubCase> cases = from s in Case.SubCases
