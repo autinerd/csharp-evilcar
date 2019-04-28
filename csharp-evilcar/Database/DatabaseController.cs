@@ -127,7 +127,9 @@ namespace CsharpEvilcar.Database
 							GUID = Guid.Parse((string)booking["GUID"]),
 							BookingID = (int)booking["BookingID"],
 							Startdate = DateTime.ParseExact((string)booking["Startdate"], "yyyyMMdd", null),
-							Enddate = DateTime.ParseExact((string)booking["Enddate"], "yyyyMMdd", null),
+							Enddate = (string)booking["Enddate"] != "default"
+									? DateTime.ParseExact((string)booking["Enddate"], "yyyyMMdd", null)
+									: default,
 							VehicleID = (int)booking["Vehicle"]
 						}).ToList()
 					}).ToList(),
@@ -139,7 +141,7 @@ namespace CsharpEvilcar.Database
 						{
 							GUID = Guid.Parse((string)branch["FleetManager"]),
 							Name = (string)(from f in jObject["FleetManagers"] where (string)f["GUID"] == (string)branch["FleetManager"] select f).Single()["Name"],
-							Residence = (string)( from f in jObject["FleetManagers"] where (string)f["GUID"] == (string)branch["FleetManager"] select f ).Single()["Residence"]
+							Residence = (string)(from f in jObject["FleetManagers"] where (string)f["GUID"] == (string)branch["FleetManager"] select f).Single()["Residence"]
 						},
 						Fleets = branch["Fleets"].Select((fleet) => new DataClasses.Fleet
 						{
@@ -284,7 +286,7 @@ namespace CsharpEvilcar.Database
 								},
 								{
 									"Enddate",
-									booking.Enddate.ToString("yyyyMMdd", CultureInfo.InvariantCulture)
+									booking.Enddate != default ? booking.Enddate.ToString("yyyyMMdd", CultureInfo.InvariantCulture) : "default"
 								},
 								{
 									"GUID",
