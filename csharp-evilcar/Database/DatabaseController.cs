@@ -127,9 +127,9 @@ namespace CsharpEvilcar.Database
 							GUID = Guid.Parse((string)booking["GUID"]),
 							BookingID = (int)booking["BookingID"],
 							Startdate = DateTime.ParseExact((string)booking["Startdate"], "yyyyMMdd", null),
-							Enddate = (string)booking["Enddate"] != "default"
-									? DateTime.ParseExact((string)booking["Enddate"], "yyyyMMdd", null)
-									: default,
+							Enddate = (string)booking["Enddate"] == "default"
+									? default
+									: DateTime.ParseExact((string)booking["Enddate"], "yyyyMMdd", null),
 							VehicleID = (int)booking["Vehicle"]
 						}).ToList()
 					}).ToList(),
@@ -140,8 +140,12 @@ namespace CsharpEvilcar.Database
 						FleetManager = new DataClasses.FleetManager
 						{
 							GUID = Guid.Parse((string)branch["FleetManager"]),
-							Name = (string)(from f in jObject["FleetManagers"] where (string)f["GUID"] == (string)branch["FleetManager"] select f).Single()["Name"],
-							Residence = (string)(from f in jObject["FleetManagers"] where (string)f["GUID"] == (string)branch["FleetManager"] select f).Single()["Residence"]
+							Name = (string)( from f in jObject["FleetManagers"]
+											 where (string)f["GUID"] == (string)branch["FleetManager"]
+											 select f ).Single()["Name"],
+							Residence = (string)( from f in jObject["FleetManagers"]
+												  where (string)f["GUID"] == (string)branch["FleetManager"]
+												  select f ).Single()["Residence"]
 						},
 						Fleets = branch["Fleets"].Select((fleet) => new DataClasses.Fleet
 						{
@@ -199,7 +203,7 @@ namespace CsharpEvilcar.Database
 					new JArray(Database.Branches.Select(branch => new JObject
 					{
 						{
-							"ID",
+							"GUID",
 							branch.GUID.ToString()
 						},
 						{
@@ -265,7 +269,7 @@ namespace CsharpEvilcar.Database
 							customer.GUID
 						},
 						{
-							"ID",
+							"CustomerID",
 							customer.CustomerID
 						},
 						{
@@ -286,7 +290,9 @@ namespace CsharpEvilcar.Database
 								},
 								{
 									"Enddate",
-									booking.Enddate != default ? booking.Enddate.ToString("yyyyMMdd", CultureInfo.InvariantCulture) : "default"
+									booking.Enddate == default 
+									? "default" 
+									: booking.Enddate.ToString("yyyyMMdd", CultureInfo.InvariantCulture)
 								},
 								{
 									"GUID",
@@ -295,6 +301,10 @@ namespace CsharpEvilcar.Database
 								{
 									"Vehicle",
 									booking.VehicleID
+								},
+								{
+									"BookingID",
+									booking.BookingID
 								}
 							}))
 						}

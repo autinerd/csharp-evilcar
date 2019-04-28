@@ -1,7 +1,7 @@
 {
     "Branches": [
         {
-            "ID": "5e2e17c9-bb5f-4b4d-b961-5eb47e8f5a8d",
+            "GUID": "5e2e17c9-bb5f-4b4d-b961-5eb47e8f5a8d",
             "FleetManager": "9917f566-e103-4454-8a5d-2b227aa67dac",
             "Fleets": [
                 {
@@ -41,7 +41,7 @@
     "Customers": [
         {
             "GUID": "658542ee-521c-47f3-847d-a514a250afbe",
-            "ID": 10000,
+            "CustomerID": 10000,
             "Name": "Lisa Müller",
             "Residence": "Berlin",
             "Bookings": [
@@ -49,7 +49,8 @@
                     "Startdate": "20190201",
                     "Enddate": "20190202",
                     "GUID": "e17684d6-302b-4ca9-983d-072159ceb7a3",
-                    "Vehicle": 1
+                    "Vehicle": 1,
+					"BookingID": 20000
                 }
             ]
         }

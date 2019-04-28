@@ -26,7 +26,8 @@ namespace CsharpEvilcar.UserInterface
 			Console.Write("Password: ");
 			while (true)
 			{
-				switch (Console.ReadKey(true).Key)
+				ConsoleKeyInfo key = Console.ReadKey(true);
+				switch (key.Key)
 				{
 					case ConsoleKey.Enter: // input finished
 						Console.WriteLine();
@@ -39,7 +40,7 @@ namespace CsharpEvilcar.UserInterface
 						continue;
 					default:
 						Console.Write("*");
-						password += Console.ReadKey(true).KeyChar;
+						password += key.KeyChar;
 						continue;
 				}
 			}
