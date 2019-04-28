@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using System.Linq;
 
 namespace CsharpEvilcar.UserInterface
 {
 	internal static partial class Output
 	{
-		internal abstract class SubCase : HelpErrorCase
+		internal abstract class SecondLevelCase : HelpErrorCase
 		{
-			public virtual string CaseName { get; }
-			public virtual string AskForParameters { get; }
-			public virtual string Syntax { get; }
-			public virtual int MinParamterLength { get; }
-			public virtual int MaxParamterLength { get; }
-			public virtual Func<IEnumerable<string>, ErrorCode> ExecuteCommand { get; }
+			public virtual string CaseName => "undefined";
+			public virtual string AskForParameters => "undefined";
+			public virtual int MinParamterLength => 0;
+			public virtual int MaxParamterLength => -1;
+			public override string Error => Output.Error.Combine;
+			public virtual string Syntax(bool withHead=false) => 
+				(SubCases == null && ExecuteCommand == null) ? "undefined" :
+				string.Join("", withHead ? Output.Main.SyntaxHead : "", ( from c in SubCases select c.Syntax() ).Aggregate((str, item) => str + item));
+			public virtual IEnumerable<SecondLevelCase> SubCases => null;
+			public virtual Func<IEnumerable<string>, ErrorCode> ExecuteCommand => (parameters) => { Console.Write(Output.Error.ExecuteCommandUndefined); return ErrorCode.Undefined; };
 		}
 	}
 	internal static partial class UserInterface
@@ -25,19 +30,26 @@ namespace CsharpEvilcar.UserInterface
 		/// </summary>
 		/// <param name="LocalOutput">path to the output information for this subcase</param>
 		/// <param name="parameters">parameters which were entered from the user</param>
-		private static (ErrorCode, Output.SubCase) SubCase(Output.SubCase LocalOutput, string[] parameters)
+		private static (ErrorCode, Output.SecondLevelCase) SubCase(Output.SecondLevelCase Case, string[] parameters)
 		{
-			if (parameters.Count() == 0) // if sub case was called without any parameters, then ask for more information
+			if (parameters.Length == 0)
 			{
-				Console.Write(LocalOutput.AskForParameters);
-				_ = GetInput(out parameters, LocalOutput.MinParamterLength, LocalOutput.MaxParamterLength);
+				Console.Write(Case.AskForParameters);
+				switch (GetInput(out parameters, Case.MinParamterLength, Case.MaxParamterLength))
+				{
+					case ErrorCode.CommandTooShort:
+					case ErrorCode.CommandTooLong:
+						return (ErrorCode.CommandAbort, Case);
+					default:
+						break;
+				}
 			}
 
-			return CheckLength(parameters, LocalOutput.MinParamterLength, LocalOutput.MaxParamterLength) != ErrorCode.Success
+			return CheckLength(parameters, Case.MinParamterLength, Case.MaxParamterLength) != ErrorCode.Success
 				? !parameters.Any(s => Output.Main.HelpStrings.Contains(s))
-				? (ErrorCode.CommandAbort, LocalOutput) // no success, no help
-				: (ErrorCode.HelpNeeded, LocalOutput) // no success, but help
-				: (LocalOutput.ExecuteCommand(parameters), LocalOutput); // success
+				? (ErrorCode.CommandAbort, Case) // no success, no help
+				: (ErrorCode.HelpNeeded, Case) // no success, but help
+				: (Case.ExecuteCommand(parameters), Case); // success
 		}
 
 	}

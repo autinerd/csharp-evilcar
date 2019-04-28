@@ -89,6 +89,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserInterface\ErrorCode.cs" />
+    <Compile Include="UserInterface\PartialClasses\OneCase.cs" />
     <Compile Include="UserInterface\PartialClasses\Output.HelpErrorCase.cs" />
     <Compile Include="UserInterface\UserInterface.cs" />
     <Compile Include="UserInterface\UserMessages.cs" />

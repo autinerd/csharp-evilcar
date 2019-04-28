@@ -9,6 +9,7 @@
 		CommandAbort,
 		CommandTooShort,
 		CommandTooLong,
-		HelpNeeded
+		HelpNeeded,
+		Undefined
 	}
 }

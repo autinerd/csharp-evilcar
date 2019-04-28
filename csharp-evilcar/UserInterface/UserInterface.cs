@@ -53,10 +53,11 @@ namespace CsharpEvilcar.UserInterface
 						break;
 				}
 				string selection = parameters[0].ToLower(CultureInfo.CurrentCulture);
+				#warning @sidney hier gibt es bei mir nen Fehler wenn als Eingabe nur \n kamm
 				parameters = parameters.Skip(1).ToArray();
 
 				// search and select main case
-				Output.MainCase maincase = ( from s in Output.MainCases
+				Output.FirstLevelCase maincase = ( from s in Output.MainCases
 											 where s.CaseName == selection
 											 select s ).SingleOrDefault();
 				switch (selection)
