@@ -47,6 +47,10 @@ namespace CsharpEvilcar.UserInterface
 					IEnumerable<Output.MainCase> cases = from s in Output.MainCases
 														 where s.CaseName == selection
 														 select s;
+
+					Output.MainCase test = Output.MainCases.Where(Case => Case.CaseName == selection).Single();
+					Console.WriteLine(test.CaseName);
+					Console.WriteLine(Output.MainCases.First().CaseName);
 					switch (selection)
 					{
 						case string s when cases.Count() == 1:
@@ -54,14 +58,16 @@ namespace CsharpEvilcar.UserInterface
 							continue;
 						case "?":
 						case "help":
+							Console.Write(Output.Main.Help);
 							continue;
 						case "syntax":
-							Console.Write(Output.Main.Help);
-							Console.Write(Output.Add.Syntax(true));
-							Console.Write(Output.Edit.Syntax(false));
-							Console.Write(Output.Delete.Syntax(false));
-							Console.Write(Output.Booking.Syntax(false));
-							Console.Write(Output.View.Syntax(false));
+							bool first = true;
+							foreach (Output.MainCase Case in Output.MainCases)
+							{
+								Console.Write(Case.Syntax(first));
+								first = false;
+
+							}
 							break;
 						case "":
 							continue;
