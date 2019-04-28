@@ -10,6 +10,7 @@
 		CommandTooShort,
 		CommandTooLong,
 		HelpNeeded,
-		Undefined
+		Undefined,
+		RequestedLogout
 	}
 }

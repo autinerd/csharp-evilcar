@@ -10,7 +10,7 @@ namespace CsharpEvilcar.UserInterface
 		/// <returns>returns if the login was successful</returns>
 		private static bool Login()
 		{
-			Console.Write(Output.Login.AskForUsername);
+			Print(Output.Login.AskForUsername,"");
 			return InputAndCheckPassword(Console.ReadLine()); // read username and go on with password query and password check
 		}
 
@@ -23,7 +23,7 @@ namespace CsharpEvilcar.UserInterface
 		private static bool InputAndCheckPassword(string username)
 		{
 			string password = ""; // empty password, will filled with the password
-			Console.Write("Password: ");
+			Print("Password: ","");
 			while (true)
 			{
 				ConsoleKeyInfo key = Console.ReadKey(true);

@@ -7,27 +7,29 @@ namespace CsharpEvilcar.UserInterface
 {
 	internal static partial class Output
 	{
-		internal abstract class OneCase : HelpErrorCase
+		internal abstract class OneCase
 		{
-			public virtual string CaseName						=> "undefined";
-			public virtual string AskForParameters				=> "undefined";
-			public virtual int MinParamterLength				=> 1;
-			public virtual int MaxParamterLength				=> 1;
-			public override string Error						=> Output.Error.Combine;
-			public virtual string Syntax(bool withHead = false)	=> (SubCases == null && ExecuteCommand == null ) ? "undefined" : string.Join("", withHead ? Output.Main.SyntaxHead : "", ( from c in SubCases select c.Syntax() ).Aggregate((str, item) => str + item));
-			public virtual IEnumerable<OneCase> SubCases		=> null;
-			public virtual Func<IEnumerable<string>, ErrorCode> ExecuteCommand 
+			public virtual string CaseName => "CaseName-undefined";
+			public virtual string AskForParameters => string.Concat(CaseName, "-AskFor-undefinde");
+			public virtual string Help => string.Concat(CaseName, "-help-undefinde");
+			public virtual int MinParamterLength => 1;
+			public virtual int MaxParamterLength => -1;
+			public virtual string Error => string.Concat(CaseName, "-error-undefinde");
+			public string GetSyntax => ( SubCases == null ) ? Syntax : (string.Join("\n", from c in SubCases select c.GetSyntax)+"\n");
+			public virtual string Syntax => string.Concat(CaseName, "-syntax-undefinde");
+			public virtual IEnumerable<OneCase> SubCases => null;
+			public virtual Func<IEnumerable<string>, ErrorCode> ExecuteCommand
 																=> (parameters) => { Console.Write(Output.Error.ExecuteCommandUndefined); return ErrorCode.Undefined; };
 		}
 	}
 
 	internal static partial class UserInterface
 	{
-		private static (ErrorCode, Output.HelpErrorCase) OneCase(Output.FirstLevelCase Case, string[] parameters)
+		private static (ErrorCode, Output.OneCase) OneCase(Output.OneCase Case, string[] parameters)
 		{
 			if (parameters.Length == 0)
 			{
-				Console.Write(Case.AskForParameters);
+				Print(Case.AskForParameters);
 				switch (GetInput(out parameters, Case.MinParamterLength, Case.MaxParamterLength))
 				{
 					case ErrorCode.CommandTooShort:
@@ -37,28 +39,26 @@ namespace CsharpEvilcar.UserInterface
 						break;
 				}
 			}
+
 			if (Case.SubCases != null)
 			{
 				string selection = parameters[0].ToLower(CultureInfo.CurrentCulture);
 				parameters = parameters.Skip(1).ToArray();
 
-				Output.SecondLevelCase selectedCase = ( from s in Case.SubCases
-												   where s.CaseName == selection
-												   select s ).SingleOrDefault();
-
-				return selectedCase == default                                              // default if no subcase was found
-					? Output.Main.HelpStrings.Contains(selection)                           // help needed
-					? ((ErrorCode, Output.HelpErrorCase))(ErrorCode.HelpNeeded, Case)       // no subcase as first argument, but help
-					: ((ErrorCode, Output.HelpErrorCase))(ErrorCode.WrongArgument, Case)    // neither subcase nor help as first argument
-					: ((ErrorCode, Output.HelpErrorCase))SubCase(selectedCase, parameters); // subcase as first argument
+				Output.OneCase selectedCase = ( from s in Case.SubCases
+												where s.CaseName == selection
+												select s ).SingleOrDefault();
+				return selectedCase == default
+					? Output.General.HelpSymbol.Contains(selection) ? (ErrorCode.HelpNeeded, Case) : (ErrorCode.WrongArgument, Case)
+					: OneCase(selectedCase, parameters);
 			}
 			else
 			{
-				return CheckLength(parameters, Case.MinParamterLength, Case.MaxParamterLength) != ErrorCode.Success
-				   ? !parameters.Any(s => Output.Main.HelpStrings.Contains(s))
-				   ? (ErrorCode.CommandAbort, Case) // no success, no help
-				   : (ErrorCode.HelpNeeded, Case) // no success, but help
-				   : (Case.ExecuteCommand(parameters), Case); // success
+				return parameters.Any(s => Output.General.HelpSymbol.Contains(s))
+					? (ErrorCode.HelpNeeded, Case)
+					: CheckLength(parameters, Case.MinParamterLength, Case.MaxParamterLength) != ErrorCode.Success
+					   ? (ErrorCode.CommandAbort, Case)
+					   : (Case.ExecuteCommand(parameters), Case);
 
 			}
 		}
