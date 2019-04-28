@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -8,45 +7,20 @@ namespace CsharpEvilcar.UserInterface
 {
 	internal static partial class UserInterface
 	{
-		private static string[] GetInput(int MinLength = 0, int Maxlength = -1)
+		private static ErrorCode GetInput(out string[] input, int MinLength = 0, int Maxlength = -1)
 		{
-			string input_str = Console.ReadLine();
-			input_str = Regex.Replace(input_str, @"(\A\s+)|(\s+\z)", ""); // removing spaces at the begin and end
-			string[] input = Regex.Split(input_str, @"\s+"); // split by every occurence of one or more spaces
-															 // Erkennung auf Hochkomma wenn Leerzeichen
-			if (!CheckLength(input, MinLength, Maxlength))
-			{ throw new AbortCommandExecution(); }
-			return input;
+			input = ( from Match m in Regex.Matches(Console.ReadLine(), @"("".*""|[\S]+)+")
+							   let s = m.Value
+							   select s.Replace("\"", "") ).ToArray(); // extracts all parameters, single words and quoted ones
+			return CheckLength(input, MinLength, Maxlength);
 		}
 
-		private static bool CheckLength(string[] inputArray, int MinLength = 0, int MaxLength = -1)
-		{
-			if (MaxLength > 0 && inputArray.Length > MaxLength)
-			{
-				Console.WriteLine(Output.Error.CommandTooLong);
-				return false;
-			}
-			else if (inputArray.Length < MinLength)
-			{
-				Console.WriteLine(Output.Error.CommandTooShort);
-				return false;
-			}
-			return true;
-		}
-		private static bool CheckLength(IEnumerable<string> inputArray, int MinLength = 0, int MaxLength = -1)
-		{
-			if (MaxLength > 0 && inputArray.Count() > MaxLength)
-			{
-				Console.WriteLine(Output.Error.CommandTooLong);
-				return false;
-			}
-			else if (inputArray.Count() < MinLength)
-			{
-				Console.WriteLine(Output.Error.CommandTooShort);
-				return false;
-			}
-			return true;
-		}
+		private static ErrorCode CheckLength(string[] inputArray, int MinLength = 0, int MaxLength = -1) => 
+			MaxLength <= 0 || inputArray.Length <= MaxLength
+				? inputArray.Length >= MinLength
+				? ErrorCode.Success // between min and max
+				: ErrorCode.CommandTooShort // less than min
+				: ErrorCode.CommandTooLong; // more than max
 
 	}
 }

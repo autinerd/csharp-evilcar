@@ -27,26 +27,23 @@ namespace CsharpEvilcar.UserInterface
 			while (true)
 			{
 				ConsoleKeyInfo key = Console.ReadKey(true);
-				if (key.Key == ConsoleKey.Enter)
+				switch (key.Key)
 				{
-					Console.WriteLine();
-					break;
-				}
-				else if (key.Key == ConsoleKey.Backspace)
-				{
-					if (password.Length > 0) { Console.Write("\b \b"); }
-					password = password.Length== 0 
-						? "" 
-						: password.Remove(password.Length - 1, 1);
-				}
-				else
-				{
-					Console.Write("*");
-					password += key.KeyChar;
+					case ConsoleKey.Enter: // input finished
+						Console.WriteLine();
+						return Database.DatabaseController.CheckUserCredentials(username, password);
+					case ConsoleKey.Backspace:
+						if (password.Length > 0) { Console.Write("\b \b"); }
+						password = password.Length == 0
+							? ""
+							: password.Remove(password.Length - 1, 1);
+						continue;
+					default:
+						Console.Write("*");
+						password += key.KeyChar;
+						continue;
 				}
 			}
-
-			return Database.DatabaseController.CheckUserCredentials(username, password);
 		}
 	}
 }

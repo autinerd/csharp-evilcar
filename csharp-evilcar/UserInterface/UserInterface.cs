@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -34,55 +33,74 @@ namespace CsharpEvilcar.UserInterface
 		{
 			while (true)
 			{
-				try
+				// read in command and separate selection from parameters
+				Console.Write(Output.Prompt);
+
+				switch (GetInput(out string[] parameters))
 				{
-					// read in command and separate selection from parameters
-					Console.Write(Output.Prompt);
-					string[] parameters = GetInput();
-
-					string selection = parameters[0].ToLower(CultureInfo.CurrentCulture);
-					parameters = parameters.Skip(1).ToArray();
-
-					// serach and select main case
-					IEnumerable<Output.MainCase> cases = from s in Output.MainCases
-														 where s.CaseName == selection
-														 select s;
-
-					Output.MainCase test = Output.MainCases.Where(Case => Case.CaseName == selection).Single();
-					Console.WriteLine(test.CaseName);
-					Console.WriteLine(Output.MainCases.First().CaseName);
-					switch (selection)
-					{
-						case string s when cases.Count() == 1:
-							MainCase(cases.Single(), parameters);
-							continue;
-						case "?":
-						case "help":
-							Console.Write(Output.Main.Help);
-							continue;
-						case "syntax":
-							bool first = true;
-							foreach (Output.MainCase Case in Output.MainCases)
-							{
-								Console.Write(Case.Syntax(first));
-								first = false;
-
-							}
-							break;
-						case "":
-							continue;
-						case "logout":
-						case "exit":
-							return;
-						default:
-							Console.WriteLine(Output.Error.CommandNotExisting);
-							continue;
-					}
+					case ErrorCode.Success:
+						break;
+					case ErrorCode.CommandTooShort:
+						Console.WriteLine(Output.Error.CommandTooShort);
+						goto default;
+					case ErrorCode.CommandTooLong:
+						Console.WriteLine(Output.Error.CommandTooLong);
+						goto default;
+					case ErrorCode.HelpNeeded:
+						break;
+					default:
+						Console.WriteLine(Output.Error.CommandAbort);
+						break;
 				}
-				catch (AbortCommandExecution)
+				string selection = parameters[0].ToLower(CultureInfo.CurrentCulture);
+				parameters = parameters.Skip(1).ToArray();
+
+				// search and select main case
+				Output.MainCase maincase = ( from s in Output.MainCases
+											 where s.CaseName == selection
+											 select s ).SingleOrDefault();
+				switch (selection)
 				{
-					Console.Write(Output.Error.CommandAbort);
-					continue;
+					case string s when maincase != default:
+						(ErrorCode code, Output.HelpErrorCase returncase) = MainCase(maincase, parameters);
+						switch (code)
+						{
+							case ErrorCode.Success:
+								_ = Database.DatabaseController.SaveDatabase();
+								break;
+							case ErrorCode.WrongArgument:
+								Console.Write(returncase.Error);
+								break;
+							case ErrorCode.CommandAbort:
+								Console.Write(returncase.Error);
+								Console.WriteLine(Output.Error.CommandAbort);
+								break;
+							case ErrorCode.HelpNeeded:
+								Console.Write(returncase.Help);
+								break;
+							default:
+								break;
+						}
+						continue;
+					case "?":
+					case "help":
+						continue;
+					case "syntax":
+						Console.Write(Output.Main.Help);
+						Console.Write(Output.Add.Syntax(true));
+						Console.Write(Output.Edit.Syntax(false));
+						Console.Write(Output.Delete.Syntax(false));
+						Console.Write(Output.Booking.Syntax(false));
+						Console.Write(Output.View.Syntax(false));
+						continue;
+					case "":
+						continue;
+					case "logout":
+					case "exit":
+						return;
+					default:
+						Console.WriteLine(Output.Error.CommandNotExisting);
+						continue;
 				}
 			}
 		}
