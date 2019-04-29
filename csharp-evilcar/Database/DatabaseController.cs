@@ -35,7 +35,7 @@ namespace CsharpEvilcar.Database
 		/// Loads the database file contents into the <see cref="Database"/> object.
 		/// </summary>
 		/// <returns>Error code</returns>
-		internal static ErrorCode LoadDatabase()
+		internal static ReturnValue.Type LoadDatabase()
 		{
 			try
 			{
@@ -44,7 +44,7 @@ namespace CsharpEvilcar.Database
 #pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
 			{
-				return ErrorCode.DatabaseError;
+				return ReturnValue.DatabaseError;
 			}
 #pragma warning restore CA1031 // Do not catch general exception types
 		}
@@ -53,7 +53,7 @@ namespace CsharpEvilcar.Database
 		/// Saves the <see cref="Database"/> object into the database file.
 		/// </summary>
 		/// <returns></returns>
-		internal static ErrorCode SaveDatabase()
+		internal static ReturnValue.Type SaveDatabase()
 		{
 			try
 			{
@@ -62,15 +62,15 @@ namespace CsharpEvilcar.Database
 #pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
 			{
-				return ErrorCode.DatabaseError;
+				return ReturnValue.DatabaseError;
 			}
 #pragma warning restore CA1031 // Do not catch general exception types
 		}
 
-		private static ErrorCode SaveDatabaseFile()
+		private static ReturnValue.Type SaveDatabaseFile()
 		{
-			ErrorCode returnval = MapToJSON(out JObject jObject);
-			if (returnval != 0)
+			ReturnValue.Type returnval = MapToJSON(out JObject jObject);
+			if (returnval is ReturnValue.PassReturnValue)
 			{
 				return returnval;
 			}
@@ -82,7 +82,7 @@ namespace CsharpEvilcar.Database
 				{
 					jObject.WriteTo(writer);
 				}
-				return ErrorCode.Success;
+				return ReturnValue.Success;
 			}
 			catch (Exception)
 			{
@@ -106,11 +106,11 @@ namespace CsharpEvilcar.Database
 
 		}
 
-		private static ErrorCode MapToDatabase(JObject jObject)
+		private static ReturnValue.Type MapToDatabase(JObject jObject)
 		{
 			if (CurrentUser == Guid.Empty)
 			{
-				return ErrorCode.NoUserLoggedIn;
+				return ReturnValue.NoUserLoggedIn;
 			}
 			else
 			{
@@ -187,15 +187,15 @@ namespace CsharpEvilcar.Database
 					}).ToList()
 				};
 			}
-			return ErrorCode.Success;
+			return ReturnValue.Success;
 		}
 
-		private static ErrorCode MapToJSON(out JObject jObject)
+		private static ReturnValue.Type MapToJSON(out JObject jObject)
 		{
 			jObject = null;
 			if (currentUser == Guid.Empty)
 			{
-				return ErrorCode.NoUserLoggedIn;
+				return ReturnValue.NoUserLoggedIn;
 			}
 			jObject = new JObject {
 				{
@@ -315,7 +315,7 @@ namespace CsharpEvilcar.Database
 					ReadDatabaseFile()["FleetManagers"]
 				}
 			};
-			return ErrorCode.Success;
+			return ReturnValue.Success;
 		}
 
 		/// <summary>

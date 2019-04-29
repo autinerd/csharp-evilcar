@@ -7,7 +7,7 @@ namespace CsharpEvilcar.UserInterface
 
 	internal static partial class UserInterface
 	{
-		public static ErrorCode DummyFunc(IEnumerable<string> parameters)
+		public static ReturnValue.Type DummyFunc(IEnumerable<string> parameters)
 		{
 			Console.WriteLine("##### Dummy Func #####");
 			for (int i = 0; i < parameters.Count(); i++)
@@ -15,7 +15,7 @@ namespace CsharpEvilcar.UserInterface
 				Console.WriteLine("[{0,2}]\t{1}",i,parameters.ElementAt(i));
 			}
 			Console.WriteLine("##### ########## #####");
-			return ErrorCode.Success;
+			return ReturnValue.Success;
 		}
 
 	}

@@ -7,60 +7,95 @@ namespace CsharpEvilcar.UserInterface
 {
 	internal static partial class Output
 	{
-		internal abstract class OneCase
+		internal class CaseTyps
 		{
-			public virtual string CaseName => "CaseName-undefined";
-			public virtual string AskForParameters => string.Concat(CaseName, "-AskFor-undefinde");
-			public virtual string Help => string.Concat(CaseName, "-help-undefinde");
-			public virtual int MinParamterLength => 1;
-			public virtual int MaxParamterLength => -1;
-			public virtual string Error => string.Concat(CaseName, "-error-undefinde");
-			public string GetSyntax => ( SubCases == null ) ? Syntax : (string.Join("\n", from c in SubCases select c.GetSyntax)+"\n");
-			public virtual string Syntax => string.Concat(CaseName, "-syntax-undefinde");
-			public virtual IEnumerable<OneCase> SubCases => null;
-			public virtual Func<IEnumerable<string>, ErrorCode> ExecuteCommand
-																=> (parameters) => { Console.Write(Output.Error.ExecuteCommandUndefined); return ErrorCode.Undefined; };
-		}
-	}
-
-	internal static partial class UserInterface
-	{
-		private static (ErrorCode, Output.OneCase) OneCase(Output.OneCase Case, string[] parameters)
-		{
-			if (parameters.Length == 0)
+			internal abstract class _Default
 			{
-				Print(Case.AskForParameters);
-				switch (GetInput(out parameters, Case.MinParamterLength, Case.MaxParamterLength))
+
+				public string CaseName = null;
+				public string AskForParameters = null;
+				public string Help = null;
+				public int MinParamterLength = -1;
+				public int MaxParamterLength = -1;
+				public int[] ParameterLenght = null;
+				public string Error = null;
+				public string Syntax = null;
+				public IEnumerable<Default> SubCases = null;
+				public Func<IEnumerable<string>, ReturnValue.Type> SubFunction
+																	 = (parameters) => { UserInterface.Print(Output.Error.SubFunctionUndefined); return ReturnValue.Undefined; };
+
+
+				public string GetCaseName => CaseName ?? "CaseName-undefined";
+				public string GetAskForParameters => AskForParameters ?? string.Concat(CaseName, "-AskFor-undefinde");
+				public string GetHelp => Help ?? string.Concat(CaseName, "-help-undefinde");
+				public string GetError => Error ?? string.Concat(CaseName, "-error-undefinde");
+				public string GetSyntax => IsLastCase ? Syntax : ( string.Join("\n", from c in SubCases select c.GetSyntax) + "\n" );
+				public int[] GetParameterLength => ParameterLenght ?? Array.Empty<int>();
+				public int GetMinParamterLength => IsLastCase ? SubCases.Min(x => x.GetMinParamterLength) : MinParamterLength;
+				public int GetMaxParamterLength => IsLastCase ? SubCases.Max(x => x.GetMaxParamterLength) : MaxParamterLength;
+
+				private bool IsLastCase => SubCases == null;
+
+
+				public ReturnValue.Type CheckParameterLenght(string[] inputArray) => IsLastCase
+						? ParameterLenght.Contains(inputArray.Count()) ? ReturnValue.Success : ReturnValue.WrongParameterLength
+						: inputArray.Count() > 0 ? ReturnValue.Success : ReturnValue.Empty;
+
+				public ReturnValue.Type Execute(string[] parameters)
 				{
-					case ErrorCode.CommandTooShort:
-					case ErrorCode.CommandTooLong:
-						return (ErrorCode.CommandAbort, Case);
-					default:
-						break;
+					ReturnValue.Case = this;
+					if (parameters.Length == 0)
+					{
+						UserInterface.Print(AskForParameters);
+						UserInterface.GetInput(out parameters);
+
+						if (CheckParameterLenght(parameters) == ReturnValue.WrongParameterLength)
+						{
+							return ReturnValue.WrongParameterLength;
+						}
+						if (CheckParameterLenght(parameters) == ReturnValue.Empty)
+						{
+							return ReturnValue.Empty;
+						}
+					}
+
+					if (SubCases != null)
+					{
+						string selection = parameters[0].ToLower(CultureInfo.CurrentCulture);
+						parameters = parameters.Skip(1).ToArray();
+
+						Default selectedCase = ( from s in SubCases
+														where s.CaseName == selection
+														select s ).SingleOrDefault();
+						return selectedCase == default
+							? Output.General.HelpSymbol.Contains(selection) ? ReturnValue.HelpNeeded : ReturnValue.WrongArgument
+							: selectedCase.Execute(parameters);
+					}
+					else
+					{
+						return parameters.Any(s => Output.General.HelpSymbol.Contains(s))
+							? ReturnValue.HelpNeeded
+							: CheckParameterLenght(parameters) != ReturnValue.Success
+							   ? ReturnValue.CommandAbort
+							   : SubFunction(parameters);
+
+					}
 				}
+
 			}
-
-			if (Case.SubCases != null)
+			internal class Default : _Default { };
+			internal class Logout : Default
 			{
-				string selection = parameters[0].ToLower(CultureInfo.CurrentCulture);
-				parameters = parameters.Skip(1).ToArray();
-
-				Output.OneCase selectedCase = ( from s in Case.SubCases
-												where s.CaseName == selection
-												select s ).SingleOrDefault();
-				return selectedCase == default
-					? Output.General.HelpSymbol.Contains(selection) ? (ErrorCode.HelpNeeded, Case) : (ErrorCode.WrongArgument, Case)
-					: OneCase(selectedCase, parameters);
+				public new ReturnValue.Type Execute(string[] parameters) {
+					Console.WriteLine("hier");
+					return ReturnValue.RequestedLogout; }
 			}
-			else
+			internal class Main : Default
 			{
-				return parameters.Any(s => Output.General.HelpSymbol.Contains(s))
-					? (ErrorCode.HelpNeeded, Case)
-					: CheckLength(parameters, Case.MinParamterLength, Case.MaxParamterLength) != ErrorCode.Success
-					   ? (ErrorCode.CommandAbort, Case)
-					   : (Case.ExecuteCommand(parameters), Case);
-
+				public ReturnValue.Type Execute() => Execute(Array.Empty<string>());
 			}
 		}
 	}
 }
+
+
