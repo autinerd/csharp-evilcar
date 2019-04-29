@@ -92,11 +92,11 @@ namespace CsharpEvilcar.UserInterface
 			internal class Default : Base
 			{
 			};
-			internal class Logout : Default
+			internal sealed class Logout : Default
 			{
 				public override ReturnValue.Type Execute(ref string[] parameters) => ReturnValue.RequestedLogout(this);
 			}
-			internal class Main : Selection
+			internal sealed class Main : Selection
 			{
 				string[] parameters = Array.Empty<string>();
 				public bool Execute()

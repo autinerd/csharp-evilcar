@@ -36,7 +36,7 @@ namespace CsharpEvilcar.UserInterface
 		}
 		internal static class Error
 		{
-			public static string Combine => "your first command cannot be combined with your second.";
+			public const string Combine = "your first command cannot be combined with your second.";
 			public const string CommandTooShort = "not enough parameters have been inserted.";
 			public const string CommandTooLong = "too much parameters have been inserted.";
 			public const string CommandNotExisting = "command doesn't exist, please use '?' for help.";
@@ -54,35 +54,23 @@ namespace CsharpEvilcar.UserInterface
 			SubCases = new CaseTyps.Base[] {
 				new CaseTyps.Selection(){
 					CaseName = "add",
-					Help = "help for 'add'\n" +
-						"you can use 'add vehicle' or 'add customer'",
-					AskForParameters = "do you want to add a 'vehicle' or a 'costumer':",
+					Help = "you can use 'add vehicle' or 'add customer'",
+					AskForParameters = "Do you want to add a 'vehicle' or a 'costumer':",
 					SubCases = new CaseTyps.Base[] {
 						new CaseTyps.Command(){
 							CaseName = "vehicle",
 							AskForParameters =
 								"Please enter now the parameters of the new vehicle in the following format:\n" +
 								"numberplate brand model class fleetNr for example: S-XY-4589 audi q5 electric 3",
-							 Help =
-								"help for 'add vehicle'\n" +
-								"full command: add vehicle [ numberplate brand model class fleetNr]\n" +
-								"In brand, model and class none space allowed\n" +
-								"If you only use 'add vehicle' you will be ask for more information about the vehicle.\n" +
-								"If you want to do this at ones use the full command",
+							Help = "add a new vehicle",
 							Syntax = "add\t\tvehicle\t\t<numberplate>\t<brand>\t\t\t<model>\t\t<category>\t\t<fleet_ID>",
 							ParameterLength = new int[]{5},
 							SubFunction = InternalLogic.AddVehicle,
 						},
 						new CaseTyps.Command(){
-							 CaseName = "customer",
-							 AskForParameters = "Please enter your Name Residence:",
-							 Help =
-								"help for 'add customer'\n" +
-								"full command: add customer [ Name Residence]\n" +
-								"In Lastname and Firstname none space allowed.\n" +
-								"If you only use 'add customer' you will be ask for more information about the coustomer." +
-								"If you want to do this at ones use the full command",
-							
+							CaseName = "customer",
+							AskForParameters = "Please enter your <name> Residence:",
+							Help = "add a new customer",							
 							Syntax = "add\t\tcustomer\t<name>\t\t<residence>",
 							ParameterLength = new int[]{2},
 							SubFunction = InternalLogic.AddCustomer

@@ -21,9 +21,8 @@
 			public virtual bool IsWrongParameterLength => false;
 			public virtual bool IsUndefined		=> false;
 			public virtual bool IsRequestedLogout => false;
+
 			
-
-
 			internal class Error : Type
 			{
 				
