@@ -22,24 +22,24 @@ namespace CsharpEvilcar
 				&& int.TryParse(fleet, out int fleetnum)
 				&& DatabaseController.Database.MyBranch.Fleets.Count() >= fleetnum ))
 			{
-				return ReturnValue.WrongArgument;
+				return ReturnValue.WrongArgument();
 			}
 			switch (category.ToLower(CultureInfo.CurrentCulture))
 			{
 				case "small":
 					DatabaseController.Database.MyBranch.Fleets[fleetnum].Vehicles.Add(new SmallVehicle(numberplate, model, brand, false));
-					return ReturnValue.Success;
+					return ReturnValue.Success();
 				case "midsize":
 					DatabaseController.Database.MyBranch.Fleets[fleetnum].Vehicles.Add(new MidsizeVehicle(numberplate, model, brand, false));
-					return ReturnValue.Success;
+					return ReturnValue.Success();
 				case "large":
 					DatabaseController.Database.MyBranch.Fleets[fleetnum].Vehicles.Add(new LargeVehicle(numberplate, model, brand, false));
-					return ReturnValue.Success;
+					return ReturnValue.Success();
 				case "electric":
 					DatabaseController.Database.MyBranch.Fleets[fleetnum].Vehicles.Add(new ElectricVehicle(numberplate, model, brand, false));
-					return ReturnValue.Success;
+					return ReturnValue.Success();
 				default:
-					return ReturnValue.WrongArgument;
+					return ReturnValue.WrongArgument();
 			}
 		}
 
@@ -56,7 +56,7 @@ namespace CsharpEvilcar
 				Residence = parameters.ElementAt(1)
 			});
 
-			return ReturnValue.Success;
+			return ReturnValue.Success();
 		}
 	}
 }

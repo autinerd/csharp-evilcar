@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 
 #pragma warning disable IDE1006
 
 namespace CsharpEvilcar.UserInterface
 {
-	internal static partial class Output
+	internal static partial class Prompt
 	{
 		// general
 		internal static class General
@@ -71,7 +70,7 @@ namespace CsharpEvilcar.UserInterface
 								"If you only use 'add vehicle' you will be ask for more information about the vehicle.\n" +
 								"If you want to do this at ones use the full command",
 							Syntax = "add\t\tvehicle\t\t<numberplate>\t<brand>\t\t\t<model>\t\t<category>\t\t<fleet_ID>",
-							ParameterLenght = new int[]{5},
+							ParameterLength = new int[]{5},
 							SubFunction = InternalLogic.AddVehicle,
 						},
 						new CaseTyps.Command(){
@@ -85,7 +84,7 @@ namespace CsharpEvilcar.UserInterface
 								"If you want to do this at ones use the full command",
 							
 							Syntax = "add\t\tcustomer\t<name>\t\t<residence>",
-							ParameterLenght = new int[]{2},
+							ParameterLength = new int[]{2},
 							SubFunction = InternalLogic.AddCustomer
 						}
 					}
@@ -97,14 +96,14 @@ namespace CsharpEvilcar.UserInterface
 						{
 							CaseName = "vehicle",
 							Syntax = "edit\tvehicle\t<vehicle_ID>\t{numberplate|fleet_ID}\t<new_value>",
-							ParameterLenght = new int[]{3},
+							ParameterLength = new int[]{3},
 							SubFunction = InternalLogic.EditCustomer,
 						},
 						new CaseTyps.Command()
 						{
 							CaseName = "customer",
 							Syntax = "edit\tcustomer\t<customer_ID>\t{name|residence}\t<new_value>",
-							ParameterLenght = new int[]{3},
+							ParameterLength = new int[]{3},
 							SubFunction = InternalLogic.EditCustomer,
 						},
 					}
@@ -116,14 +115,14 @@ namespace CsharpEvilcar.UserInterface
 						{
 							CaseName = "vehicle",
 							Syntax = "delete\tvehicle\t\t<vehicle_ID>",
-							ParameterLenght = new int[]{1},
+							ParameterLength = new int[]{1},
 							SubFunction = InternalLogic.DeleteVehicle,
 						},
 						new CaseTyps.Command()
 						{
 							CaseName = "customer",
 							Syntax = "delete\tcustomer\t<customer_ID>",
-							ParameterLenght = new int[]{1},
+							ParameterLength = new int[]{1},
 							SubFunction = InternalLogic.DeleteCustomer,
 						},
 					}
@@ -135,32 +134,32 @@ namespace CsharpEvilcar.UserInterface
 						{
 							CaseName = "branch",
 							Syntax = "view\tbranch",
-							ParameterLenght = new int[]{0},
+							ParameterLength = new int[]{0},
 
 						},
 						new CaseTyps.Command()
 						{
 							CaseName = "fleet",
 							Syntax = "view\tfleet\n\t\t\t\t<branch_ID>",
-							ParameterLenght = new int[]{0,1},
+							ParameterLength = new int[]{0,1},
 						},
 						new CaseTyps.Command()
 						{
 							CaseName = "vehicle",
 							Syntax = "view\tvehicle\n\t\t\t\t<branch_ID>\t[<fleet_ID>]\n\t\tsingle\t\t<vehicle_ID>",
-							ParameterLenght = new int[]{0,2},
+							ParameterLength = new int[]{0,2},
 						},
 						new CaseTyps.Command()
 						{
 							CaseName = "customer",
 							Syntax = "view\tcustomer\n\t\t\t\t<customer_ID>",
-							ParameterLenght = new int[]{0,1},
+							ParameterLength = new int[]{0,1},
 						},
 						new CaseTyps.Command()
 						{
 							CaseName = "bookings",
 							Syntax = "view\tbookings\n\t\t\t\t<branch_ID>\t[< fleet_ID >]\n\t\tvehicle\t\t<vehicle_ID>\n\t\tcustomer\t<customer_ID>\n\t\tbooking\t\t<booking_ID>",
-							ParameterLenght = new int[]{0,2},
+							ParameterLength = new int[]{0,2},
 						},
 					}
 				},
@@ -171,14 +170,14 @@ namespace CsharpEvilcar.UserInterface
 						{
 							CaseName = "rent",
 							Syntax = "booking\trent\t\t<vehicle_ID>\t<customer_ID>",
-							ParameterLenght = new int[]{2},
+							ParameterLength = new int[]{2},
 							SubFunction = InternalLogic.BookingRent,
 						},
 						new CaseTyps.Command()
 						{
 							CaseName = "return",
 							Syntax = "booking\treturn\t\t<vehicle_ID>",
-							ParameterLenght = new int[]{1},
+							ParameterLength = new int[]{1},
 							SubFunction = InternalLogic.BookingReturn,
 						},
 					}

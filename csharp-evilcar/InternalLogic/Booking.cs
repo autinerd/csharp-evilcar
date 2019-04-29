@@ -19,7 +19,7 @@ namespace CsharpEvilcar
 			if (!int.TryParse(parameters.ElementAt(0), out int vehID)
 				|| !int.TryParse(parameters.ElementAt(1), out int cusID))
 			{
-				return ReturnValue.WrongArgument;
+				return ReturnValue.WrongArgument();
 			}
 			IEnumerable<Customer> cc = from c in DatabaseController.Database.Customers
 					 where c.CustomerID == cusID
@@ -30,14 +30,14 @@ namespace CsharpEvilcar
 				  select v ).Count() == 1 
 				  && cc.Count() == 1 ))
 			{
-				return ReturnValue.WrongArgument;
+				return ReturnValue.WrongArgument();
 			}
 			cc.Single().Bookings.Add(new Booking(false)
 			{
 				Startdate = DateTime.Today,
 				VehicleID = vehID
 			});
-			return ReturnValue.Success;
+			return ReturnValue.Success();
 		}
 
 		/// <summary>
@@ -49,7 +49,7 @@ namespace CsharpEvilcar
 		{
 			if (!int.TryParse(parameters.ElementAt(0), out int vehID))
 			{
-				return ReturnValue.WrongArgument;
+				return ReturnValue.WrongArgument();
 			}
 			IEnumerable<Booking> vc = from c in DatabaseController.Database.Customers
 									  from b in c.Bookings
@@ -57,10 +57,10 @@ namespace CsharpEvilcar
 									  select b;
 			if (vc.Count() != 1)
 			{
-				return ReturnValue.WrongArgument;
+				return ReturnValue.WrongArgument();
 			}
 			vc.Single().Enddate = DateTime.Today;
-			return ReturnValue.Success;
+			return ReturnValue.Success();
 		}
 	}
 }

@@ -44,7 +44,7 @@ namespace CsharpEvilcar.Database
 #pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
 			{
-				return ReturnValue.DatabaseError;
+				return ReturnValue.DatabaseError();
 			}
 #pragma warning restore CA1031 // Do not catch general exception types
 		}
@@ -62,7 +62,7 @@ namespace CsharpEvilcar.Database
 #pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
 			{
-				return ReturnValue.DatabaseError;
+				return ReturnValue.DatabaseError();
 			}
 #pragma warning restore CA1031 // Do not catch general exception types
 		}
@@ -70,19 +70,19 @@ namespace CsharpEvilcar.Database
 		private static ReturnValue.Type SaveDatabaseFile()
 		{
 			ReturnValue.Type returnval = MapToJSON(out JObject jObject);
-			if (returnval is ReturnValue.PassReturnValue)
+			if (returnval is ReturnValue.Type.Pass)
 			{
 				return returnval;
 			}
 			try
 			{
-#pragma warning disable CA1508 // Avoid dead conditional code
+				#pragma warning disable CA1508 // Avoid dead conditional code
 				using (JsonTextWriter writer = new JsonTextWriter(new StreamWriter("database.json")))
 #pragma warning restore CA1508 // Avoid dead conditional code
 				{
 					jObject.WriteTo(writer);
 				}
-				return ReturnValue.Success;
+				return ReturnValue.Success();
 			}
 			catch (Exception)
 			{
@@ -110,7 +110,7 @@ namespace CsharpEvilcar.Database
 		{
 			if (CurrentUser == Guid.Empty)
 			{
-				return ReturnValue.NoUserLoggedIn;
+				return ReturnValue.NoUserLoggedIn();
 			}
 			else
 			{
@@ -187,7 +187,7 @@ namespace CsharpEvilcar.Database
 					}).ToList()
 				};
 			}
-			return ReturnValue.Success;
+			return ReturnValue.Success();
 		}
 
 		private static ReturnValue.Type MapToJSON(out JObject jObject)
@@ -195,7 +195,7 @@ namespace CsharpEvilcar.Database
 			jObject = null;
 			if (currentUser == Guid.Empty)
 			{
-				return ReturnValue.NoUserLoggedIn;
+				return ReturnValue.NoUserLoggedIn();
 			}
 			jObject = new JObject {
 				{
@@ -315,7 +315,7 @@ namespace CsharpEvilcar.Database
 					ReadDatabaseFile()["FleetManagers"]
 				}
 			};
-			return ReturnValue.Success;
+			return ReturnValue.Success();
 		}
 
 		/// <summary>

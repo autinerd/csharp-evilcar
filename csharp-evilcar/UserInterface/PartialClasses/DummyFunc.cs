@@ -15,7 +15,7 @@ namespace CsharpEvilcar.UserInterface
 				Console.WriteLine("[{0,2}]\t{1}",i,parameters.ElementAt(i));
 			}
 			Console.WriteLine("##### ########## #####");
-			return ReturnValue.Success;
+			return ReturnValue.Success();
 		}
 
 	}

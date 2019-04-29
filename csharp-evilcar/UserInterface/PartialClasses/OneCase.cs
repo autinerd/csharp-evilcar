@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace CsharpEvilcar.UserInterface
 {
-	internal static partial class Output
+	internal static partial class Prompt
 	{
 		internal class CaseTyps
 		{
@@ -24,27 +24,22 @@ namespace CsharpEvilcar.UserInterface
 
 
 				public virtual string GetSyntax => null;
-				public virtual ReturnValue.Type CheckParameterLenght(string[] inputArray) => ReturnValue.Success;
+				public virtual ReturnValue.Type CheckParameterLenght(string[] inputArray) => ReturnValue.Success();
 
 				
 				public virtual ReturnValue.Type Execute(ref string[] parameters)
 				{
-					ReturnValue.Case = this;
 					if (parameters.Length == 0)
 					{
-						UserInterface.Print(AskForParameters);
-						UserInterface.GetInput(out parameters);
-
-						if (CheckParameterLenght(parameters) == ReturnValue.WrongParameterLength)
+						Print(AskForParameters);
+						GetInput(out parameters);
+						ReturnValue.Type code = CheckParameterLenght(parameters);
+						if (code.IsWrongParameterLength | code.IsEmpty)
 						{
-							return ReturnValue.WrongParameterLength;
-						}
-						if (CheckParameterLenght(parameters) == ReturnValue.Empty)
-						{
-							return ReturnValue.Empty;
+							return code;
 						}
 					}
-					return ReturnValue.Success;
+					return ReturnValue.Success();
 				}
 
 			}
@@ -52,13 +47,13 @@ namespace CsharpEvilcar.UserInterface
 			{
 				public IEnumerable<Base> SubCases = null;
 				public override string Syntax =>  string.Join("\n", from c in SubCases select c.Syntax) + "\n" ;
-				public override ReturnValue.Type CheckParameterLenght(string[] inputArray) => inputArray.Count() > 0 ? ReturnValue.Success : ReturnValue.Empty;
+				public override ReturnValue.Type CheckParameterLenght(string[] inputArray) => inputArray.Count() > 0 ? ReturnValue.Success() : ReturnValue.Empty();
 				public override ReturnValue.Type Execute(ref string[] parameters)
 				{
-					ReturnValue.Type RV = base.Execute(ref parameters);
-					if (RV != ReturnValue.Success)
+					ReturnValue.Type code = base.Execute(ref parameters);
+					if (code.IsError)
 					{
-						return RV;
+						return code;
 					}
 					string selection = parameters[0].ToLower(CultureInfo.CurrentCulture);
 					parameters = parameters.Skip(1).ToArray();
@@ -66,8 +61,9 @@ namespace CsharpEvilcar.UserInterface
 					Base selectedCase = ( from s in SubCases
 											 where s.CaseName == selection
 											 select s ).SingleOrDefault();
+
 					return selectedCase == default
-						? Output.General.HelpSymbol.Contains(selection) ? ReturnValue.HelpNeeded : ReturnValue.WrongArgument
+						? General.HelpSymbol.Contains(selection) ? ReturnValue.HelpNeeded(this) : ReturnValue.WrongArgument(this)
 						: selectedCase.Execute(ref parameters);
 				}
 
@@ -75,20 +71,20 @@ namespace CsharpEvilcar.UserInterface
 			internal class Command : Base
 			{
 				
-				public int[] ParameterLenght = null;
-				public override ReturnValue.Type CheckParameterLenght(string[] inputArray) => ParameterLenght.Contains(inputArray.Count()) ? ReturnValue.Success : ReturnValue.WrongParameterLength;
+				public int[] ParameterLength = null;
+				public override ReturnValue.Type CheckParameterLenght(string[] inputArray) => ParameterLength.Contains(inputArray.Count()) ? ReturnValue.Success() : ReturnValue.WrongParameterLength();
 				public Func<IEnumerable<string>, ReturnValue.Type> SubFunction
-																	 = (parameters) => { UserInterface.Print(Output.Error.SubFunctionUndefined); return ReturnValue.Undefined; };
+																	 = (parameters) => { Print(Error.SubFunctionUndefined); return ReturnValue.Undefined(); };
 
 				public override ReturnValue.Type Execute(ref string[] parameters)
 				{
 					ReturnValue.Type RV = base.Execute(ref parameters);
-					return RV != ReturnValue.Success
+					return RV.IsError
 						? RV
-						: parameters.Any(s => Output.General.HelpSymbol.Contains(s))
-						   ? ReturnValue.HelpNeeded
-						   : CheckParameterLenght(parameters) != ReturnValue.Success
-							  ? ReturnValue.CommandAbort
+						: parameters.Any(s => General.HelpSymbol.Contains(s))
+						   ? ReturnValue.HelpNeeded(this)
+						   : CheckParameterLenght(parameters).IsPass
+							  ? ReturnValue.CommandAbort(this)
 							  : SubFunction(parameters);
 				}
 
@@ -98,14 +94,35 @@ namespace CsharpEvilcar.UserInterface
 			};
 			internal class Logout : Default
 			{
-				public override ReturnValue.Type Execute(ref string[] parameters) => ReturnValue.RequestedLogout;
+				public override ReturnValue.Type Execute(ref string[] parameters) => ReturnValue.RequestedLogout(this);
 			}
 			internal class Main : Selection
 			{
-				public ReturnValue.Type Execute()
+				string[] parameters = Array.Empty<string>();
+				public bool Execute()
 				{
-					string[] parameters = Array.Empty<string>();
-					return Execute(ref parameters);
+					ReturnValue.Type code = Execute(ref parameters);
+					if (code.IsSuccess)
+					{
+						Database.DatabaseController.SaveDatabase();
+					}
+					else if (code.IsEmpty)
+					{
+					}
+					else if (code.IsHelpNeeded)
+					{
+						Print(code.Case.Help + "\n" + General.SyntaxHead + "\n" + code.Case.Syntax);
+					}
+					else if (code.IsRequestedLogout)
+					{
+						return false;
+					}
+					else if (code.IsError)
+					{
+						Print("Error");
+						Print(code.Text);
+					}
+					return true;
 				}
 			}
 		}
