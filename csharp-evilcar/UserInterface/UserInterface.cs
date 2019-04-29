@@ -32,7 +32,7 @@ namespace CsharpEvilcar.UserInterface
 		{
 			while (true)
 			{
-				ReturnValue.Type code = Output.Main.Execute(Array.Empty<string>());
+				ReturnValue.Type code = Output.Main.Execute();
 				if (code is ReturnValue.PassReturnValue)
 				{
 					if (code == ReturnValue.Empty)
@@ -43,7 +43,7 @@ namespace CsharpEvilcar.UserInterface
 				}
 				else if (code == ReturnValue.HelpNeeded)
 				{
-					Print(ReturnValue.Case.GetHelp + "\n" + Output.General.SyntaxHead + "\n" + ReturnValue.Case.GetSyntax);
+					Print(ReturnValue.Case.Help + "\n" + Output.General.SyntaxHead + "\n" + ReturnValue.Case.Syntax);
 					continue;
 				}
 				else if (code == ReturnValue.RequestedLogout)

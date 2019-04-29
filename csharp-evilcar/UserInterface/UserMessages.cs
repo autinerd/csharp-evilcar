@@ -49,17 +49,17 @@ namespace CsharpEvilcar.UserInterface
 		}
 
 		// cases
-		internal static readonly CaseTyps.Default Main = new CaseTyps.Main()
+		internal static readonly CaseTyps.Main Main = new CaseTyps.Main()
 		{
 			CaseName = "main",
-			SubCases = new CaseTyps.Default[] {
-				new CaseTyps.Default(){
+			SubCases = new CaseTyps.Base[] {
+				new CaseTyps.Selection(){
 					CaseName = "add",
 					Help = "help for 'add'\n" +
 						"you can use 'add vehicle' or 'add customer'",
 					AskForParameters = "do you want to add a 'vehicle' or a 'costumer':",
-					SubCases = new CaseTyps.Default[] {
-						new CaseTyps.Default(){
+					SubCases = new CaseTyps.Base[] {
+						new CaseTyps.Command(){
 							CaseName = "vehicle",
 							AskForParameters =
 								"Please enter now the parameters of the new vehicle in the following format:\n" +
@@ -74,7 +74,7 @@ namespace CsharpEvilcar.UserInterface
 							ParameterLenght = new int[]{5},
 							SubFunction = InternalLogic.AddVehicle,
 						},
-						new CaseTyps.Default(){
+						new CaseTyps.Command(){
 							 CaseName = "customer",
 							 AskForParameters = "Please enter your Name Residence:",
 							 Help =
@@ -83,21 +83,24 @@ namespace CsharpEvilcar.UserInterface
 								"In Lastname and Firstname none space allowed.\n" +
 								"If you only use 'add customer' you will be ask for more information about the coustomer." +
 								"If you want to do this at ones use the full command",
-							Error = "Your input wasn't correct\n" + General.RemindHelp,
+							
 							Syntax = "add\t\tcustomer\t<name>\t\t<residence>",
 							ParameterLenght = new int[]{2},
 							SubFunction = InternalLogic.AddCustomer
 						}
 					}
 				},
-				new CaseTyps.Default(){
+				new CaseTyps.Selection(){
 					CaseName = "edit",
-					SubCases = new CaseTyps.Default[]{
-						new CaseTyps.Default()
+					SubCases = new CaseTyps.Base[]{
+						new CaseTyps.Command()
 						{
 							CaseName = "vehicle",
+							Syntax = "edit\tvehicle\t<vehicle_ID>\t{numberplate|fleet_ID}\t<new_value>",
+							ParameterLenght = new int[]{3},
+							SubFunction = InternalLogic.EditCustomer,
 						},
-						new CaseTyps.Default()
+						new CaseTyps.Command()
 						{
 							CaseName = "customer",
 							Syntax = "edit\tcustomer\t<customer_ID>\t{name|residence}\t<new_value>",
@@ -106,17 +109,17 @@ namespace CsharpEvilcar.UserInterface
 						},
 					}
 				},
-				new CaseTyps.Default(){
+				new CaseTyps.Selection(){
 					CaseName = "delete",
-					SubCases = new CaseTyps.Default[]{
-						new CaseTyps.Default()
+					SubCases = new CaseTyps.Base[]{
+						new CaseTyps.Command()
 						{
 							CaseName = "vehicle",
 							Syntax = "delete\tvehicle\t\t<vehicle_ID>",
 							ParameterLenght = new int[]{1},
 							SubFunction = InternalLogic.DeleteVehicle,
 						},
-						new CaseTyps.Default()
+						new CaseTyps.Command()
 						{
 							CaseName = "customer",
 							Syntax = "delete\tcustomer\t<customer_ID>",
@@ -125,34 +128,35 @@ namespace CsharpEvilcar.UserInterface
 						},
 					}
 				},
-				new CaseTyps.Default(){
+				new CaseTyps.Selection(){
 					CaseName = "view",
-					SubCases = new CaseTyps.Default[]{
-						new CaseTyps.Default()
+					SubCases = new CaseTyps.Base[]{
+						new CaseTyps.Command()
 						{
 							CaseName = "branch",
 							Syntax = "view\tbranch",
 							ParameterLenght = new int[]{0},
+
 						},
-						new CaseTyps.Default()
+						new CaseTyps.Command()
 						{
 							CaseName = "fleet",
 							Syntax = "view\tfleet\n\t\t\t\t<branch_ID>",
 							ParameterLenght = new int[]{0,1},
 						},
-						new CaseTyps.Default()
+						new CaseTyps.Command()
 						{
 							CaseName = "vehicle",
 							Syntax = "view\tvehicle\n\t\t\t\t<branch_ID>\t[<fleet_ID>]\n\t\tsingle\t\t<vehicle_ID>",
 							ParameterLenght = new int[]{0,2},
 						},
-						new CaseTyps.Default()
+						new CaseTyps.Command()
 						{
 							CaseName = "customer",
 							Syntax = "view\tcustomer\n\t\t\t\t<customer_ID>",
 							ParameterLenght = new int[]{0,1},
 						},
-						new CaseTyps.Default()
+						new CaseTyps.Command()
 						{
 							CaseName = "bookings",
 							Syntax = "view\tbookings\n\t\t\t\t<branch_ID>\t[< fleet_ID >]\n\t\tvehicle\t\t<vehicle_ID>\n\t\tcustomer\t<customer_ID>\n\t\tbooking\t\t<booking_ID>",
@@ -160,17 +164,17 @@ namespace CsharpEvilcar.UserInterface
 						},
 					}
 				},
-				new CaseTyps.Default(){
+				new CaseTyps.Selection(){
 					CaseName = "booking",
-					SubCases = new CaseTyps.Default[]{
-						new CaseTyps.Default()
+					SubCases = new CaseTyps.Base[]{
+						new CaseTyps.Command()
 						{
 							CaseName = "rent",
 							Syntax = "booking\trent\t\t<vehicle_ID>\t<customer_ID>",
 							ParameterLenght = new int[]{2},
 							SubFunction = InternalLogic.BookingRent,
 						},
-						new CaseTyps.Default()
+						new CaseTyps.Command()
 						{
 							CaseName = "return",
 							Syntax = "booking\treturn\t\t<vehicle_ID>",
@@ -182,7 +186,6 @@ namespace CsharpEvilcar.UserInterface
 				new CaseTyps.Logout(){
 					CaseName = "logout",
 					Syntax = "logout",
-					SubFunction = (parameters) => { return ReturnValue.RequestedLogout; },
 				}
 			},
 		};

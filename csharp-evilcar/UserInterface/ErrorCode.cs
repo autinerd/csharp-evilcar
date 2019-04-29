@@ -22,7 +22,7 @@
 	
 	internal static class ReturnValue
 	{
-		public static Output.CaseTyps._Default Case = null;
+		public static Output.CaseTyps.Base Case = null;
 		internal abstract class Type
 		{
 			public const bool error = true;
