@@ -25,5 +25,13 @@ namespace CsharpEvilcar.DataClasses
 				CustomerID = ( from c in Database.DatabaseController.Database.Customers select c.CustomerID ).Max() + 1;
 			}
 		}
+
+		public override string ToString() => ToString(false);
+
+		public string ToString(bool fullDetails) => fullDetails
+				? $@"Customer {CustomerID}: Name: {Name}, Residence: {Residence}
+	{Bookings.Count} Bookings:
+		{string.Join("\n\t\t", from b in Bookings select b.ToString())}"
+				: $@"Customer {CustomerID}: Name: {Name}, Residence: {Residence}, {Bookings.Count} Bookings";
 	}
 }

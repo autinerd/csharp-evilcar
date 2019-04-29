@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CsharpEvilcar.DataClasses
 {
@@ -28,5 +29,14 @@ namespace CsharpEvilcar.DataClasses
 		/// The Location of the branch
 		/// </summary>
 		public string Location { get; set; } = null;
+
+		public override string ToString() => ToString(false);
+
+		public string ToString(bool fullDetails) => fullDetails
+				? $@"Branch {Location}:
+	Fleet manager: {FleetManager.ToString()}
+	Fleets:
+		{string.Join("\n\t\t", from f in Fleets select f.ToString())}"
+				: $@"Branch {Location}: Fleet manager {FleetManager.Name}, {Fleets.Count} fleets";
 	}
 }
