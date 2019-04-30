@@ -21,6 +21,7 @@ namespace CsharpEvilcar.UserInterface
 				public string AskForParameters = null;
 				public string Help = null;
 				public virtual string Syntax { get; set; }
+				public virtual bool EmptyIsLegal => false;
 
 				public IList<Base> CasePath()
 				{
@@ -41,20 +42,16 @@ namespace CsharpEvilcar.UserInterface
 
 
 				public virtual string GetSyntax => null;
-				public virtual ReturnValue.Typ CheckParameterLenght(string[] inputArray) => ReturnValue.Success();
+				public virtual ReturnValue.Typ CheckParameterLenght(string[] inputArray) => ReturnValue.Success(this);
 				public virtual ReturnValue.Typ Execute(ref string[] parameters)
 				{
 					if (parameters.Length == 0)
 					{
 						Print(GetAskForParameters);
 						GetInput(out parameters);
-						ReturnValue.Typ code = CheckParameterLenght(parameters);
-						if (code.IsWrongParameterLength | code.IsEmpty)
-						{
-							return code;
-						}
 					}
-					return ReturnValue.Success();
+					return CheckParameterLenght(parameters);
+					
 				}
 
 			}
@@ -72,39 +69,33 @@ namespace CsharpEvilcar.UserInterface
 				}
 				public IEnumerable<Base> SubCases = null;
 				public override string Syntax => string.Join("\n", from c in SubCases select c.Syntax) + "\n";
-				public override ReturnValue.Typ CheckParameterLenght(string[] inputArray) => inputArray.Count() > 0 ? ReturnValue.Success() : ReturnValue.Empty();
+				public override ReturnValue.Typ CheckParameterLenght(string[] inputArray) => inputArray.Count() > 0 ? ReturnValue.Success(this) : ReturnValue.Empty(this);
 				public override ReturnValue.Typ Execute(ref string[] parameters)
 				{
-					if (ReturnValue.Execute(out ReturnValue.Typ code, base.Execute(ref parameters)).IsError)
+					if (ReturnValue.Execute(out ReturnValue.Typ code, base.Execute(ref parameters)).IsError|code.IsEmpty)
 					{
 						return code;
 					}
-					else
+					string selection = parameters[0].ToLower(CultureInfo.CurrentCulture);
+					parameters = parameters.Skip(1).ToArray();
+
+					Base selectedCase = ( from s in SubCases
+											where s.CaseName == selection
+											select s ).SingleOrDefault();
+
+					if (General.HelpSymbol.Contains(selection))
 					{
-						if (parameters.Length == 0)
-						{
-							return ReturnValue.Empty(this);
-						}
-						string selection = parameters[0].ToLower(CultureInfo.CurrentCulture);
-						parameters = parameters.Skip(1).ToArray();
-
-						Base selectedCase = ( from s in SubCases
-											  where s.CaseName == selection
-											  select s ).SingleOrDefault();
-
-						if (General.HelpSymbol.Contains(selection))
-						{
-							return ReturnValue.HelpNeeded(this);
-						}
-						else if (selectedCase == default)
-						{
-							return ReturnValue.WrongArgument(this);
-						}
-						else {
-							return selectedCase.Execute(ref parameters);
-						}
+						return ReturnValue.HelpNeeded(this);
+					}
+					else if (selectedCase == default)
+					{
+						return ReturnValue.WrongArgument(this);
+					}
+					else {
+						return selectedCase.Execute(ref parameters);
 					}
 				}
+				
 
 			}
 			internal class Command : Base
@@ -112,8 +103,8 @@ namespace CsharpEvilcar.UserInterface
 
 				public Command(Base ParentsCase = null) => this.ParentsCase = ParentsCase;
 				public int[] ParameterLength = null;
-				public override ReturnValue.Typ CheckParameterLenght(string[] inputArray) => ParameterLength.Contains(inputArray.Count()) ? ReturnValue.Success() : ReturnValue.WrongParameterLength();
-				public Func<IEnumerable<string>, ReturnValue.Typ> SubFunction = (parameters) => ReturnValue.CommandFunctionUndefined();
+				public override ReturnValue.Typ CheckParameterLenght(string[] inputArray) => ParameterLength.Contains(inputArray.Count()) ? ReturnValue.Success(this) : ReturnValue.WrongParameterLength(this);
+				public Func<IEnumerable<string>, ReturnValue.Typ> SubFunction =null;
 
 				public override ReturnValue.Typ Execute(ref string[] parameters)
 				{
@@ -127,7 +118,7 @@ namespace CsharpEvilcar.UserInterface
 					}
 					else if (CheckParameterLenght(parameters).IsPass)
 					{
-						return SubFunction(parameters);
+						return SubFunction == null ? ReturnValue.CommandFunctionUndefined(this) : SubFunction(parameters);
 					}
 					else
 					{
@@ -146,6 +137,7 @@ namespace CsharpEvilcar.UserInterface
 			}
 			internal sealed class Main : Selection
 			{
+				public override bool EmptyIsLegal => true;
 				public override string GetAskForParameters => null;
 				string[] parameters =null;
 				public bool Execute()
@@ -156,8 +148,9 @@ namespace CsharpEvilcar.UserInterface
 					{
 						Database.DatabaseController.SaveDatabase();
 					}
-					else if (code.IsEmpty)
+					else if (code.IsEmpty&!code.Case.EmptyIsLegal)
 					{
+						Print(code.Text);
 					}
 					else if (code.IsHelpNeeded)
 					{
