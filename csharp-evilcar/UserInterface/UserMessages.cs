@@ -23,10 +23,10 @@ namespace CsharpEvilcar.UserInterface
 			#endregion Logo
 			;
 
-			internal const string RemindHelp = "If you need help with some command or the prompt as a whole please don't hasitate to use the '?' at any point.";
+			public const string RemindHelp = "If you need help with some command or the prompt as a whole please don't hasitate to use the '?' at any point.";
 			public const string ProgrammEnd = "See you soon!\nYour EPT-EvilProgrammingTeam";
-			public static string HelpSymbol => "?";
-			public static string SyntaxHead => "Syntax\nMainCase\tSubCase\t\tParameter 1\tParameter 2\t\tParameter 3\tParameter 4\t\tParameter 5";
+			public const string HelpSymbol = "?";
+			public const string SyntaxHead = "Syntax\nMainCase\tSubCase\t\tParameter 1\tParameter 2\t\tParameter 3\tParameter 4\t\tParameter 5";
 		}
 		internal static class Login
 		{
@@ -35,15 +35,16 @@ namespace CsharpEvilcar.UserInterface
 			public const string Failed = "Login failed!";
 		}
 		internal static class Error
-		{			
-			public const string HelpNeeded = "";
-			public const string WrongArgument = "";
-			public const string DatabaseError = "";
-			public const string NoUserLoggedIn = "";
+		{
+			public const string DefaultError = "Default-Error";
+			public const string HelpNeeded = "You requested help in Case: ";
+			public const string WrongArgument = "Some of the entered arguments were wrong.";
+			public const string DatabaseError = "An database error happend.";
+			public const string NoUserLoggedIn = "You are not logged in.";
 			public const string CommandAbort = "The command was not executed.";
-			public const string WrongParameterLength = "";
-			public const string Undefined = "";
-			public const string RequestedLogout = "";
+			public const string WrongParameterLength = "You entered a not allowed parameter number.";
+			public const string CommandFunctionUndefined = "Command-Function-is undefined yet.";
+			public const string RequestedLogout = "You requestet logout.";
 		}
 
 		// cases
@@ -97,6 +98,7 @@ namespace CsharpEvilcar.UserInterface
 				},
 				new CaseTyps.Selection(){
 					CaseName = "delete",
+					AskForParameters = "Do you want to delete a 'vehicle' or a 'customer'?",
 					SubCases = new CaseTyps.Base[]{
 						new CaseTyps.Command()
 						{

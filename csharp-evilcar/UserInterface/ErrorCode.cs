@@ -3,114 +3,171 @@
 		
 	internal static class ReturnValue
 	{
-		internal abstract class Type
+		public static Typ Execute(Typ i) => i;
+		public static Typ Execute(out Typ r,Typ i )
+		{
+			r = i;
+			return r;
+		}
+		internal abstract class Typ
 		{
 			public Prompt.CaseTyps.Base Case = null;
-			public Type(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
-			public const string Text = "Type-return-undefined";
-			public string GetText = Text;
+			private System.Type ClassTyp => typeof(Typ);
+			public Typ(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
 
-			public virtual bool _IsError			=> true;
-			public virtual bool _IsPass			=> false;
-			public virtual bool _IsHelpNeeded	=> false;
-			public virtual bool _IsSuccess		=> false;
-			public virtual bool _IsEmpty			=> false;
-			public virtual bool _IsWrongArgument => false;
-			public virtual bool _IsDatabaseError => false;
-			public virtual bool _IsNoUserLoggedIn => false;
-			public virtual bool _IsCommandAbort	=> false;
-			public virtual bool -IsWrongParameterLength => false;
-			public virtual bool _IsUndefined		=> false;
-			public virtual bool _IsRequestedLogout => false;
 
-			
-			internal class Error : Type
+			private const bool _IsError		= false;
+			private const bool _IsPass			= false;
+			private const bool _IsHelpNeeded	= false;
+			private const bool _IsSuccess		= false;
+			private const bool _IsEmpty		= false;
+			private const bool _IsWrongArgument = false;
+			private const bool _IsDatabaseError = false;
+			private const bool _IsNoUserLoggedIn = false;
+			private const bool _IsCommandAbort	= false;
+			private const bool _IsWrongParameterLength = false;
+			private const bool _CommandFunctionUndefined = false;
+			private const bool _IsRequestedLogout = false;
+			private const string _Text = "Type-return-undefined";
+
+
+			public virtual string Text => _Text;
+			public virtual bool IsError => _IsError;
+			public virtual bool IsPass => _IsPass;
+			public virtual bool IsHelpNeeded => _IsHelpNeeded;
+			public virtual bool IsSuccess => _IsSuccess;
+			public virtual bool IsEmpty => _IsEmpty;
+			public virtual bool IsWrongArgument => _IsWrongArgument;
+			public virtual bool IsDatabaseError => _IsDatabaseError;
+			public virtual bool IsNoUserLoggedIn => _IsNoUserLoggedIn;
+			public virtual bool IsCommandAbort => _IsCommandAbort;
+			public virtual bool IsWrongParameterLength => _IsWrongParameterLength;
+			public virtual bool IsCommandFunctionUndefined => _CommandFunctionUndefined;
+			public virtual bool IsRequestedLogout => _IsRequestedLogout;
+
+			internal abstract class Error : Typ
 			{
-				
-				public new const string Text = "Error-return-undefined";
-				public Error(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
+				private new const bool _IsError = false;
+				private new const string _Text = Prompt.Error.DefaultError;
 
-				internal class RequestedLogout : Error
+				public override bool IsError=> _IsError;
+				public override string Text => _Text;
+				public Error(Prompt.CaseTyps.Base Case = null) : base(Case) { }
+
+				internal sealed class RequestedLogout : Error
 				{
-					public override bool IsRequestedLogout => true;
-					public override bool IsRequestedLogout => true;
-					public new const string Text = Prompt.Error.RequestedLogout;
-					public RequestedLogout(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
+					private new const bool _IsRequestedLogout = true;
+					private new const string _Text = Prompt.Error.RequestedLogout;
+
+					public override bool IsRequestedLogout => _IsRequestedLogout;
+					public override string Text => _Text;
+					public RequestedLogout(Prompt.CaseTyps.Base Case = null) : base(Case) { }
 				}
-				internal class HelpNeeded : Error
+				internal sealed class HelpNeeded : Error
 				{
-					public override bool IsHelpNeeded => true;
-					public new const string Text = Prompt.Error.HelpNeeded;
-					public HelpNeeded(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
+					private new const bool _IsHelpNeeded = true;
+					private new const string _Text = Prompt.Error.HelpNeeded;
+
+					public override bool IsHelpNeeded => _IsHelpNeeded;
+					public override string Text => _Text;
+					public HelpNeeded(Prompt.CaseTyps.Base Case = null) : base(Case) { }
 				}
-				internal class WrongArgument : Error
+				internal sealed class WrongArgument : Error
 				{
-					public override bool IsWrongArgument => true;
-					public new const string Text = Prompt.Error.WrongArgument;
-					public WrongArgument(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
+					private new const bool _IsWrongArgument = true;
+					private new const string _Text = Prompt.Error.WrongArgument;
+
+					public override bool IsWrongArgument => _IsWrongArgument;
+					public override string Text => _Text;
+					public WrongArgument(Prompt.CaseTyps.Base Case = null) : base(Case) { }
 				}
-				internal class DatabaseError : Error
+				internal sealed class DatabaseError : Error
 				{
-					public override bool IsDatabaseError => true;
-					public new const string Text = Prompt.Error.DatabaseError;
-					public DatabaseError(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
+					private new const bool _IsDatabaseError = true;
+					private new const string _Text = Prompt.Error.DatabaseError;
+
+					public override bool IsDatabaseError=> _IsDatabaseError;
+					public override string Text => _Text;
+					public DatabaseError(Prompt.CaseTyps.Base Case = null) : base(Case) { }
 				}
 				internal class NoUserLoggedIn : Error
 				{
-					public override bool IsNoUserLoggedIn => true;
-					public new const string Text = Prompt.Error.NoUserLoggedIn;
-					public NoUserLoggedIn(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
+					private new const bool _IsNoUserLoggedIn = true;
+					private new const string _Text = Prompt.Error.NoUserLoggedIn;
+
+					public override bool IsNoUserLoggedIn=> _IsNoUserLoggedIn;
+					public override string Text => _Text;
+					public NoUserLoggedIn(Prompt.CaseTyps.Base Case = null) : base(Case) { }
 				}
 				internal class CommandAbort : Error
 				{
-					public override bool IsCommandAbort => true;
-					public new const string Text = Prompt.Error.CommandAbort;
-					public CommandAbort(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
+					private new const bool _IsCommandAbort = true;
+					private new const string _Text = Prompt.Error.CommandAbort;
+
+					public override bool IsCommandAbort=> _IsCommandAbort;
+					public override string Text => _Text;
+					public CommandAbort(Prompt.CaseTyps.Base Case = null) : base(Case) { }
 				}
-				internal class WrongParameterLength : Error
+				internal sealed class WrongParameterLength : Error
 				{
-					public override bool IsWrongParameterLength => true;
-					public new const string Text = Prompt.Error.WrongParameterLength;
-					public WrongParameterLength(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
+					private new const bool _IsWrongParameterLength = true;
+					private new const string _Text = Prompt.Error.WrongParameterLength;
+
+					public override bool IsWrongParameterLength=> _IsWrongParameterLength;
+					public override string Text => _Text;
+					public WrongParameterLength(Prompt.CaseTyps.Base Case = null) : base(Case) { }
 				}
-				internal class Undefined : Error
+				internal sealed class CommandFunctionUndefined : Error
 				{
-					public override bool IsUndefined => true;
-					public new const string Text = Prompt.Error.Undefined;
-					public Undefined(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
+					private new const bool _CommandFunctionUndefined = true;
+					private new const string _Text = Prompt.Error.CommandFunctionUndefined;
+
+					public override bool IsCommandFunctionUndefined => _CommandFunctionUndefined;
+					public override string Text => _Text;
+					public CommandFunctionUndefined(Prompt.CaseTyps.Base Case = null) : base(Case) { }
 				}
 			}
-			internal class Pass : Type
+			internal abstract class Pass : Typ
 			{
-				public override bool IsPass => true;
-				public override bool IsError => false;
-				public new const string Text = "Pass-return-undefined";
-				public Pass(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
+				private new const bool _IsPass = true;
+				public new const string _Text = "Pass-return";
 
-				internal class Success : Pass
+				public override bool IsPass => _IsPass;
+				public override string Text => _Text;
+				public Pass(Prompt.CaseTyps.Base Case = null) : base(Case) { }
+
+				internal sealed class Success : Pass
 				{
-					public override bool IsSuccess => true;
-					public Success(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
+					private new const bool _IsSuccess = true;
+					private new const string _Text = "Success-return";
+
+					public override bool IsSuccess => _IsSuccess;
+					public override string Text => _Text;
+					public Success(Prompt.CaseTyps.Base Case = null) : base(Case) { }
 				}
-				internal class Empty : Pass
+				internal sealed class Empty : Pass
 				{
-					public override bool IsEmpty => true;
-					public Empty(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
+					private new const bool _IsEmpty = true;
+					private new const string _Text = "Empty-return";
+
+					public override bool IsEmpty => _IsEmpty;
+					public override string Text => _Text;
+					public Empty(Prompt.CaseTyps.Base Case = null) : base(Case) { }
 				}
 
 			}
 		}
 		
-		internal static Type Success(Prompt.CaseTyps.Base Case=null)				=> new Type.Pass.Success(Case);
-		internal static Type Empty(Prompt.CaseTyps.Base Case=null)					=> new Type.Pass.Empty(Case);
-		internal static Type WrongArgument(Prompt.CaseTyps.Base Case = null)		=> new Type.Error.WrongArgument(Case);
-		internal static Type DatabaseError(Prompt.CaseTyps.Base Case = null)		=> new Type.Error.NoUserLoggedIn(Case);
-		internal static Type NoUserLoggedIn(Prompt.CaseTyps.Base Case = null)		=> new Type.Error.NoUserLoggedIn(Case);
-		internal static Type CommandAbort(Prompt.CaseTyps.Base Case = null)			=> new Type.Error.CommandAbort(Case);
-		internal static Type WrongParameterLength(Prompt.CaseTyps.Base Case= null)	=> new Type.Error.WrongParameterLength(Case);
-		internal static Type HelpNeeded(Prompt.CaseTyps.Base Case = null)			=> new Type.Error.HelpNeeded(Case);
-		internal static Type Undefined(Prompt.CaseTyps.Base Case = null)			=> new Type.Error.Undefined(Case);
-		internal static Type RequestedLogout(Prompt.CaseTyps.Base Case = null)		=> new Type.Error.RequestedLogout(Case);
+		internal static Typ Success(Prompt.CaseTyps.Base Case=null)				=> new Typ.Pass.Success(Case);
+		internal static Typ Empty(Prompt.CaseTyps.Base Case=null)					=> new Typ.Pass.Empty(Case);
+		internal static Typ WrongArgument(Prompt.CaseTyps.Base Case = null)		=> new Typ.Error.WrongArgument(Case);
+		internal static Typ DatabaseError(Prompt.CaseTyps.Base Case = null)		=> new Typ.Error.NoUserLoggedIn(Case);
+		internal static Typ NoUserLoggedIn(Prompt.CaseTyps.Base Case = null)		=> new Typ.Error.NoUserLoggedIn(Case);
+		internal static Typ CommandAbort(Prompt.CaseTyps.Base Case = null)			=> new Typ.Error.CommandAbort(Case);
+		internal static Typ WrongParameterLength(Prompt.CaseTyps.Base Case= null)	=> new Typ.Error.WrongParameterLength(Case);
+		internal static Typ HelpNeeded(Prompt.CaseTyps.Base Case = null)			=> new Typ.Error.HelpNeeded(Case);
+		internal static Typ CommandFunctionUndefined(Prompt.CaseTyps.Base Case	= null)			=> new Typ.Error.CommandFunctionUndefined(Case);
+		internal static Typ RequestedLogout(Prompt.CaseTyps.Base Case = null)		=> new Typ.Error.RequestedLogout(Case);
 	}
 	
 }

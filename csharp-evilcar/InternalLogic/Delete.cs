@@ -13,7 +13,7 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: VehicleID (0)</param>
 		/// <returns>Error code</returns>
-		internal static ReturnValue.Type DeleteVehicle(IEnumerable<string> parameters)
+		internal static ReturnValue.Typ DeleteVehicle(IEnumerable<string> parameters)
 		{
 			if (!int.TryParse(parameters.ElementAt(0), out int vehID))
 			{
@@ -37,7 +37,7 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: CustomerID (0)</param>
 		/// <returns>Error code</returns>
-		internal static ReturnValue.Type DeleteCustomer(IEnumerable<string> parameters) => int.TryParse(parameters.ElementAt(0), out int cusID)
+		internal static ReturnValue.Typ DeleteCustomer(IEnumerable<string> parameters) => int.TryParse(parameters.ElementAt(0), out int cusID)
 			&& DatabaseController.Database.Customers.Any((c) => c.CustomerID == cusID)
 				? DatabaseController.Database.Customers.Remove(( from c in DatabaseController.Database.Customers where cusID == c.CustomerID select c ).Single())
 				? ReturnValue.Success()

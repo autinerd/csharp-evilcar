@@ -8,15 +8,19 @@ namespace CsharpEvilcar.UserInterface
 		{
 			// print programm begin info
 			Prompt.Print(Prompt.General.EvilCarLogo);
-
 			// login and run the prompt
 			if (Login())
 			{
 				Prompt.Print(Prompt.Login.Successful);
 				Prompt.Print(Prompt.General.RemindHelp);
-				if (Database.DatabaseController.LoadDatabase().IsSuccess)
+				if (ReturnValue.Execute(out ReturnValue.Typ code,Database.DatabaseController.LoadDatabase()).IsPass)
 				{
+					Prompt.Main.Init();
 					while (Prompt.Main.Execute()) { };
+				}
+				else
+				{
+					Prompt.Print(code.Text);
 				}
 			}
 			else { Prompt.Print(Prompt.Login.Failed); }

@@ -35,7 +35,7 @@ namespace CsharpEvilcar.Database
 		/// Loads the database file contents into the <see cref="Database"/> object.
 		/// </summary>
 		/// <returns>Error code</returns>
-		internal static ReturnValue.Type LoadDatabase()
+		internal static ReturnValue.Typ LoadDatabase()
 		{
 			try
 			{
@@ -53,7 +53,7 @@ namespace CsharpEvilcar.Database
 		/// Saves the <see cref="Database"/> object into the database file.
 		/// </summary>
 		/// <returns></returns>
-		internal static ReturnValue.Type SaveDatabase()
+		internal static ReturnValue.Typ SaveDatabase()
 		{
 			try
 			{
@@ -67,10 +67,10 @@ namespace CsharpEvilcar.Database
 #pragma warning restore CA1031 // Do not catch general exception types
 		}
 
-		private static ReturnValue.Type SaveDatabaseFile()
+		private static ReturnValue.Typ SaveDatabaseFile()
 		{
-			ReturnValue.Type returnval = MapToJSON(out JObject jObject);
-			if (returnval is ReturnValue.Type.Pass)
+			ReturnValue.Typ returnval = MapToJSON(out JObject jObject);
+			if (returnval is ReturnValue.Typ.Pass)
 			{
 				return returnval;
 			}
@@ -106,7 +106,7 @@ namespace CsharpEvilcar.Database
 
 		}
 
-		private static ReturnValue.Type MapToDatabase(JObject jObject)
+		private static ReturnValue.Typ MapToDatabase(JObject jObject)
 		{
 			if (CurrentUser == Guid.Empty)
 			{
@@ -190,7 +190,7 @@ namespace CsharpEvilcar.Database
 			return ReturnValue.Success();
 		}
 
-		private static ReturnValue.Type MapToJSON(out JObject jObject)
+		private static ReturnValue.Typ MapToJSON(out JObject jObject)
 		{
 			jObject = null;
 			if (currentUser == Guid.Empty)

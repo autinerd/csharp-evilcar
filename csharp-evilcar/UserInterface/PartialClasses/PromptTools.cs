@@ -7,7 +7,7 @@ namespace CsharpEvilcar.UserInterface
 {
 	internal static partial class Prompt
 	{
-		internal static ReturnValue.Type GetInput(out string[] input)
+		internal static ReturnValue.Typ GetInput(out string[] input)
 		{
 			Print("", "");
 			input = ( from Match m in Regex.Matches(Console.ReadLine(), @"("".*""|[\S]+)+")
@@ -19,7 +19,7 @@ namespace CsharpEvilcar.UserInterface
 
 	
 
-		internal static ReturnValue.Type Print(string str = "", string end = "\n")
+		internal static ReturnValue.Typ Print(string str = "", string end = "\n")
 		{
 			if (str != null)
 			{

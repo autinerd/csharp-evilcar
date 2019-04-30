@@ -14,7 +14,7 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: <see cref="Vehicle.VehicleID"/> (0), <see cref="Customer.CustomerID"/> (1)</param>
 		/// <returns>Error code</returns>
-		internal static ReturnValue.Type BookingRent(IEnumerable<string> parameters)
+		internal static ReturnValue.Typ BookingRent(IEnumerable<string> parameters)
 		{
 			if (!int.TryParse(parameters.ElementAt(0), out int vehID)
 				|| !int.TryParse(parameters.ElementAt(1), out int cusID))
@@ -45,7 +45,7 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: <see cref="Vehicle.VehicleID"/> (0)</param>
 		/// <returns>Error code</returns>
-		internal static ReturnValue.Type BookingReturn(IEnumerable<string> parameters)
+		internal static ReturnValue.Typ BookingReturn(IEnumerable<string> parameters)
 		{
 			if (!int.TryParse(parameters.ElementAt(0), out int vehID))
 			{

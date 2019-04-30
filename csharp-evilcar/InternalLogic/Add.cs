@@ -15,7 +15,7 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: <see cref="Vehicle.Numberplate"/> (0), <see cref="Vehicle.Brand"/> (1), <see cref="Vehicle.Model"/> (2), <see cref="Vehicle.Category"/> (3), Number of <see cref="Fleet"/> (4)</param>
 		/// <returns>Error code</returns>
-		internal static ReturnValue.Type AddVehicle(IEnumerable<string> parameters)
+		internal static ReturnValue.Typ AddVehicle(IEnumerable<string> parameters)
 		{
 			string numberplate = parameters.ElementAt(0), brand = parameters.ElementAt(1), model = parameters.ElementAt(2), category = parameters.ElementAt(3), fleet = parameters.ElementAt(4);
 			if (!( Regex.IsMatch(numberplate, "[A-Z]{1,3}-[A-Z]{1,2}-[0-9]{1,4}")
@@ -48,7 +48,7 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: <see cref="Person.Name"/> (0), <see cref="Person.Residence"/> (1)</param>
 		/// <returns>Error code</returns>
-		internal static ReturnValue.Type AddCustomer(IEnumerable<string> parameters)
+		internal static ReturnValue.Typ AddCustomer(IEnumerable<string> parameters)
 		{
 			DatabaseController.Database.Customers.Add(new Customer(false)
 			{

@@ -14,7 +14,7 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: VehicleID (0), Key (1), Value(2)</param>
 		/// <returns>Error code</returns>
-		internal static ReturnValue.Type EditVehicle(IEnumerable<string> parameters)
+		internal static ReturnValue.Typ EditVehicle(IEnumerable<string> parameters)
 		{
 			if (!int.TryParse(parameters.ElementAt(0), out int vehID))
 			{
@@ -67,7 +67,7 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: CustomerID (0), Key (1), Value(2)</param>
 		/// <returns>Error code</returns>
-		internal static ReturnValue.Type EditCustomer(IEnumerable<string> parameters)
+		internal static ReturnValue.Typ EditCustomer(IEnumerable<string> parameters)
 		{
 			if (!( int.TryParse(parameters.ElementAt(0), out int cusID)
 				&& DatabaseController.Database.Customers.Any((c) => c.CustomerID == cusID) ))
