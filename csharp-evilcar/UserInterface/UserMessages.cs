@@ -35,16 +35,15 @@ namespace CsharpEvilcar.UserInterface
 			public const string Failed = "Login failed!";
 		}
 		internal static class Error
-		{
-			public const string Combine = "your first command cannot be combined with your second.";
-			public const string CommandTooShort = "not enough parameters have been inserted.";
-			public const string CommandTooLong = "too much parameters have been inserted.";
-			public const string CommandNotExisting = "command doesn't exist, please use '?' for help.";
+		{			
+			public const string HelpNeeded = "";
+			public const string WrongArgument = "";
+			public const string DatabaseError = "";
+			public const string NoUserLoggedIn = "";
 			public const string CommandAbort = "The command was not executed.";
-			public const string InputIncorrect = "Your input was incorrect";
-			public const string SubFunctionUndefined = "This Command doesn't do anything yet!";
-
-
+			public const string WrongParameterLength = "";
+			public const string Undefined = "";
+			public const string RequestedLogout = "";
 		}
 
 		// cases

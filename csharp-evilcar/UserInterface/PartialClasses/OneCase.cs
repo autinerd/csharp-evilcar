@@ -73,8 +73,7 @@ namespace CsharpEvilcar.UserInterface
 				
 				public int[] ParameterLength = null;
 				public override ReturnValue.Type CheckParameterLenght(string[] inputArray) => ParameterLength.Contains(inputArray.Count()) ? ReturnValue.Success() : ReturnValue.WrongParameterLength();
-				public Func<IEnumerable<string>, ReturnValue.Type> SubFunction
-																	 = (parameters) => { Print(Error.SubFunctionUndefined); return ReturnValue.Undefined(); };
+				public Func<IEnumerable<string>, ReturnValue.Type> SubFunction = (parameters) =>  ReturnValue.Undefined();
 
 				public override ReturnValue.Type Execute(ref string[] parameters)
 				{
@@ -120,7 +119,7 @@ namespace CsharpEvilcar.UserInterface
 					else if (code.IsError)
 					{
 						Print("Error");
-						Print(code.Text);
+						Print(code.GetText);
 					}
 					return true;
 				}

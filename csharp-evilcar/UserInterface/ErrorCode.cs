@@ -7,66 +7,76 @@
 		{
 			public Prompt.CaseTyps.Base Case = null;
 			public Type(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
-			public virtual string Text => "Error-undefined";
+			public const string Text = "Type-return-undefined";
+			public string GetText = Text;
 
-			public virtual bool IsError			=> true;
-			public virtual bool IsPass			=> false;
-			public virtual bool IsHelpNeeded	=> false;
-			public virtual bool IsSuccess		=> false;
-			public virtual bool IsEmpty			=> false;
-			public virtual bool IsWrongArgument => false;
-			public virtual bool IsDatabaseError => false;
-			public virtual bool IsNoUserLoggedIn => false;
-			public virtual bool IsCommandAbort	=> false;
-			public virtual bool IsWrongParameterLength => false;
-			public virtual bool IsUndefined		=> false;
-			public virtual bool IsRequestedLogout => false;
+			public virtual bool _IsError			=> true;
+			public virtual bool _IsPass			=> false;
+			public virtual bool _IsHelpNeeded	=> false;
+			public virtual bool _IsSuccess		=> false;
+			public virtual bool _IsEmpty			=> false;
+			public virtual bool _IsWrongArgument => false;
+			public virtual bool _IsDatabaseError => false;
+			public virtual bool _IsNoUserLoggedIn => false;
+			public virtual bool _IsCommandAbort	=> false;
+			public virtual bool -IsWrongParameterLength => false;
+			public virtual bool _IsUndefined		=> false;
+			public virtual bool _IsRequestedLogout => false;
 
 			
 			internal class Error : Type
 			{
 				
-				public override string Text => "Error-return-undefined";
+				public new const string Text = "Error-return-undefined";
 				public Error(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
 
 				internal class RequestedLogout : Error
 				{
 					public override bool IsRequestedLogout => true;
+					public override bool IsRequestedLogout => true;
+					public new const string Text = Prompt.Error.RequestedLogout;
 					public RequestedLogout(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
 				}
 				internal class HelpNeeded : Error
 				{
 					public override bool IsHelpNeeded => true;
+					public new const string Text = Prompt.Error.HelpNeeded;
 					public HelpNeeded(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
 				}
 				internal class WrongArgument : Error
 				{
 					public override bool IsWrongArgument => true;
+					public new const string Text = Prompt.Error.WrongArgument;
 					public WrongArgument(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
 				}
 				internal class DatabaseError : Error
 				{
 					public override bool IsDatabaseError => true;
+					public new const string Text = Prompt.Error.DatabaseError;
 					public DatabaseError(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
 				}
 				internal class NoUserLoggedIn : Error
 				{
 					public override bool IsNoUserLoggedIn => true;
+					public new const string Text = Prompt.Error.NoUserLoggedIn;
 					public NoUserLoggedIn(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
 				}
 				internal class CommandAbort : Error
 				{
 					public override bool IsCommandAbort => true;
+					public new const string Text = Prompt.Error.CommandAbort;
 					public CommandAbort(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
 				}
 				internal class WrongParameterLength : Error
 				{
 					public override bool IsWrongParameterLength => true;
+					public new const string Text = Prompt.Error.WrongParameterLength;
 					public WrongParameterLength(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
 				}
 				internal class Undefined : Error
 				{
 					public override bool IsUndefined => true;
+					public new const string Text = Prompt.Error.Undefined;
 					public Undefined(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
 				}
 			}
@@ -74,7 +84,7 @@
 			{
 				public override bool IsPass => true;
 				public override bool IsError => false;
-				public override string Text => "Pass-return-undefined";
+				public new const string Text = "Pass-return-undefined";
 				public Pass(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
 
 				internal class Success : Pass
