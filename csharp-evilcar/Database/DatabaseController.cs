@@ -1,4 +1,4 @@
-﻿using CsharpEvilcar.UserInterface;
+﻿
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -35,7 +35,7 @@ namespace CsharpEvilcar.Database
 		/// Loads the database file contents into the <see cref="Database"/> object.
 		/// </summary>
 		/// <returns>Error code</returns>
-		internal static ReturnValue.Typ LoadDatabase()
+		internal static Prompt.ReturnValue.Typ LoadDatabase()
 		{
 			try
 			{
@@ -44,7 +44,7 @@ namespace CsharpEvilcar.Database
 #pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
 			{
-				return ReturnValue.DatabaseError();
+				return Prompt.ReturnValue.DatabaseError();
 			}
 #pragma warning restore CA1031 // Do not catch general exception types
 		}
@@ -53,7 +53,7 @@ namespace CsharpEvilcar.Database
 		/// Saves the <see cref="Database"/> object into the database file.
 		/// </summary>
 		/// <returns></returns>
-		internal static ReturnValue.Typ SaveDatabase()
+		internal static Prompt.ReturnValue.Typ SaveDatabase()
 		{
 			try
 			{
@@ -62,15 +62,15 @@ namespace CsharpEvilcar.Database
 #pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
 			{
-				return ReturnValue.DatabaseError();
+				return Prompt.ReturnValue.DatabaseError();
 			}
 #pragma warning restore CA1031 // Do not catch general exception types
 		}
 
-		private static ReturnValue.Typ SaveDatabaseFile()
+		private static Prompt.ReturnValue.Typ SaveDatabaseFile()
 		{
-			ReturnValue.Typ returnval = MapToJSON(out JObject jObject);
-			if (returnval is ReturnValue.Typ.Pass)
+			Prompt.ReturnValue.Typ returnval = MapToJSON(out JObject jObject);
+			if (returnval is Prompt.ReturnValue.Typ.Pass)
 			{
 				return returnval;
 			}
@@ -82,7 +82,7 @@ namespace CsharpEvilcar.Database
 				{
 					jObject.WriteTo(writer);
 				}
-				return ReturnValue.Success();
+				return Prompt.ReturnValue.Success();
 			}
 			catch (Exception)
 			{
@@ -106,11 +106,11 @@ namespace CsharpEvilcar.Database
 
 		}
 
-		private static ReturnValue.Typ MapToDatabase(JObject jObject)
+		private static Prompt.ReturnValue.Typ MapToDatabase(JObject jObject)
 		{
 			if (CurrentUser == Guid.Empty)
 			{
-				return ReturnValue.NoUserLoggedIn();
+				return Prompt.ReturnValue.NoUserLoggedIn();
 			}
 			else
 			{
@@ -187,15 +187,15 @@ namespace CsharpEvilcar.Database
 					}).ToList()
 				};
 			}
-			return ReturnValue.Success();
+			return Prompt.ReturnValue.Success();
 		}
 
-		private static ReturnValue.Typ MapToJSON(out JObject jObject)
+		private static Prompt.ReturnValue.Typ MapToJSON(out JObject jObject)
 		{
 			jObject = null;
 			if (currentUser == Guid.Empty)
 			{
-				return ReturnValue.NoUserLoggedIn();
+				return Prompt.ReturnValue.NoUserLoggedIn();
 			}
 			jObject = new JObject {
 				{
@@ -315,7 +315,7 @@ namespace CsharpEvilcar.Database
 					ReadDatabaseFile()["FleetManagers"]
 				}
 			};
-			return ReturnValue.Success();
+			return Prompt.ReturnValue.Success();
 		}
 
 		/// <summary>

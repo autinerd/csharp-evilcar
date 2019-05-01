@@ -1,6 +1,5 @@
 ﻿using CsharpEvilcar.Database;
 using CsharpEvilcar.DataClasses;
-using CsharpEvilcar.UserInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +13,12 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: <see cref="Vehicle.VehicleID"/> (0), <see cref="Customer.CustomerID"/> (1)</param>
 		/// <returns>Error code</returns>
-		internal static ReturnValue.Typ BookingRent(IEnumerable<string> parameters)
+		internal static Prompt.ReturnValue.Typ BookingRent(IEnumerable<string> parameters)
 		{
 			if (!int.TryParse(parameters.ElementAt(0), out int vehID)
 				|| !int.TryParse(parameters.ElementAt(1), out int cusID))
 			{
-				return ReturnValue.WrongArgument();
+				return Prompt.ReturnValue.WrongArgument();
 			}
 			IEnumerable<Customer> cc = from c in DatabaseController.Database.Customers
 					 where c.CustomerID == cusID
@@ -30,14 +29,14 @@ namespace CsharpEvilcar
 				  select v ).Count() == 1 
 				  && cc.Count() == 1 ))
 			{
-				return ReturnValue.WrongArgument();
+				return Prompt.ReturnValue.WrongArgument();
 			}
 			cc.Single().Bookings.Add(new Booking(false)
 			{
 				Startdate = DateTime.Today,
 				VehicleID = vehID
 			});
-			return ReturnValue.Success();
+			return Prompt.ReturnValue.Success();
 		}
 
 		/// <summary>
@@ -45,11 +44,11 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: <see cref="Vehicle.VehicleID"/> (0)</param>
 		/// <returns>Error code</returns>
-		internal static ReturnValue.Typ BookingReturn(IEnumerable<string> parameters)
+		internal static Prompt.ReturnValue.Typ BookingReturn(IEnumerable<string> parameters)
 		{
 			if (!int.TryParse(parameters.ElementAt(0), out int vehID))
 			{
-				return ReturnValue.WrongArgument();
+				return Prompt.ReturnValue.WrongArgument();
 			}
 			IEnumerable<Booking> vc = from c in DatabaseController.Database.Customers
 									  from b in c.Bookings
@@ -57,10 +56,10 @@ namespace CsharpEvilcar
 									  select b;
 			if (vc.Count() != 1)
 			{
-				return ReturnValue.WrongArgument();
+				return Prompt.ReturnValue.WrongArgument();
 			}
 			vc.Single().Enddate = DateTime.Today;
-			return ReturnValue.Success();
+			return Prompt.ReturnValue.Success();
 		}
 	}
 }

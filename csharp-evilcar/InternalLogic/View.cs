@@ -1,5 +1,4 @@
 ﻿using CsharpEvilcar.Database;
-using CsharpEvilcar.UserInterface;
 using System.Linq;
 
 namespace CsharpEvilcar
@@ -11,7 +10,7 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">(0): "all" | <see cref="int"/> branchNumber</param>
 		/// <returns><see cref="ReturnValue.Undefined(Prompt.CaseTyps.Base)"/></returns>
-		internal static ReturnValue.Typ ViewBranch(string[] parameters) => Prompt.Print(( parameters[0] == "all" )
+		internal static Prompt.ReturnValue.Typ ViewBranch(string[] parameters) => Prompt.InputOutput.Print(( parameters[0] == "all" )
 				? string.Join("", from b in DatabaseController.Database.Branches select b.ToString(false))
 				: int.TryParse(parameters[0], out int i) && DatabaseController.Database.Branches.Count() > i
 				? DatabaseController.Database.Branches.ElementAt(i).ToString(true)
@@ -22,68 +21,68 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">(0): "all" | <see cref="int"/> branchNumber, (1): "all" | <see cref="int"/> fleetNumber</param>
 		/// <returns><see cref="ReturnValue.Undefined(Prompt.CaseTyps.Base)"/></returns>
-		internal static ReturnValue.Typ ViewFleet(string[] parameters) => parameters[0] == "all"
+		internal static Prompt.ReturnValue.Typ ViewFleet(string[] parameters) => parameters[0] == "all"
 				? ( from b in DatabaseController.Database.Branches
 					from f in b.Fleets
-					select Prompt.Print(f.ToString(false)) ).First()
+					select Prompt.InputOutput.Print(f.ToString(false)) ).First()
 				: int.TryParse(parameters[1], out int i) && DatabaseController.Database.Branches.Count() > i
 					? parameters[1] == "all"
 						? ( from f in DatabaseController.Database.Branches.ElementAt(i).Fleets
-							select Prompt.Print(f.ToString(false)) ).First()
+							select Prompt.InputOutput.Print(f.ToString(false)) ).First()
 						: int.TryParse(parameters[1], out int i2) && DatabaseController.Database.Branches.ElementAt(i).Fleets.Count() > i2
-							? Prompt.Print(DatabaseController.Database.Branches.ElementAt(i).Fleets.ElementAt(i2).ToString(true))
-							: ReturnValue.CommandFunctionUndefined()
-					: ReturnValue.CommandFunctionUndefined();
+							? Prompt.InputOutput.Print(DatabaseController.Database.Branches.ElementAt(i).Fleets.ElementAt(i2).ToString(true))
+							: Prompt.ReturnValue.CommandFunctionUndefined()
+					: Prompt.ReturnValue.CommandFunctionUndefined();
 
 		/// <summary>
 		/// Views vehicle(s).
 		/// </summary>
 		/// <param name="parameters">(0): "all" | branchID | "single", (1): (if branchID: "all" | fleetID) | (if "single": vehicleID)</param>
 		/// <returns></returns>
-		internal static ReturnValue.Typ ViewVehicle(string[] parameters) => parameters[0] == "single" && int.TryParse(parameters[1], out int vid)
-				? Prompt.Print(( from b in DatabaseController.Database.Branches
+		internal static Prompt.ReturnValue.Typ ViewVehicle(string[] parameters) => parameters[0] == "single" && int.TryParse(parameters[1], out int vid)
+				? Prompt.InputOutput.Print(( from b in DatabaseController.Database.Branches
 								 from f in b.Fleets
 								 from v in f.Vehicles
 								 where v.VehicleID == vid
 								 select v.ToString() ).SingleOrDefault())
 				: parameters[0] == "all"
-					? Prompt.Print(string.Join("", from b in DatabaseController.Database.Branches
+					? Prompt.InputOutput.Print(string.Join("", from b in DatabaseController.Database.Branches
 												   from f in b.Fleets
 												   from v in f.Vehicles
 												   select v.ToString()))
 					: int.TryParse(parameters[0], out int bid) && DatabaseController.Database.Branches.Count() > bid
 									? parameters[1] == "all"
-										? Prompt.Print(string.Join("", from f in DatabaseController.Database.Branches.ElementAt(bid).Fleets
+										? Prompt.InputOutput.Print(string.Join("", from f in DatabaseController.Database.Branches.ElementAt(bid).Fleets
 																	   from v in f.Vehicles
 																	   select v.ToString()))
 										: int.TryParse(parameters[1], out int fid) && DatabaseController.Database.Branches.ElementAt(bid).Fleets.Count > fid
-											? Prompt.Print(string.Join("", from v in DatabaseController.Database.Branches.ElementAt(bid).Fleets.ElementAt(fid).Vehicles
+											? Prompt.InputOutput.Print(string.Join("", from v in DatabaseController.Database.Branches.ElementAt(bid).Fleets.ElementAt(fid).Vehicles
 																		   select v.ToString()))
-											: ReturnValue.CommandFunctionUndefined()
-									: ReturnValue.CommandFunctionUndefined();
+											: Prompt.ReturnValue.CommandFunctionUndefined()
+									: Prompt.ReturnValue.CommandFunctionUndefined();
 
 		/// <summary>
 		/// View customer(s).
 		/// </summary>
 		/// <param name="parameters">(0): "all" | customerID</param>
 		/// <returns></returns>
-		internal static ReturnValue.Typ ViewCustomer(string[] parameters) => parameters[0] == "all"
-				? Prompt.Print(string.Join("", from c in DatabaseController.Database.Customers
+		internal static Prompt.ReturnValue.Typ ViewCustomer(string[] parameters) => parameters[0] == "all"
+				? Prompt.InputOutput.Print(string.Join("", from c in DatabaseController.Database.Customers
 											   select c.ToString()))
 				: int.TryParse(parameters[0], out int i) && DatabaseController.Database.Customers.Any(item => item.CustomerID == i)
-					? Prompt.Print(( from c in DatabaseController.Database.Customers
+					? Prompt.InputOutput.Print(( from c in DatabaseController.Database.Customers
 									 where c.CustomerID == i
 									 select c.ToString(true) ).SingleOrDefault())
-					: ReturnValue.CommandFunctionUndefined();
+					: Prompt.ReturnValue.CommandFunctionUndefined();
 
 		/// <summary>
 		/// View booking(s)
 		/// </summary>
 		/// <param name="parameters">(0): branchID | "vehicle" | "customer" | "booking" </param>
 		/// <returns></returns>
-		internal static ReturnValue.Typ ViewBooking(string[] parameters)
+		internal static Prompt.ReturnValue.Typ ViewBooking(string[] parameters)
 		{
-			return ReturnValue.CommandFunctionUndefined();
+			return Prompt.ReturnValue.CommandFunctionUndefined();
 		}
 	}
 }

@@ -1,29 +1,41 @@
 ﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 
-namespace CsharpEvilcar.UserInterface
+namespace CsharpEvilcar.Prompt
 {
-	internal static partial class UserInterface
-	{	
-		/// <summary>
-		/// execute the login prozess
-		/// </summary>
-		/// <returns>returns if the login was successful</returns>
-		private static bool Login()
+
+	internal static class InputOutput
+	{
+		internal static ReturnValue.Typ GetInput(out string[] input)
 		{
-			Prompt.Print(Prompt.Login.AskForUsername,"");
+			Print("", "");
+			input = ( from Match m in Regex.Matches(Console.ReadLine(), @"("".*""|[\S]+)+")
+					  let s = m.Value
+					  select s.Replace("\"", "") ).ToArray(); // extracts all parameters, single words and quoted ones
+			return ReturnValue.Success();
+
+		}
+			   
+		internal static ReturnValue.Typ Print(string str = "", string end = "\n")
+		{
+			if (str != null)
+			{
+				Console.Write(">>> " + Regex.Replace(str, @"\n", "\n    ") + end);
+			}
+			return ReturnValue.Success();
+		}
+
+		internal static bool Login()
+		{
+			Print(UserMessages.Login.AskForUsername, "");
 			return InputAndCheckPassword(Console.ReadLine()); // read username and go on with password query and password check
 		}
 
-		/// <summary>
-		/// written by Sidney
-		/// read and checks password
-		/// </summary>
-		/// <param name="username">the username you want to login</param>
-		/// <returns>returns if the password was correct</returns>
 		private static bool InputAndCheckPassword(string username)
 		{
 			string password = ""; // empty password, will filled with the password
-			Prompt.Print("Password: ","");
+			Print("Password: ", "");
 			while (true)
 			{
 				ConsoleKeyInfo key = Console.ReadKey(true);

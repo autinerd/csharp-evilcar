@@ -2,15 +2,15 @@
 
 #pragma warning disable IDE1006
 
-namespace CsharpEvilcar.UserInterface
+namespace CsharpEvilcar
 {
-	internal static partial class Prompt
+	internal static partial class UserMessages
 	{
 		// general
 		internal static class General
 		{
 
-			public const string EvilCarLogo =
+			public const string Logo =
 			#region Logo
 @"
 	    ______      _ ________          
@@ -53,16 +53,16 @@ namespace CsharpEvilcar.UserInterface
 		}
 
 		// cases
-		internal static readonly CaseTyps.Main Main = new CaseTyps.Main()
+		internal static readonly Prompt.CaseTyps.Main Main = new Prompt.CaseTyps.Main()
 		{
 			CaseName = "main",
-			SubCases = new CaseTyps.Base[] {
-				new CaseTyps.Selection(){
+			SubCases = new Prompt.CaseTyps.Base[] {
+				new Prompt.CaseTyps.Selection(){
 					CaseName = "add",
 					Help = "Use this if you want to add a vehicle or a customer to the databese.",
 					AskForParameters = "Do you want to add a 'vehicle' or a 'costumer':",
-					SubCases = new CaseTyps.Base[] {
-						new CaseTyps.Command(){
+					SubCases = new Prompt.CaseTyps.Base[] {
+						new Prompt.CaseTyps.Command(){
 							CaseName = "vehicle",
 							AskForParameters =
 								"Please enter now the parameters of the new vehicle in the following format:\n" +
@@ -72,7 +72,7 @@ namespace CsharpEvilcar.UserInterface
 							ParameterLength = new int[]{5},
 							SubFunction = InternalLogic.AddVehicle,
 						},
-						new CaseTyps.Command(){
+						new Prompt.CaseTyps.Command(){
 							CaseName = "customer",
 							AskForParameters = "Please enter your <name> and <residence>",
 							Help = "Use this if you want to add a new customer.",
@@ -82,12 +82,12 @@ namespace CsharpEvilcar.UserInterface
 						}
 					}
 				},
-				new CaseTyps.Selection(){
+				new Prompt.CaseTyps.Selection(){
 					CaseName = "edit",
 					AskForParameters="Do you want to edit a 'vehicle' or a 'customer'?",
 					Help="Use this if you want to edit a vehicle or a customer.",
-					SubCases = new CaseTyps.Base[]{
-						new CaseTyps.Command()
+					SubCases = new Prompt.CaseTyps.Base[]{
+						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "vehicle",
 							AskForParameters="Please enter the <vehicle_ID>  'numberplate' or 'fleet_ID' and <new_value>.",
@@ -96,7 +96,7 @@ namespace CsharpEvilcar.UserInterface
 							ParameterLength = new int[]{3},
 							SubFunction = InternalLogic.EditCustomer,
 						},
-						new CaseTyps.Command()
+						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "customer",
 							AskForParameters="Please enter the <customer_Id> 'name' or 'residence' and <new_value>.",
@@ -107,12 +107,12 @@ namespace CsharpEvilcar.UserInterface
 						},
 					}
 				},
-				new CaseTyps.Selection(){
+				new Prompt.CaseTyps.Selection(){
 					CaseName = "delete",
 					AskForParameters = "Do you want to delete a 'vehicle' or a 'customer'?",
 					Help="Use this if you want something to be deleted from the database",
-					SubCases = new CaseTyps.Base[]{
-						new CaseTyps.Command()
+					SubCases = new Prompt.CaseTyps.Base[]{
+						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "vehicle",
 							AskForParameters="Please enter the <vehicle_ID> of the vehicle you want do delete.",
@@ -121,7 +121,7 @@ namespace CsharpEvilcar.UserInterface
 							ParameterLength = new int[]{1},
 							SubFunction = InternalLogic.DeleteVehicle,
 						},
-						new CaseTyps.Command()
+						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "customer",
 							AskForParameters="Please enter the <customer_id> of the customer you want to delete.",
@@ -132,34 +132,32 @@ namespace CsharpEvilcar.UserInterface
 						},
 					}
 				},
-				new CaseTyps.Selection(){
+				new Prompt.CaseTyps.Selection(){
 					CaseName = "view",
 					AskForParameters="Please enter if you want to view 'branch', 'fleet', 'vehicle', 'customer' or 'bookings'.",
 					Help="Use this if you want to view data from the database.",
-					SubCases = new CaseTyps.Base[]{
-						new CaseTyps.Command()
+					SubCases = new Prompt.CaseTyps.Base[]{
+						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "branch",
 							AskForParameters=null, // because no more parameter requierd
 							Help="Use this command if you want to view all ",
 							Syntax = "view\tbranch",
 							ParameterLength = new int[]{0},
-							SubFunction=UserInterface.DummyFunc,
 							//SubFunction=?
 #warning view-branch SubFunction fehlt noch
 						},
-						new CaseTyps.Command()
+						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "fleet",
 							AskForParameters="Please enter nothing if you want to view all fleets or enter the <branch_ID> for which to see all fleets.",
 							Help="Use this command if you want do view all all fleets or the fleets of one branch.",
 							Syntax = "view\tfleet\n\t\t\t\t<branch_ID>",
 							ParameterLength = new int[]{0,1},
-							SubFunction=UserInterface.DummyFunc,
 							//SubFunction=?
 #warning view-fleet SubFunction fehlt noch
 						},
-						new CaseTyps.Command()
+						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "vehicle",
 							AskForParameters="Plase enter <branch_ID> and optional <fleet_ID> if you want to view all vehicle of a branch or a fleet in a branch.\n"+
@@ -170,7 +168,7 @@ namespace CsharpEvilcar.UserInterface
 							//SubFunction=?
 #warning view-vehicle SubFunction fehlt noch
 						},
-						new CaseTyps.Command()
+						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "customer",
 							AskForParameters="Please enter the <customer_ID> of the customer you want to see.",
@@ -180,7 +178,7 @@ namespace CsharpEvilcar.UserInterface
 							//SubFunction=?
 #warning view-customer SubFunction fehlt noch
 						},
-						new CaseTyps.Command()
+						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "bookings",
 							AskForParameters="Fehlt noch.",
@@ -194,12 +192,12 @@ namespace CsharpEvilcar.UserInterface
 						},
 					}
 				},
-				new CaseTyps.Selection(){
+				new Prompt.CaseTyps.Selection(){
 					CaseName = "booking",
 					AskForParameters="Please enter if you want to 'rent' or 'return' a vehicle.",
 					Help="Use this if you want to rent or return a vehicle.",
-					SubCases = new CaseTyps.Base[]{
-						new CaseTyps.Command()
+					SubCases = new Prompt.CaseTyps.Base[]{
+						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "rent",
 							AskForParameters="Please enter the <vehicle_ID> and the <customer_ID> for a new booking.",
@@ -208,7 +206,7 @@ namespace CsharpEvilcar.UserInterface
 							ParameterLength = new int[]{2},
 							SubFunction = InternalLogic.BookingRent,
 						},
-						new CaseTyps.Command()
+						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "return",
 							Syntax = "booking\treturn\t\t<vehicle_ID>",
@@ -217,7 +215,7 @@ namespace CsharpEvilcar.UserInterface
 						},
 					}
 				},
-				new CaseTyps.Logout(){
+				new Prompt.CaseTyps.Logout(){
 					CaseName = "logout",
 					Syntax = "logout",
 				}
