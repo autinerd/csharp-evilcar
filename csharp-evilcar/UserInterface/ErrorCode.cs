@@ -12,23 +12,23 @@
 		internal abstract class Typ
 		{
 			public Prompt.CaseTyps.Base Case = null;
-			private System.Type ClassTyp => typeof(Typ);
+			protected System.Type ClassTyp => typeof(Typ);
 			public Typ(Prompt.CaseTyps.Base Case = null) => this.Case = Case;
 
 
-			private const bool _IsError = false;
-			private const bool _IsPass = false;
-			private const bool _IsHelpNeeded = false;
-			private const bool _IsSuccess = false;
-			private const bool _IsEmpty = false;
-			private const bool _IsWrongArgument = false;
-			private const bool _IsDatabaseError = false;
-			private const bool _IsNoUserLoggedIn = false;
-			private const bool _IsCommandAbort = false;
-			private const bool _IsWrongParameterLength = false;
-			private const bool _CommandFunctionUndefined = false;
-			private const bool _IsRequestedLogout = false;
-			private const string _Text = "Type-return-undefined";
+			protected const bool _IsError = false;
+			protected const bool _IsPass = false;
+			protected const bool _IsHelpNeeded = false;
+			protected const bool _IsSuccess = false;
+			protected const bool _IsEmpty = false;
+			protected const bool _IsWrongArgument = false;
+			protected const bool _IsDatabaseError = false;
+			protected const bool _IsNoUserLoggedIn = false;
+			protected const bool _IsCommandAbort = false;
+			protected const bool _IsWrongParameterLength = false;
+			protected const bool _CommandFunctionUndefined = false;
+			protected const bool _IsRequestedLogout = false;
+			protected const string _Text = "Type-return-undefined";
 
 
 			public virtual string Text => _Text;
@@ -47,8 +47,8 @@
 
 			internal abstract class Error : Typ
 			{
-				private new const bool _IsError = false;
-				private new const string _Text = Prompt.Error.DefaultError;
+				protected new const bool _IsError = false;
+				protected new const string _Text = Prompt.Error.DefaultError;
 
 				public override bool IsError => _IsError;
 				public override string Text => _Text;
@@ -56,8 +56,8 @@
 
 				internal sealed class RequestedLogout : Error
 				{
-					private new const bool _IsRequestedLogout = true;
-					private new const string _Text = Prompt.Error.RequestedLogout;
+					protected const bool _IsRequestedLogout = true;
+					protected new const string _Text = Prompt.Error.RequestedLogout;
 
 					public override bool IsRequestedLogout => _IsRequestedLogout;
 					public override string Text => _Text;
@@ -65,8 +65,8 @@
 				}
 				internal sealed class HelpNeeded : Error
 				{
-					private new const bool _IsHelpNeeded = true;
-					private new const string _Text = Prompt.Error.HelpNeeded;
+					protected new const bool _IsHelpNeeded = true;
+					protected new const string _Text = Prompt.Error.HelpNeeded;
 
 					public override bool IsHelpNeeded => _IsHelpNeeded;
 					public override string Text => _Text;
@@ -74,8 +74,8 @@
 				}
 				internal sealed class WrongArgument : Error
 				{
-					private new const bool _IsWrongArgument = true;
-					private new const string _Text = Prompt.Error.WrongArgument;
+					protected new const bool _IsWrongArgument = true;
+					protected new const string _Text = Prompt.Error.WrongArgument;
 
 					public override bool IsWrongArgument => _IsWrongArgument;
 					public override string Text => _Text;
@@ -83,8 +83,8 @@
 				}
 				internal sealed class DatabaseError : Error
 				{
-					private new const bool _IsDatabaseError = true;
-					private new const string _Text = Prompt.Error.DatabaseError;
+					protected new const bool _IsDatabaseError = true;
+					protected new const string _Text = Prompt.Error.DatabaseError;
 
 					public override bool IsDatabaseError => _IsDatabaseError;
 					public override string Text => _Text;
@@ -92,8 +92,8 @@
 				}
 				internal class NoUserLoggedIn : Error
 				{
-					private new const bool _IsNoUserLoggedIn = true;
-					private new const string _Text = Prompt.Error.NoUserLoggedIn;
+					protected new const bool _IsNoUserLoggedIn = true;
+					protected new const string _Text = Prompt.Error.NoUserLoggedIn;
 
 					public override bool IsNoUserLoggedIn => _IsNoUserLoggedIn;
 					public override string Text => _Text;
@@ -101,8 +101,8 @@
 				}
 				internal class CommandAbort : Error
 				{
-					private new const bool _IsCommandAbort = true;
-					private new const string _Text = Prompt.Error.CommandAbort;
+					protected new const bool _IsCommandAbort = true;
+					protected new const string _Text = Prompt.Error.CommandAbort;
 
 					public override bool IsCommandAbort => _IsCommandAbort;
 					public override string Text => _Text;
@@ -110,8 +110,8 @@
 				}
 				internal sealed class WrongParameterLength : Error
 				{
-					private new const bool _IsWrongParameterLength = true;
-					private new const string _Text = Prompt.Error.WrongParameterLength;
+					protected new const bool _IsWrongParameterLength = true;
+					protected new const string _Text = Prompt.Error.WrongParameterLength;
 
 					public override bool IsWrongParameterLength => _IsWrongParameterLength;
 					public override string Text => _Text;
@@ -119,8 +119,8 @@
 				}
 				internal sealed class CommandFunctionUndefined : Error
 				{
-					private new const bool _CommandFunctionUndefined = true;
-					private new const string _Text = Prompt.Error.CommandFunctionUndefined;
+					protected new const bool _CommandFunctionUndefined = true;
+					protected new const string _Text = Prompt.Error.CommandFunctionUndefined;
 
 					public override bool IsCommandFunctionUndefined => _CommandFunctionUndefined;
 					public override string Text => _Text;
@@ -129,7 +129,7 @@
 			}
 			internal abstract class Pass : Typ
 			{
-				private new const bool _IsPass = true;
+				protected new const bool _IsPass = true;
 				public new const string _Text = "Pass-return";
 
 				public override bool IsPass => _IsPass;
@@ -138,8 +138,8 @@
 
 				internal sealed class Success : Pass
 				{
-					private new const bool _IsSuccess = true;
-					private new const string _Text = "Success-return";
+					protected new const bool _IsSuccess = true;
+					protected new const string _Text = Prompt.Pass.Success;
 
 					public override bool IsSuccess => _IsSuccess;
 					public override string Text => _Text;
@@ -147,8 +147,8 @@
 				}
 				internal sealed class Empty : Pass
 				{
-					private new const bool _IsEmpty = true;
-					private new const string _Text = "Empty-return";
+					protected new const bool _IsEmpty = true;
+					protected new const string _Text = "Empty-return";
 
 					public override bool IsEmpty => _IsEmpty;
 					public override string Text => _Text;

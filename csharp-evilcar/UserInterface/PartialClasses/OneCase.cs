@@ -108,11 +108,17 @@ namespace CsharpEvilcar.UserInterface
 
 				public override ReturnValue.Typ Execute(ref string[] parameters)
 				{
-					if (ReturnValue.Execute(out ReturnValue.Typ code, base.Execute(ref parameters)).IsError)
+					if (AskForParameters != null)
 					{
-						return code;
+						ReturnValue.Execute(out ReturnValue.Typ code, base.Execute(ref parameters));
+						if (code.IsError)
+						{
+							return code;
+						}
+
 					}
-					else if (parameters.Any(s => General.HelpSymbol.Contains(s)))
+
+					if (parameters.Any(s => General.HelpSymbol.Contains(s)))
 					{
 						return ReturnValue.HelpNeeded(this);
 					}
@@ -147,6 +153,7 @@ namespace CsharpEvilcar.UserInterface
 					if (code.IsSuccess)
 					{
 						Database.DatabaseController.SaveDatabase();
+						Print(code.Text);
 					}
 					else if (code.IsEmpty&!code.Case.EmptyIsLegal)
 					{
@@ -159,7 +166,7 @@ namespace CsharpEvilcar.UserInterface
 						{
 							casepath.Add(C.CaseName);
 						}
-						Print(code.Text + string.Join("-", casepath) + "\n" + General.SyntaxHead + "\n" + code.Case.Syntax);
+						Print(code.Text + string.Join("-", casepath) + "\n\n"+"Help"+ "\n"+code.Case.Help + "\n\n" + General.SyntaxHead + "\n" + code.Case.Syntax);
 					}
 					else if (code.IsRequestedLogout)
 					{
