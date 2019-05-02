@@ -81,7 +81,7 @@ namespace CsharpEvilcar
 							SubFunction = InternalLogic.AddCustomer
 						}
 					}
-				},
+				}, // add
 				new Prompt.CaseTyps.Selection(){
 					CaseName = "edit",
 					AskForParameters="Do you want to edit a 'vehicle' or a 'customer'?",
@@ -106,7 +106,7 @@ namespace CsharpEvilcar
 							SubFunction = InternalLogic.EditCustomer,
 						},
 					}
-				},
+				}, // edit
 				new Prompt.CaseTyps.Selection(){
 					CaseName = "delete",
 					AskForParameters = "Do you want to delete a 'vehicle' or a 'customer'?",
@@ -131,7 +131,7 @@ namespace CsharpEvilcar
 							SubFunction = InternalLogic.DeleteCustomer,
 						},
 					}
-				},
+				}, // delete
 				new Prompt.CaseTyps.Selection(){
 					CaseName = "view",
 					AskForParameters="Please enter if you want to view 'branch', 'fleet', 'vehicle', 'customer' or 'bookings'.",
@@ -176,7 +176,6 @@ namespace CsharpEvilcar
 							Syntax = "view\tcustomer\tall\n\t\t\t\t<customer_ID>",
 							ParameterLength = new int[]{1},
 							SubFunction= InternalLogic.ViewCustomer,
-#warning view-customer AskFroParameters und Syntax fixen
 						},
 						new Prompt.CaseTyps.Command()
 						{
@@ -192,7 +191,7 @@ namespace CsharpEvilcar
 							SubFunction=InternalLogic.ViewBooking,
 						},
 					}
-				},
+				}, // view
 				new Prompt.CaseTyps.Selection(){
 					CaseName = "booking",
 					AskForParameters="Please enter if you want to 'rent' or 'return' a vehicle.",
@@ -215,11 +214,11 @@ namespace CsharpEvilcar
 							SubFunction = InternalLogic.BookingReturn,
 						},
 					}
-				},
+				}, // booking
 				new Prompt.CaseTyps.Logout(){
 					CaseName = "logout",
 					Syntax = "logout",
-				}
+				}		//  logout
 			},
 		};
 	}
