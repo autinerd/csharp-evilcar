@@ -10,6 +10,11 @@ namespace CsharpEvilcar.Prompt
 			r = i;
 			return r;
 		}
+		internal static Typ Execute(Typ i, CaseTyps.Base C)
+		{
+			i.Case = C;
+			return i;
+		}
 		internal abstract class Typ
 		{
 			internal CaseTyps.Base Case = null;

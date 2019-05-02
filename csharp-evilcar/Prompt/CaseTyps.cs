@@ -123,7 +123,7 @@ namespace CsharpEvilcar.Prompt.CaseTyps
 				}
 				else if (CheckParameterLenght(parameters).IsPass)
 				{
-					return SubFunction == null ? ReturnValue.CommandFunctionUndefined(this) : SubFunction(parameters);
+					return SubFunction == null ? ReturnValue.CommandFunctionUndefined(this) : ReturnValue.Execute(SubFunction(parameters),this);
 				}
 				else
 				{
