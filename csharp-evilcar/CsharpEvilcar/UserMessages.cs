@@ -92,7 +92,7 @@ namespace CsharpEvilcar
 							CaseName = "vehicle",
 							AskForParameters="Please enter the <vehicle_ID>  'numberplate' or 'fleet_ID' and <new_value>.",
 							Help="Use this if you want to edit a vehicle.",
-							Syntax = "edit\tvehicle\t<vehicle_ID>\t{numberplate|fleet_ID}\t<new_value>",
+							Syntax = "edit\tvehicle\t\t<vehicle_ID>\t{numberplate|fleet_ID}\t<new_value>",
 							ParameterLength = new int[]{3},
 							SubFunction = InternalLogic.EditCustomer,
 						},
@@ -142,7 +142,7 @@ namespace CsharpEvilcar
 							CaseName = "branch",
 							AskForParameters="Please enter 'all' if you want to see all or enter <banch_ID> if you only want so see one branch.",
 							Help="Use this command if you want to view all ",
-							Syntax = "view\tbranch",
+							Syntax = "view\tbranch\t\tall\n\t\t\t\t<branch_ID>",
 							ParameterLength = new int[]{1},
 							SubFunction=InternalLogic.ViewBranch,
 #warning view-branch AskFroParameters und Syntax fixen
@@ -152,7 +152,7 @@ namespace CsharpEvilcar
 							CaseName = "fleet",
 							AskForParameters="Please enter nothing if you want to view all fleets or enter the <branch_ID> for which to see all fleets.",
 							Help="Use this command if you want do view all all fleets or the fleets of one branch.",
-							Syntax = "view\tfleet\n\t\t\t\t<branch_ID>",
+							Syntax = "view\tfleet\t\tall\n\t\t\t\t<branch_ID>",
 							ParameterLength = new int[]{1},
 							SubFunction=InternalLogic.ViewFleet,
 #warning view-fleet SubFunction falsche Übergabeparameter
@@ -163,17 +163,17 @@ namespace CsharpEvilcar
 							AskForParameters="Plase enter <branch_ID> and optional <fleet_ID> if you want to view all vehicle of a branch or a fleet in a branch.\n"+
 							"If you want to see a single car, please enter 'single' and than the <vehicle_ID>.",
 							Help="Use this command if you want to view one or many vehicles.",
-							Syntax = "view\tvehicle\n\t\t\t\t<branch_ID>\t[<fleet_ID>]\n\t\tsingle\t\t<vehicle_ID>",
-							ParameterLength = new int[]{2},
+							Syntax = "view\tvehicle\t\tall\n\t\t\t\tsingle\t\t<vehicle_ID>\n\t\t\t\t<branch_ID>\t[<fleet_ID>]",
+							ParameterLength = new int[]{1,2},
 							SubFunction=InternalLogic.ViewVehicle,
 #warning view-vehicle AskFroParameters und Syntax fixen
 						},
 						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "customer",
-							AskForParameters="Please enter the <customer_ID> of the customer you want to see.",
+							AskForParameters="Please enter the <customer_ID> of the customer you want to see or 'all' for all customer.",
 							Help="Use this command if you want to view a customers data.",
-							Syntax = "view\tcustomer\n\t\t\t\t<customer_ID>",
+							Syntax = "view\tcustomer\tall\n\t\t\t\t<customer_ID>",
 							ParameterLength = new int[]{1},
 							SubFunction= InternalLogic.ViewCustomer,
 #warning view-customer AskFroParameters und Syntax fixen
@@ -204,7 +204,7 @@ namespace CsharpEvilcar
 							AskForParameters="Please enter the <vehicle_ID> and the <customer_ID> for a new booking.",
 							Help="",
 							Syntax = "booking\trent\t\t<vehicle_ID>\t<customer_ID>",
-							ParameterLength = new int[]{2},
+							ParameterLength = new int[]{1,2},
 							SubFunction = InternalLogic.BookingRent,
 						},
 						new Prompt.CaseTyps.Command()
