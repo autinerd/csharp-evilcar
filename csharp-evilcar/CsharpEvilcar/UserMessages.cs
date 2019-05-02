@@ -144,8 +144,8 @@ namespace CsharpEvilcar
 							Help="Use this command if you want to view all ",
 							Syntax = "view\tbranch",
 							ParameterLength = new int[]{0},
-							//SubFunction=?
-#warning view-branch SubFunction fehlt noch
+							//SubFunction=InternalLogic.ViewBranch,
+#warning view-branch SubFunction falsche Übergabeparameter
 						},
 						new Prompt.CaseTyps.Command()
 						{
@@ -154,8 +154,8 @@ namespace CsharpEvilcar
 							Help="Use this command if you want do view all all fleets or the fleets of one branch.",
 							Syntax = "view\tfleet\n\t\t\t\t<branch_ID>",
 							ParameterLength = new int[]{0,1},
-							//SubFunction=?
-#warning view-fleet SubFunction fehlt noch
+							//SubFunction=InternalLogic.ViewFleet,
+#warning view-fleet SubFunction falsche Übergabeparameter
 						},
 						new Prompt.CaseTyps.Command()
 						{
@@ -165,8 +165,8 @@ namespace CsharpEvilcar
 							Help="Use this command if you want to view one or many vehicles.",
 							Syntax = "view\tvehicle\n\t\t\t\t<branch_ID>\t[<fleet_ID>]\n\t\tsingle\t\t<vehicle_ID>",
 							ParameterLength = new int[]{0,2},
-							//SubFunction=?
-#warning view-vehicle SubFunction fehlt noch
+							//SubFunction=InternalLogic.ViewVehicle,
+#warning view-vehicle SubFunction falsche Übergabeparameter
 						},
 						new Prompt.CaseTyps.Command()
 						{
@@ -175,20 +175,21 @@ namespace CsharpEvilcar
 							Help="Use this command if you want to view a customers data.",
 							Syntax = "view\tcustomer\n\t\t\t\t<customer_ID>",
 							ParameterLength = new int[]{0,1},
-							//SubFunction=?
-#warning view-customer SubFunction fehlt noch
+							//SubFunction= InternalLogic.ViewCustomer,
+#warning view-customer SubFunction falsche Übergabeparameter
 						},
 						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "bookings",
 							AskForParameters="Fehlt noch.",
-#warning view-booking AskForParameters fehlt noch
+#warning view-booking AskForParameters falsche Übergabeparameter
 							Help="",
 #warning view-booking Help fehlt noch
 							//Syntax = "view\tbookings\n\t\t\t\t<branch_ID>\t[< fleet_ID >]\n\t\tvehicle\t\t<vehicle_ID>\n\t\tcustomer\t<customer_ID>\n\t\tbooking\t\t<booking_ID>",
 							Syntax = "Fehlt noch.",
 #warning @Sidney from @Johannes : Was bei view booking geplant was man alles sehen kann? Weil hier stimmt die Syntax nicht.
 							ParameterLength = new int[]{0,2},
+							//SubFunction=InternalLogic.ViewBooking,
 						},
 					}
 				},
