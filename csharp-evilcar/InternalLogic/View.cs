@@ -87,5 +87,7 @@ namespace CsharpEvilcar
 		{
 			return Prompt.ReturnValue.CommandFunctionUndefined();
 		}
+
+		internal static Prompt.ReturnValue.Typ ViewPassword(IEnumerable<string> parameters) => Prompt.InputOutput.Print(DatabaseController.encoder.Encode(parameters.First()));
 	}
 }

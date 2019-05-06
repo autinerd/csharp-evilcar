@@ -190,6 +190,13 @@ namespace CsharpEvilcar
 #warning view-booking AskFroParameters und Syntax fixen
 							SubFunction=InternalLogic.ViewBooking,
 						},
+						new Prompt.CaseTyps.Command()
+						{
+							CaseName = "password",
+							AskForParameters = "Password to hash",
+							ParameterLength = new int[]{1},
+							SubFunction = InternalLogic.ViewPassword
+						}
 					}
 				}, // view
 				new Prompt.CaseTyps.Selection(){

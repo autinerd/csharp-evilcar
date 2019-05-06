@@ -29,7 +29,7 @@ namespace CsharpEvilcar.Database
 		}
 		private static Guid currentUser = Guid.Empty;
 
-		private static readonly Scrypt.ScryptEncoder encoder = new Scrypt.ScryptEncoder();
+		internal static readonly Scrypt.ScryptEncoder encoder = new Scrypt.ScryptEncoder();
 
 		/// <summary>
 		/// Loads the database file contents into the <see cref="Database"/> object.
