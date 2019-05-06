@@ -5,11 +5,7 @@ namespace CsharpEvilcar.Prompt
 	internal static class ReturnValue
 	{
 		internal static Typ Execute(Typ i) => i;
-		internal static Typ Execute(out Typ r, Typ i)
-		{
-			r = i;
-			return r;
-		}
+		internal static Typ Execute(out Typ r, Typ i) => r = i;
 		internal static Typ Execute(Typ i, CaseTyps.Base C)
 		{
 			i.Case = C;

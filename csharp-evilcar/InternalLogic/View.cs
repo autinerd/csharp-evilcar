@@ -85,6 +85,8 @@ namespace CsharpEvilcar
 		/// <returns></returns>
 		internal static Prompt.ReturnValue.Typ ViewBooking(IEnumerable<string> parameters)
 		{
+#warning DO IT
+#warning Wenn booking angegeben dann ist die Rechnung
 			return Prompt.ReturnValue.CommandFunctionUndefined();
 		}
 
