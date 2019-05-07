@@ -2,8 +2,8 @@
 {
 	class MidsizeVehicle : Vehicle
 	{
-		public static new decimal DayPrice => 60;
-		public static new Service[] Services => new Service[] { Navigation, Spotify, AirConditioner };
+		public override decimal DayPrice => 60;
+		public override Service[] Services => new Service[] { Navigation, Spotify, AirConditioner };
 		public MidsizeVehicle(
 			string numberplate,
 			string type,

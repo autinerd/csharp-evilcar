@@ -17,6 +17,8 @@ namespace CsharpEvilcar.DataClasses
 		internal int VehicleID { get; set; }
 		public DateTime Startdate { get; set; } = default;
 		public DateTime Enddate { get; set; } = default;
+
+		public decimal Price => Vehicle.TotalDayPrice * (decimal)Math.Floor(( (Enddate == default ? DateTime.Today : Enddate) - Startdate ).Add(new TimeSpan(1, 0, 0, 0)).TotalDays);
 		public int BookingID { get; set; }
 
 		public Booking(bool hasBookID)
@@ -32,10 +34,10 @@ namespace CsharpEvilcar.DataClasses
 		public override string ToString() => ToString(false);
 
 		public string ToString(bool fullDetails) => fullDetails
-				? $@"Booking {BookingID}:
+		? $@"Booking {BookingID}:
 	Vehicle {Vehicle}
-	from {Startdate} to {Enddate}
-	Total cost: {Vehicle.TotalDayPrice * (decimal)Math.Floor(( Enddate - Startdate ).TotalDays)} EUR"
-				: $"Booking {BookingID}: Vehicle {VehicleID}, from {Startdate} to {Enddate}";
+	from {Startdate.ToShortDateString()} {((Enddate == default) ? "" : "to " + Enddate.ToShortDateString())}
+	{(Enddate == default ? "Current" : "Total")} cost: {Price} EUR"
+		: $"Booking {BookingID}: Vehicle {VehicleID}, from {Startdate.ToShortDateString()} {(Enddate == default ? "" : "to " + Enddate.ToShortDateString())}";
 	}
 }

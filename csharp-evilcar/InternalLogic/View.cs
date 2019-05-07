@@ -1,6 +1,7 @@
 ﻿using CsharpEvilcar.Database;
 using System.Collections.Generic;
 using System.Linq;
+using CsharpEvilcar.Prompt;
 
 namespace CsharpEvilcar
 {
@@ -11,8 +12,8 @@ namespace CsharpEvilcar
 		/// Views branch(es)
 		/// </summary>
 		/// <param name="parameters">(0): "all" | <see cref="int"/> branchNumber</param>
-		/// <returns><see cref="ReturnValue.Undefined(Prompt.CaseTyps.Base)"/></returns>
-		internal static Prompt.ReturnValue.Typ ViewBranch(IEnumerable<string> parameters) => Prompt.InputOutput.Print(( parameters.ElementAt(0) == "all" )
+		/// <returns><see cref="ReturnValue.Undefined(CaseTyps.Base)"/></returns>
+		internal static ReturnValue.Typ ViewBranch(IEnumerable<string> parameters) => InputOutput.Print(( parameters.ElementAt(0) == "all" )
 				? string.Join("\n", from b in DatabaseController.Database.Branches select b.ToString(false))
 				: int.TryParse(parameters.ElementAt(0), out int i) && DatabaseController.Database.Branches.Count() > i
 				? DatabaseController.Database.Branches.ElementAt(i).ToString(true)
@@ -22,19 +23,19 @@ namespace CsharpEvilcar
 		/// Views fleet(s)
 		/// </summary>
 		/// <param name="parameters">(0): "all" | <see cref="int"/> branchNumber, (1): "all" | <see cref="int"/> fleetNumber</param>
-		/// <returns><see cref="ReturnValue.Undefined(Prompt.CaseTyps.Base)"/></returns>
-		internal static Prompt.ReturnValue.Typ ViewFleet(IEnumerable<string> parameters) => parameters.ElementAt(0) == "all"
+		/// <returns><see cref="ReturnValue.Undefined(CaseTyps.Base)"/></returns>
+		internal static ReturnValue.Typ ViewFleet(IEnumerable<string> parameters) => parameters.ElementAt(0) == "all"
 				? ( from b in DatabaseController.Database.Branches
 					from f in b.Fleets
-					select Prompt.InputOutput.Print(f.ToString(false)) ).First()
+					select InputOutput.Print(f.ToString(false)) ).First()
 				: int.TryParse(parameters.ElementAt(1), out int i) && DatabaseController.Database.Branches.Count() > i
 					? parameters.ElementAt(1) == "all"
 						? ( from f in DatabaseController.Database.Branches.ElementAt(i).Fleets
-							select Prompt.InputOutput.Print(f.ToString(false)) ).First()
+							select InputOutput.Print(f.ToString(false)) ).First()
 						: int.TryParse(parameters.ElementAt(1), out int i2) && DatabaseController.Database.Branches.ElementAt(i).Fleets.Count() > i2
-							? Prompt.InputOutput.Print(DatabaseController.Database.Branches.ElementAt(i).Fleets.ElementAt(i2).ToString(true))
-							: Prompt.ReturnValue.CommandFunctionUndefined()
-					: Prompt.ReturnValue.CommandFunctionUndefined();
+							? InputOutput.Print(DatabaseController.Database.Branches.ElementAt(i).Fleets.ElementAt(i2).ToString(true))
+							: ReturnValue.CommandFunctionUndefined()
+					: ReturnValue.CommandFunctionUndefined();
 #warning "bei dem view fleets bin ich etwas verwirrt wie du das machst weil da oft .First() vorkommt. Wenn du meherer zurückgeben geben willst einfach alle in einen String und jede Zeile durch \n trennen. Die Print Funktion passt es dann an das es einheitlich auf der Ausgabe erscheint.
 
 		/// <summary>
@@ -42,54 +43,88 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">(0): "all" | branchID | "single", (1): (if branchID: "all" | fleetID) | (if "single": vehicleID)</param>
 		/// <returns></returns>
-		internal static Prompt.ReturnValue.Typ ViewVehicle(IEnumerable<string> parameters) => parameters.ElementAt(0) == "single" && int.TryParse(parameters.ElementAt(1), out int vid)
-				? Prompt.InputOutput.Print(( from b in DatabaseController.Database.Branches
+		internal static ReturnValue.Typ ViewVehicle(IEnumerable<string> parameters) => parameters.ElementAt(0) == "single" && int.TryParse(parameters.ElementAt(1), out int vid)
+				? InputOutput.Print(( from b in DatabaseController.Database.Branches
 								 from f in b.Fleets
 								 from v in f.Vehicles
 								 where v.VehicleID == vid
 								 select v.ToString() ).SingleOrDefault())
 				: parameters.ElementAt(0) == "all"
-					? Prompt.InputOutput.Print(string.Join("\n", from b in DatabaseController.Database.Branches
+					? InputOutput.Print(string.Join("\n", from b in DatabaseController.Database.Branches
 												   from f in b.Fleets
 												   from v in f.Vehicles
 												   select v.ToString()))
 					: int.TryParse(parameters.ElementAt(0), out int bid) && DatabaseController.Database.Branches.Count() > bid
 									? parameters.ElementAt(1) == "all"
-										? Prompt.InputOutput.Print(string.Join("\n", from f in DatabaseController.Database.Branches.ElementAt(bid).Fleets
+										? InputOutput.Print(string.Join("\n", from f in DatabaseController.Database.Branches.ElementAt(bid).Fleets
 																	   from v in f.Vehicles
 																	   select v.ToString()))
 										: int.TryParse(parameters.ElementAt(1), out int fid) && DatabaseController.Database.Branches.ElementAt(bid).Fleets.Count > fid
-											? Prompt.InputOutput.Print(string.Join("\n", from v in DatabaseController.Database.Branches.ElementAt(bid).Fleets.ElementAt(fid).Vehicles
+											? InputOutput.Print(string.Join("\n", from v in DatabaseController.Database.Branches.ElementAt(bid).Fleets.ElementAt(fid).Vehicles
 																		   select v.ToString()))
-											: Prompt.ReturnValue.CommandFunctionUndefined()
-									: Prompt.ReturnValue.CommandFunctionUndefined();
+											: ReturnValue.CommandFunctionUndefined()
+									: ReturnValue.CommandFunctionUndefined();
 
 		/// <summary>
 		/// View customer(s).
 		/// </summary>
 		/// <param name="parameters">(0): "all" | customerID</param>
 		/// <returns></returns>
-		internal static Prompt.ReturnValue.Typ ViewCustomer(IEnumerable<string> parameters) => parameters.ElementAt(0) == "all"
-				? Prompt.InputOutput.Print(string.Join("\n", from c in DatabaseController.Database.Customers
+		internal static ReturnValue.Typ ViewCustomer(IEnumerable<string> parameters) => parameters.ElementAt(0) == "all"
+				? InputOutput.Print(string.Join("\n", from c in DatabaseController.Database.Customers
 											   select c.ToString()))
 				: int.TryParse(parameters.ElementAt(0), out int i) && DatabaseController.Database.Customers.Any(item => item.CustomerID == i)
-					? Prompt.InputOutput.Print(( from c in DatabaseController.Database.Customers
+					? InputOutput.Print(( from c in DatabaseController.Database.Customers
 									 where c.CustomerID == i
 									 select c.ToString(true) ).SingleOrDefault())
-					: Prompt.ReturnValue.CommandFunctionUndefined();
+					: ReturnValue.CommandFunctionUndefined();
 
 		/// <summary>
 		/// View booking(s)
 		/// </summary>
 		/// <param name="parameters">(0): branchID | "vehicle" | "customer" | "booking" </param>
 		/// <returns></returns>
-		internal static Prompt.ReturnValue.Typ ViewBooking(IEnumerable<string> parameters)
+		internal static ReturnValue.Typ ViewBooking(IEnumerable<string> parameters)
 		{
+			if (int.TryParse(parameters.ElementAt(0), out int branchID) && branchID < DatabaseController.Database.Branches.Count())
+			{
+				return InputOutput.Print(string.Join("\n", from c in DatabaseController.Database.Customers
+													from book in c.Bookings
+													where DatabaseController.Database.Branches.ElementAt(branchID).Fleets.Any((f) => f.Vehicles.Contains(book.Vehicle))
+													select book));
+			}
+			else if (parameters.ElementAt(0) == "vehicle" && int.TryParse(parameters.ElementAt(1), out int vehicleID))
+			{
+				return InputOutput.Print(string.Join("\n", from c in DatabaseController.Database.Customers
+													from book in c.Bookings
+													where book.VehicleID == vehicleID
+													select book));
+			}
+			else if (parameters.ElementAt(0) == "customer" && int.TryParse(parameters.ElementAt(1), out int customerID))
+			{
+				return InputOutput.Print(string.Join("\n", (from c in DatabaseController.Database.Customers
+													from b in c.Bookings
+													where c.CustomerID == customerID
+													select b.ToString(true)).Append("Total price of bookings:\n" + (from c in DatabaseController.Database.Customers
+																					from b in c.Bookings
+																					where c.CustomerID == customerID
+																					select b.Price).Sum())));
+			}
+			else if (parameters.ElementAt(0) == "booking" && int.TryParse(parameters.ElementAt(1), out int bookingID))
+			{
+				return InputOutput.Print((from c in DatabaseController.Database.Customers
+								  from b in c.Bookings
+								  select b).SingleOrDefault().ToString(true));
+			}
+			else
+			{
+				return ReturnValue.CommandFunctionUndefined();
+			}
 #warning DO IT
 #warning Wenn booking angegeben dann ist die Rechnung
-			return Prompt.ReturnValue.CommandFunctionUndefined();
+			return ReturnValue.Success();
 		}
 
-		internal static Prompt.ReturnValue.Typ ViewPassword(IEnumerable<string> parameters) => Prompt.InputOutput.Print(DatabaseController.encoder.Encode(parameters.First()));
+		internal static ReturnValue.Typ ViewPassword(IEnumerable<string> parameters) => InputOutput.Print(DatabaseController.encoder.Encode(parameters.First()));
 	}
 }

@@ -2,8 +2,8 @@
 {
 	sealed class SmallVehicle : Vehicle
 	{
-		public static new decimal DayPrice => 30;
-		public static new Service[] Services => new Service[] { Navigation };
+		public override decimal DayPrice => 30;
+		public override Service[] Services => new Service[] { Navigation };
 		public SmallVehicle(
 			string numberplate,
 			string model,

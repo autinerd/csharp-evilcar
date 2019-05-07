@@ -50,7 +50,7 @@
 							"Category": 2,
 							"Model": "Mondeo",
 							"Brand": "Ford",
-							"VehicleID": 1
+							"VehicleID": 4
 						},
 						{
 							"GUID": "64234adb-ad07-4add-b801-3602e426efdb",
@@ -58,7 +58,7 @@
 							"Category": 1,
 							"Model": "Golf VII",
 							"Brand": "VW",
-							"VehicleID": 2
+							"VehicleID": 5
 						},
 						{
 							"GUID": "2abec16c-5d94-47aa-885c-eb56ea4b7729",
@@ -66,7 +66,7 @@
 							"Category": 3,
 							"Model": "S",
 							"Brand": "Tesla",
-							"VehicleID": 3
+							"VehicleID": 6
 						}
 					],
 					"Location": "Laim"

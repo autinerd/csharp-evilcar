@@ -5,14 +5,14 @@ namespace CsharpEvilcar.DataClasses
 {
 	internal abstract partial class Vehicle : GuidObject
 	{
-		public static Service[] Services { get; private set; }
-		public static decimal DayPrice { get; private set; }
+		public abstract Service[] Services { get; }
+		public abstract decimal DayPrice { get; }
 		public string Numberplate { get; set; }
 		public string Model { get; private set; }
 		public string Brand { get; private set; }
 		public int VehicleID { get; set; }
 		public CategoryEnum Category { get; protected set; }
-		public static decimal TotalDayPrice => ( from svc in Services select svc.Price ).Sum() + DayPrice;
+		public decimal TotalDayPrice => ( from svc in Services select svc.Price ).Sum() + DayPrice;
 
 		protected Vehicle(
 			string numberplate,

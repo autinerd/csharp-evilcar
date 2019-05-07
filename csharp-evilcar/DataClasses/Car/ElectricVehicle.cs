@@ -2,8 +2,8 @@
 {
 	class ElectricVehicle : Vehicle
 	{
-		public static new decimal DayPrice => 130;
-		public static new Service[] Services => new Service[] { Navigation, ChargingStationFinder, Spotify, AirConditioner, SnowChains };
+		public override decimal DayPrice => 130;
+		public override Service[] Services => new Service[] { Navigation, ChargingStationFinder, Spotify, AirConditioner, SnowChains };
 		public ElectricVehicle(
 			string numberplate,
 			string type,
