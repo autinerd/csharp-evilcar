@@ -177,10 +177,8 @@ namespace CsharpEvilcar
 						new Prompt.CaseTyps.Command()
 						{
 							CaseName = "bookings",
-							AskForParameters="Fehlt noch.",
-#warning view-booking AskForParameters falsche Übergabeparameter
-							Help="",
-#warning view-booking Help fehlt noch
+							AskForParameters="Please enter <branch_ID> for all bookings of a branch, 'fleet' <fleet_ID> for all bookings of a fleet, 'customer' <customer_ID> for all bookings of a customer or 'booking' <booking_ID> for one specific bokking",
+							Help="Use this command if you want to view bookings.",
 							Syntax = "view\tbookings\n\t\t\t\t<branch_ID>\n\t\t\t\tfleet\t\t<fleet_ID>\n\t\t\t\tcustomer\t<customer_ID>\n\t\t\t\tbooking\t\t<booking_ID>",
 							ParameterLength = new int[]{1,2},
 							SubFunction=InternalLogic.ViewBooking,
@@ -190,6 +188,8 @@ namespace CsharpEvilcar
 							// just for set up our database
 							CaseName = "password",
 							AskForParameters = "Password to hash",
+							Help="",
+							Syntax = "\b",
 							ParameterLength = new int[]{1},
 							SubFunction = InternalLogic.ViewPassword
 						}
