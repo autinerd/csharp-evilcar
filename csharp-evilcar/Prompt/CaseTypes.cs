@@ -13,7 +13,9 @@ namespace CsharpEvilcar.Prompt.CaseTypes
 			ParentsCase = parentsCase;
 			return ReturnValue.GetValue(ErrorCodeFlags.IsSuccess, this);
 		}
+		public IEnumerable<Base> SubCases = null;
 		public Base ParentsCase = null;
+		internal CaseTypeFlags flags = CaseTypeFlags.Main;
 		public string CaseName = null;
 		public string AskForParameters = null;
 		public string Help = null;
@@ -37,8 +39,6 @@ namespace CsharpEvilcar.Prompt.CaseTypes
 		public string GetCaseName => CaseName ?? "CaseName-undefined";
 		public virtual string GetAskForParameters => AskForParameters ?? string.Concat(CaseName, "-AskFor-undefined");
 		public string GetHelp => Help ?? string.Concat(CaseName, "-help-undefined");
-
-
 		public virtual string GetSyntax => null;
 		public virtual ReturnValue CheckParameterLength(string[] inputArray) => ReturnValue.GetValue(ErrorCodeFlags.IsSuccess, this);
 		public virtual ReturnValue Execute(ref string[] parameters)
@@ -70,7 +70,7 @@ namespace CsharpEvilcar.Prompt.CaseTypes
 		public override ReturnValue CheckParameterLength(string[] inputArray) => inputArray.Count() > 0 ? ReturnValue.GetValue(ErrorCodeFlags.IsSuccess, this) : ReturnValue.GetValue(ErrorCodeFlags.IsEmpty, this);
 		public override ReturnValue Execute(ref string[] parameters)
 		{
-			if (ReturnValue.Execute(out ReturnValue code, base.Execute(ref parameters)).Flags.HasFlag(ErrorCodeFlags.IsError) | code.Flags.HasFlag(ErrorCodeFlags.IsEmpty))
+			if (ReturnValue.Execute(out ReturnValue code, base.Execute(ref parameters)) == ErrorCodeFlags.IsError || code == ErrorCodeFlags.IsEmpty)
 			{
 				return code;
 			}
@@ -81,7 +81,7 @@ namespace CsharpEvilcar.Prompt.CaseTypes
 								  where s.CaseName == selection
 								  select s ).SingleOrDefault();
 
-			return UserMessages.General.HelpSymbol.Contains(selection)
+			return UserMessages.General.HelpSymbols.Contains(selection)
 				? ReturnValue.GetValue(ErrorCodeFlags.IsHelpNeeded, this)
 				: selectedCase == default 
 					? ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, this) 
@@ -109,7 +109,7 @@ namespace CsharpEvilcar.Prompt.CaseTypes
 				}
 			}
 
-			if (parameters.Any(s => UserMessages.General.HelpSymbol.Contains(s)))
+			if (parameters.Any(s => UserMessages.General.HelpSymbols.Contains(s)))
 			{
 				return ReturnValue.GetValue(ErrorCodeFlags.IsHelpNeeded, this);
 			}
@@ -175,5 +175,4 @@ namespace CsharpEvilcar.Prompt.CaseTypes
 	}
 
 }
-
 

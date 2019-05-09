@@ -7,7 +7,9 @@ namespace CsharpEvilcar
 	{
 		public static void Main()
 		{
+			#if NET472
 			ConsoleStuff.EnableQuickEdit();
+			#endif
 			// print programm begin info
 			InputOutput.Print(UserMessages.General.Logo);
 			// login and run the prompt
