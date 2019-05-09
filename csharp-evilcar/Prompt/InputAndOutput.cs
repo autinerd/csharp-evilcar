@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 namespace CsharpEvilcar.Prompt
@@ -7,35 +8,45 @@ namespace CsharpEvilcar.Prompt
 
 	internal static class InputOutput
 	{
-		internal static ReturnValue.Typ GetInput(out string[] input)
+		internal static (string[], ReturnValue) GetInput()
 		{
-			Print("", "");
-			input = ( from Match m in Regex.Matches(Console.ReadLine(), @"("".*""|[\S]+)+")
+			_ = Print("", end: "", withPrompt: true);
+			return (( from Match m in Regex.Matches(Console.ReadLine(), @"("".*""|[\S]+)+") // extracts all parameters, single words and quoted ones
 					  let s = m.Value
-					  select s.Replace("\"", "") ).ToArray(); // extracts all parameters, single words and quoted ones
-			return ReturnValue.Success();
+					  select s.Replace("\"", "") ).ToArray(), ReturnValue.GetValue(ErrorCodeFlags.IsSuccess));
 
 		}
-			   
-		internal static ReturnValue.Typ Print(string str = "", string end = "\n")
+
+		/// <summary>
+		/// Prints to console
+		/// </summary>
+		/// <param name="str">The string to be printed</param>
+		/// <param name="end">When nothing is given, end with newline</param>
+		/// <param name="returns">when nothing is given, retuen Success</param>
+		/// <param name="withoutPrompt">if the ">>>" is not printed</param>
+		/// <returns>Success or <paramref name="returns"/></returns>
+		internal static ReturnValue Print([Optional] string str, [Optional] string end, [Optional] ReturnValue returns, [Optional] bool withPrompt)
 		{
 			if (str != null)
 			{
-				Console.Write(">>> " + Regex.Replace(str, @"\n", "\n    ") + end);
+				Console.Write(( withPrompt ? ">>> " : "" ) +
+					Regex.Replace(str, @"\n", "\n    ") +
+					( end ?? "\n" ));
 			}
-			return ReturnValue.Success();
+			return returns ?? ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);
 		}
 
 		internal static bool Login()
 		{
-			Print(UserMessages.Login.AskForUsername, "");
+			_ = Print("");
+			_ = Print(UserMessages.Login.AskForUsername, "");
 			return InputAndCheckPassword(Console.ReadLine()); // read username and go on with password query and password check
 		}
 
 		private static bool InputAndCheckPassword(string username)
 		{
 			string password = ""; // empty password, will filled with the password
-			Print("Password: ", "");
+			_ = Print("Password: ", "");
 			while (true)
 			{
 				ConsoleKeyInfo key = Console.ReadKey(true);

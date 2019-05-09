@@ -22,8 +22,9 @@ namespace CsharpEvilcar.DataClasses
 		{
 			if (!hasCustID)
 			{
-				CustomerID = ( from c in Database.DatabaseController.Database.Customers select c.CustomerID ).Max() + 1;
+				CustomerID = ( from c in Database.DatabaseController.DatabaseObject.Customers select c.CustomerID ).Max() + 1;
 			}
+			Bookings = new List<Booking>();
 		}
 
 		public override string ToString() => ToString(false);
@@ -31,7 +32,7 @@ namespace CsharpEvilcar.DataClasses
 		public string ToString(bool fullDetails) => fullDetails
 				? $@"Customer {CustomerID}: Name: {Name}, Residence: {Residence}
 	{Bookings.Count} Bookings:
-		{string.Join("\n\t\t", from b in Bookings select b.ToString())}"
+	{string.Join("\n\t", from b in Bookings select b.ToString())}"
 				: $@"Customer {CustomerID}: Name: {Name}, Residence: {Residence}, {Bookings.Count} Bookings";
 	}
 }

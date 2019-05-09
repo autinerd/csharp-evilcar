@@ -25,7 +25,7 @@ namespace CsharpEvilcar.DataClasses
 			Brand = brand;
 			if (!hasVehID)
 			{
-				VehicleID = ( from b in Database.DatabaseController.Database.Branches
+				VehicleID = ( from b in Database.DatabaseController.DatabaseObject.Branches
 							  from f in b.Fleets
 							  from v in f.Vehicles
 							  select v.VehicleID ).Max() + 1;

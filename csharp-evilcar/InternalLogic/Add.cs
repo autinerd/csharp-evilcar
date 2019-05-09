@@ -1,9 +1,9 @@
-﻿using CsharpEvilcar.Database;
-using CsharpEvilcar.DataClasses;
+﻿using CsharpEvilcar.DataClasses;
+using CsharpEvilcar.Prompt;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
+using static CsharpEvilcar.Database.DatabaseController;
 
 namespace CsharpEvilcar
 {
@@ -14,31 +14,30 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: <see cref="Vehicle.Numberplate"/> (0), <see cref="Vehicle.Brand"/> (1), <see cref="Vehicle.Model"/> (2), <see cref="Vehicle.Category"/> (3), Number of <see cref="Fleet"/> (4)</param>
 		/// <returns>Error code</returns>
-		internal static Prompt.ReturnValue.Typ AddVehicle(IEnumerable<string> parameters)
+		internal static ReturnValue AddVehicle(IEnumerable<string> parameters)
 		{
 			string numberplate = parameters.ElementAt(0), brand = parameters.ElementAt(1), model = parameters.ElementAt(2), category = parameters.ElementAt(3), fleet = parameters.ElementAt(4);
 			if (!( Regex.IsMatch(numberplate, "[A-Z]{1,3}-[A-Z]{1,2}-[0-9]{1,4}")
-				&& int.TryParse(fleet, out int fleetnum)
-				&& DatabaseController.Database.MyBranch.Fleets.Count() >= fleetnum ))
+				&& fleet.IsValidIndex(DatabaseObject.MyBranch.Fleets, out uint fleetnum) ))
 			{
-				return Prompt.ReturnValue.WrongArgument();
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
 			}
 			switch (category.ToLower(CultureInfo.CurrentCulture))
 			{
 				case "small":
-					DatabaseController.Database.MyBranch.Fleets[fleetnum].Vehicles.Add(new SmallVehicle(numberplate, model, brand, false));
-					return Prompt.ReturnValue.Success();
+					DatabaseObject.MyBranch.Fleets.ElementAt(fleetnum).Vehicles.Add(new SmallVehicle(numberplate, model, brand, false));
+					return ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);
 				case "midsize":
-					DatabaseController.Database.MyBranch.Fleets[fleetnum].Vehicles.Add(new MidsizeVehicle(numberplate, model, brand, false));
-					return Prompt.ReturnValue.Success();
+					DatabaseObject.MyBranch.Fleets.ElementAt(fleetnum).Vehicles.Add(new MidsizeVehicle(numberplate, model, brand, false));
+					return ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);
 				case "large":
-					DatabaseController.Database.MyBranch.Fleets[fleetnum].Vehicles.Add(new LargeVehicle(numberplate, model, brand, false));
-					return Prompt.ReturnValue.Success();
+					DatabaseObject.MyBranch.Fleets.ElementAt(fleetnum).Vehicles.Add(new LargeVehicle(numberplate, model, brand, false));
+					return ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);
 				case "electric":
-					DatabaseController.Database.MyBranch.Fleets[fleetnum].Vehicles.Add(new ElectricVehicle(numberplate, model, brand, false));
-					return Prompt.ReturnValue.Success();
+					DatabaseObject.MyBranch.Fleets.ElementAt(fleetnum).Vehicles.Add(new ElectricVehicle(numberplate, model, brand, false));
+					return ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);
 				default:
-					return Prompt.ReturnValue.WrongArgument();
+					return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
 			}
 		}
 
@@ -47,15 +46,15 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: <see cref="Person.Name"/> (0), <see cref="Person.Residence"/> (1)</param>
 		/// <returns>Error code</returns>
-		internal static Prompt.ReturnValue.Typ AddCustomer(IEnumerable<string> parameters)
+		internal static ReturnValue AddCustomer(IEnumerable<string> parameters)
 		{
-			DatabaseController.Database.Customers.Add(new Customer(false)
+			DatabaseObject.Customers.Add(new Customer(false)
 			{
 				Name = parameters.ElementAt(0),
 				Residence = parameters.ElementAt(1)
 			});
 
-			return Prompt.ReturnValue.Success();
+			return ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);
 		}
 	}
 }
