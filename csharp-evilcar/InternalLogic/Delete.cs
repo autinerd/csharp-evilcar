@@ -1,7 +1,8 @@
-﻿using CsharpEvilcar.Database;
-using CsharpEvilcar.DataClasses;
+﻿using CsharpEvilcar.DataClasses;
 using System.Collections.Generic;
 using System.Linq;
+using CsharpEvilcar.Prompt;
+using static CsharpEvilcar.Database.DatabaseController;
 
 namespace CsharpEvilcar
 {
@@ -12,13 +13,13 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: VehicleID (0)</param>
 		/// <returns>Error code</returns>
-		internal static Prompt.ReturnValue.Typ DeleteVehicle(IEnumerable<string> parameters)
+		internal static ReturnValue DeleteVehicle(IEnumerable<string> parameters)
 		{
 			if (!int.TryParse(parameters.ElementAt(0), out int vehID))
 			{
-				return Prompt.ReturnValue.WrongArgument();
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
 			}
-			IEnumerable<Fleet> fleets = from f in DatabaseController.Database.MyBranch.Fleets
+			IEnumerable<Fleet> fleets = from f in DatabaseObject.MyBranch.Fleets
 										from v in f.Vehicles
 										where v.VehicleID == vehID
 										select f;
@@ -26,9 +27,9 @@ namespace CsharpEvilcar
 			return fleets.Count() == 1
 				&& fleets.Single().Vehicles.Count((v) => v.VehicleID == vehID) == 1
 				? fleets.Single().Vehicles.Remove(( from ve in fleets.Single().Vehicles where ve.VehicleID == vehID select ve ).Single())
-				? Prompt.ReturnValue.Success()
-				: Prompt.ReturnValue.DatabaseError()
-				: Prompt.ReturnValue.WrongArgument();
+				? ReturnValue.GetValue(ErrorCodeFlags.IsSuccess)
+				: ReturnValue.GetValue(ErrorCodeFlags.IsDatabaseError)
+				: ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
 		}
 
 		/// <summary>
@@ -36,11 +37,12 @@ namespace CsharpEvilcar
 		/// </summary>
 		/// <param name="parameters">Parameters: CustomerID (0)</param>
 		/// <returns>Error code</returns>
-		internal static Prompt.ReturnValue.Typ DeleteCustomer(IEnumerable<string> parameters) => int.TryParse(parameters.ElementAt(0), out int cusID)
-			&& DatabaseController.Database.Customers.Any((c) => c.CustomerID == cusID)
-				? DatabaseController.Database.Customers.Remove(( from c in DatabaseController.Database.Customers where cusID == c.CustomerID select c ).Single())
-				? Prompt.ReturnValue.Success()
-				: Prompt.ReturnValue.DatabaseError()
-				: Prompt.ReturnValue.WrongArgument();
+		internal static ReturnValue DeleteCustomer(IEnumerable<string> parameters) => 
+			int.TryParse(parameters.ElementAt(0), out int cusID)
+			&& DatabaseObject.Customers.Any((c) => c.CustomerID == cusID)
+				? DatabaseObject.Customers.Remove(( from c in DatabaseObject.Customers where cusID == c.CustomerID select c ).Single())
+				? ReturnValue.GetValue(ErrorCodeFlags.IsSuccess)
+				: ReturnValue.GetValue(ErrorCodeFlags.IsDatabaseError)
+				: ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
 	}
 }

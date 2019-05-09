@@ -81,18 +81,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CsharpEvilcar\Extensions.cs" />
     <Compile Include="CsharpEvilcar\UserInterface.cs" />
+    <Compile Include="CsharpEvilcar\UserMessages.General.cs" />
+    <Compile Include="CsharpEvilcar\UserMessages.Login.cs" />
+    <Compile Include="CsharpEvilcar\UserMessages.cs" />
     <Compile Include="DataClasses\*.cs" />
     <Compile Include="DataClasses\Car\*.cs" />
     <Compile Include="DataClasses\Person\*.cs" />
     <Compile Include="Database\*.cs" />
     <Compile Include="InternalLogic\*.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Prompt\ConsoleStuff.cs" />
+    <Compile Include="Prompt\ErrorCodeFlags.cs" />
+    <Compile Include="Prompt\NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Prompt\InputAndOutput.cs" />
-    <Compile Include="Prompt\ErrorCode.cs" />
-    <Compile Include="Prompt\CaseTyps.cs" />
-    <Compile Include="CsharpEvilcar\UserMessages.cs" />
+    <Compile Include="Prompt\ReturnValue.cs" />
+    <Compile Include="Prompt\CaseTypes.cs" />
+    <Compile Include="CsharpEvilcar\Cases.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,4 +1,5 @@
 ﻿
+using CsharpEvilcar.Prompt;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -17,7 +18,7 @@ namespace CsharpEvilcar.Database
 		/// <summary>
 		/// The database object which represents the contents of the database file.
 		/// </summary>
-		internal static Database Database { get; private set; } = null;
+		internal static Database DatabaseObject { get; private set; } = null;
 
 		/// <summary>
 		/// The current logged in user.
@@ -32,10 +33,10 @@ namespace CsharpEvilcar.Database
 		internal static readonly Scrypt.ScryptEncoder encoder = new Scrypt.ScryptEncoder();
 
 		/// <summary>
-		/// Loads the database file contents into the <see cref="Database"/> object.
+		/// Loads the database file contents into the <see cref="DatabaseObject"/> object.
 		/// </summary>
 		/// <returns>Error code</returns>
-		internal static Prompt.ReturnValue.Typ LoadDatabase()
+		internal static ReturnValue LoadDatabase()
 		{
 			try
 			{
@@ -44,16 +45,16 @@ namespace CsharpEvilcar.Database
 #pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
 			{
-				return Prompt.ReturnValue.DatabaseError();
+				return ReturnValue.GetValue(ErrorCodeFlags.IsDatabaseError);
 			}
 #pragma warning restore CA1031 // Do not catch general exception types
 		}
 
 		/// <summary>
-		/// Saves the <see cref="Database"/> object into the database file.
+		/// Saves the <see cref="DatabaseObject"/> object into the database file.
 		/// </summary>
 		/// <returns></returns>
-		internal static Prompt.ReturnValue.Typ SaveDatabase()
+		internal static ReturnValue SaveDatabase()
 		{
 			try
 			{
@@ -62,15 +63,15 @@ namespace CsharpEvilcar.Database
 #pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
 			{
-				return Prompt.ReturnValue.DatabaseError();
+				return ReturnValue.GetValue(ErrorCodeFlags.IsDatabaseError);
 			}
 #pragma warning restore CA1031 // Do not catch general exception types
 		}
 
-		private static Prompt.ReturnValue.Typ SaveDatabaseFile()
+		private static ReturnValue SaveDatabaseFile()
 		{
-			Prompt.ReturnValue.Typ returnval = MapToJSON(out JObject jObject);
-			if (returnval is Prompt.ReturnValue.Typ.Pass)
+			(ReturnValue returnval, JObject jObject) = MapToJSON();
+			if (returnval == ErrorCodeFlags.IsError)
 			{
 				return returnval;
 			}
@@ -82,7 +83,7 @@ namespace CsharpEvilcar.Database
 				{
 					jObject.WriteTo(writer);
 				}
-				return Prompt.ReturnValue.Success();
+				return ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);
 			}
 			catch (Exception)
 			{
@@ -106,15 +107,15 @@ namespace CsharpEvilcar.Database
 
 		}
 
-		private static Prompt.ReturnValue.Typ MapToDatabase(JObject jObject)
+		private static ReturnValue MapToDatabase(JObject jObject)
 		{
 			if (CurrentUser == Guid.Empty)
 			{
-				return Prompt.ReturnValue.NoUserLoggedIn();
+				return ReturnValue.GetValue(ErrorCodeFlags.IsNoUserLoggedIn);
 			}
 			else
 			{
-				Database = new Database
+				DatabaseObject = new Database
 				{
 					Customers = jObject["Customers"].Select((customer) => new DataClasses.Customer(true)
 					{
@@ -187,20 +188,15 @@ namespace CsharpEvilcar.Database
 					}).ToList()
 				};
 			}
-			return Prompt.ReturnValue.Success();
+			return ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);
 		}
 
-		private static Prompt.ReturnValue.Typ MapToJSON(out JObject jObject)
-		{
-			jObject = null;
-			if (currentUser == Guid.Empty)
-			{
-				return Prompt.ReturnValue.NoUserLoggedIn();
-			}
-			jObject = new JObject {
+		private static (ReturnValue, JObject) MapToJSON() => currentUser == Guid.Empty
+				? (ReturnValue.GetValue(ErrorCodeFlags.IsNoUserLoggedIn), null)
+				: (ReturnValue.GetValue(ErrorCodeFlags.IsSuccess), new JObject {
 				{
 					"Branches",
-					new JArray(Database.Branches.Select(branch => new JObject
+					new JArray(DatabaseObject.Branches.Select(branch => new JObject
 					{
 						{
 							"GUID",
@@ -262,7 +258,7 @@ namespace CsharpEvilcar.Database
 				},
 				{
 					"Customers",
-					new JArray(Database.Customers.Select(customer => new JObject
+					new JArray(DatabaseObject.Customers.Select(customer => new JObject
 					{
 						{
 							"GUID",
@@ -290,8 +286,8 @@ namespace CsharpEvilcar.Database
 								},
 								{
 									"Enddate",
-									booking.Enddate == default 
-									? "default" 
+									booking.Enddate == default
+									? "default"
 									: booking.Enddate.ToString("yyyyMMdd", CultureInfo.InvariantCulture)
 								},
 								{
@@ -314,9 +310,7 @@ namespace CsharpEvilcar.Database
 					"FleetManagers",
 					ReadDatabaseFile()["FleetManagers"]
 				}
-			};
-			return Prompt.ReturnValue.Success();
-		}
+			});
 
 		/// <summary>
 		/// Checks if the given <paramref name="username"/> is in the database and the given <paramref name="password"/> is correct.

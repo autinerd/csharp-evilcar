@@ -5,11 +5,11 @@ namespace CsharpEvilcar.DataClasses
 {
 	class Booking : GuidObject
 	{
-		public Customer Customer => ( from c in Database.DatabaseController.Database.Customers
+		public Customer Customer => ( from c in Database.DatabaseController.DatabaseObject.Customers
 									  from b in c.Bookings
 									  where b.GUID == GUID
 									  select c ).Single();
-		public Vehicle Vehicle => ( from b in Database.DatabaseController.Database.Branches
+		public Vehicle Vehicle => ( from b in Database.DatabaseController.DatabaseObject.Branches
 									from f in b.Fleets
 									from v in f.Vehicles
 									where v.VehicleID == VehicleID
@@ -25,7 +25,7 @@ namespace CsharpEvilcar.DataClasses
 		{
 			if (!hasBookID)
 			{
-				BookingID = ( from c in Database.DatabaseController.Database.Customers
+				BookingID = ( from c in Database.DatabaseController.DatabaseObject.Customers
 							  from b in c.Bookings
 							  select b.BookingID ).Max() + 1;
 			}
