@@ -8,12 +8,16 @@ namespace CsharpEvilcar.Prompt
 
 	internal static class InputOutput
 	{
-		internal static (string[], ReturnValue) GetInput()
+		internal static string[] GetInput(string message = null)
 		{
-			_ = Print("", end: "", withPrompt: true);
-			return (( from Match m in Regex.Matches(Console.ReadLine(), @"("".*""|[\S]+)+") // extracts all parameters, single words and quoted ones
+			if (message != null)
+			{
+				Print(message);
+			}
+			Print("", end: "", withPrompt: true);
+			return ( from Match m in Regex.Matches(Console.ReadLine(), @"("".*""|[\S]+)+") // extracts all parameters, single words and quoted ones
 					  let s = m.Value
-					  select s.Replace("\"", "") ).ToArray(), ReturnValue.GetValue(ErrorCodeFlags.IsSuccess));
+					  select s.Replace("\"", "") ).ToArray();
 
 		}
 

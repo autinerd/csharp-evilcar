@@ -46,7 +46,7 @@ namespace CsharpEvilcar.Prompt.CaseTypes
 			if (parameters.Length == 0)
 			{
 				_ = InputOutput.Print(GetAskForParameters);
-				(parameters, _) = InputOutput.GetInput();
+				parameters = InputOutput.GetInput();
 			}
 			return CheckParameterLength(parameters);
 

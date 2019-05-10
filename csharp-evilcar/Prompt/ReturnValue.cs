@@ -31,19 +31,28 @@
 		internal static ReturnValue GetValue(ErrorCodeFlags flags, CaseDescriptor Case) => new ReturnValue(flags, Case);
 
 		public static bool operator ==(ReturnValue value, ErrorCodeFlags flag) => value.Flags.HasFlag(flag);
-		public static bool operator !=(ReturnValue value, ErrorCodeFlags flag) => !(value == flag);
+		public static bool operator !=(ReturnValue value, ErrorCodeFlags flag) => !( value == flag );
 
-		public override bool Equals(object obj) => ReferenceEquals(this, obj)
-				? true
-				:  obj is ReturnValue 
-					? Flags == ( obj as ReturnValue ).Flags
-					: false;
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(this, obj))
+			{
+				return true;
+			}
+			else
+			{
+				ReturnValue value = obj as ReturnValue;
+				if (obj != null && Flags == value.Flags)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 
 		public override int GetHashCode() => Flags.GetHashCode();
-		public static implicit operator bool(ReturnValue value)
-		{
-			return value.Flags != ErrorCodeFlags.IsRequestedLogout;
-		}
+
+		public static implicit operator bool(ReturnValue value) => value.Flags != ErrorCodeFlags.IsRequestedLogout;
 	}
 }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CsharpEvilcar
@@ -15,5 +16,21 @@ namespace CsharpEvilcar
 		public static T ElementAt<T>(this IEnumerable<T> source, uint index) => source.ElementAt((int)index);
 
 		public static T ElementAtOrDefault<T>(this IEnumerable<T> source, uint index) => source.ElementAtOrDefault((int)index);
+
+		internal static uint LevelOf(this CaseTypeFlags flag)
+		{
+			uint number = (uint)flag;
+			const uint GROUP = 0x1_0000;
+			for (uint i = 0; ; i++)
+			{
+				if (Math.Floor(number / Math.Pow(GROUP, i + 1)) > 0)
+				{
+					continue;
+				}
+				return i;
+			}
+		}
+
+		internal static CaseTypeFlags BaseTypeOf(this CaseTypeFlags flag) => (CaseTypeFlags)( (uint)flag % (uint)Math.Pow(0x1_0000, flag.LevelOf() + 1) );
 	}
 }
