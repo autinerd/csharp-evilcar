@@ -1,4 +1,5 @@
 ﻿using CsharpEvilcar.Prompt;
+using static CsharpEvilcar.Prompt.InputOutput;
 using System;
 
 namespace CsharpEvilcar
@@ -11,31 +12,43 @@ namespace CsharpEvilcar
 			ConsoleStuff.EnableQuickEdit();
 			#endif
 			// print programm begin info
-			InputOutput.Print(UserMessages.General.Logo);
+			Print(UserMessages.General.Logo);
 			// login and run the prompt
-			if (InputOutput.Login())
+			if (Login())
 			{
-				InputOutput.Print(UserMessages.Login.Successful);
-				InputOutput.Print(UserMessages.General.RemindHelp);
+				Print(UserMessages.Login.Successful);
+				Print(UserMessages.General.RemindHelp);
 				ReturnValue code;
 				if (( code = Database.DatabaseController.LoadDatabase() ) == ErrorCodeFlags.IsPass)
 				{
-					Cases.Main.Init();
-					while (Cases.Main.Execute()) { };
+					ReturnValue value;
+					while (value = CaseDescriptor.Execute())
+					{
+						if (value == ErrorCodeFlags.IsHelpNeeded)
+						{
+							Print(value.Case2.Help);
+						}
+						else if (value == ErrorCodeFlags.IsError)
+						{
+							Print(value.Text);
+						}
+					}
+					//Cases.Main.Init();
+					//while (Cases.Main.Execute()) { };
 				}
 				else
 				{
-					InputOutput.Print(code.Text);
+					Print(code.Text);
 				}
 			}
 			else
 			{
-				InputOutput.Print(UserMessages.Login.Failed);
+				Print(UserMessages.Login.Failed);
 			}
 
 			// close the programm
-			InputOutput.Print(UserMessages.General.ProgrammEnd);
-			InputOutput.Print("", "");
+			Print(UserMessages.General.ProgrammEnd);
+			Print("", "");
 			Console.ReadKey();
 
 		}

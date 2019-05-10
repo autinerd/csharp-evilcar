@@ -15,7 +15,7 @@ namespace CsharpEvilcar.Prompt.CaseTypes
 		}
 		public IEnumerable<Base> SubCases = null;
 		public Base ParentsCase = null;
-		internal CaseTypeFlags flags = CaseTypeFlags.Main;
+		internal CaseTypeFlags flags = CaseTypeFlags.None;
 		public string CaseName = null;
 		public string AskForParameters = null;
 		public string Help = null;

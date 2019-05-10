@@ -150,7 +150,7 @@ namespace CsharpEvilcar
 																	   from b in c.Bookings
 																	   where c.CustomerID == ID
 																	   select b.Price ).Sum())));
-					case "booking":
+					case "single":
 						return InputOutput.Print(( from c in DatabaseObject.Customers
 												   from b in c.Bookings
 												   select b ).SingleOrDefault().ToString(true));

@@ -23,7 +23,7 @@ namespace CsharpEvilcar.Prompt
 		/// <param name="str">The string to be printed</param>
 		/// <param name="end">When nothing is given, end with newline</param>
 		/// <param name="returns">when nothing is given, retuen Success</param>
-		/// <param name="withoutPrompt">if the ">>>" is not printed</param>
+		/// <param name="withPrompt">if the ">>>" is printed</param>
 		/// <returns>Success or <paramref name="returns"/></returns>
 		internal static ReturnValue Print([Optional] string str, [Optional] string end, [Optional] ReturnValue returns, [Optional] bool withPrompt)
 		{
