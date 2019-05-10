@@ -26,7 +26,7 @@ namespace CsharpEvilcar
 				// Console.WriteLine($"Param {i}: {param}");
 				if (param == "?")
 				{
-					var a = ( from c in Cases.CaseList
+					CaseDescriptor a = ( from c in Cases.CaseList
 							where c.Flags == currentFlags
 							select c ).SingleOrDefault();
 					return ReturnValue.GetValue(ErrorCodeFlags.IsHelpNeeded, a);
@@ -34,7 +34,7 @@ namespace CsharpEvilcar
 				if (Enum.TryParse(param, true, out CaseTypeFlags flag))
 				{
 					currentFlags |= flag;
-					var a = ( from c in Cases.CaseList
+					CaseDescriptor a = ( from c in Cases.CaseList
 							where c.Flags == currentFlags
 							select c ).SingleOrDefault();
 					if (a == default(CaseDescriptor))
