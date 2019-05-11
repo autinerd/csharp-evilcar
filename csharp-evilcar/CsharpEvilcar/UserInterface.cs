@@ -26,7 +26,7 @@ namespace CsharpEvilcar
 					{
 						if (code == ErrorCodeFlags.IsHelpNeeded)
 						{
-							CaseDescriptor caseDescriptor = code.Case2;
+							CaseDescriptor caseDescriptor = code.Case;
 							Print(caseDescriptor.Help);
 							System.Collections.Generic.IEnumerable<CaseDescriptor> c = from d in Cases.CaseList
 									where d.Flags.HasFlag(caseDescriptor.Flags)
@@ -50,11 +50,10 @@ namespace CsharpEvilcar
 						}
 						else if (code == ErrorCodeFlags.IsError)
 						{
-							Print(code.Text);
+							Print("Error in case " + code.Case.Flags.ToString().ToLower().Replace(",", ""));
+							Print(code.Text + ( ( code == ErrorCodeFlags.IsWrongArgument ) ? ( (int)code.Options.ElementAt(0) ).ToString() : "" ));
 						}
 					}
-					//Cases.Main.Init();
-					//while (Cases.Main.Execute()) { };
 				}
 				else
 				{

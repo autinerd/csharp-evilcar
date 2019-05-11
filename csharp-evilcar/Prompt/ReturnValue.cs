@@ -1,19 +1,22 @@
-﻿namespace CsharpEvilcar.Prompt
+﻿using System.Collections.Generic;
+
+namespace CsharpEvilcar.Prompt
 {
 	internal class ReturnValue
 	{
-		private readonly ErrorCodeFlags flags = ErrorCodeFlags.None;
+		internal CaseDescriptor Case = default;
+		internal ErrorCodeFlags Flags { get; } = ErrorCodeFlags.None;
+		internal string Text => UserMessages.Messages[Flags];
 
-		internal CaseDescriptor Case2 = default;
-		internal virtual ErrorCodeFlags Flags => flags;
-		internal virtual string Text => UserMessages.Messages[flags];
+		internal IEnumerable<object> Options { get; }
 
-		internal ReturnValue(ErrorCodeFlags codeFlags, CaseDescriptor Case = default)
+		internal ReturnValue(ErrorCodeFlags codeFlags, CaseDescriptor Case = default, params object[] options)
 		{
-			Case2 = Case;
-			flags = codeFlags;
+			this.Case = Case;
+			Flags = codeFlags;
+			Options = options;
 		}
-		internal static ReturnValue GetValue(ErrorCodeFlags flags, CaseDescriptor Case = null) => new ReturnValue(flags, Case);
+		internal static ReturnValue GetValue(ErrorCodeFlags flags, CaseDescriptor Case = null, params object[] options) => new ReturnValue(flags, Case, options);
 
 		public static bool operator ==(ReturnValue value, ErrorCodeFlags flag) => value.Flags.HasFlag(flag);
 		public static bool operator !=(ReturnValue value, ErrorCodeFlags flag) => !( value == flag );

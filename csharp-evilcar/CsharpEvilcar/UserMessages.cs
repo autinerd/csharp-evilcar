@@ -12,7 +12,7 @@ namespace CsharpEvilcar
 			{ IsPass, "" },
 			{ IsError, "An unspecified error happened" },
 			{ IsHelpNeeded, "You requested help in Case: " },
-			{ IsWrongArgument, "Some of the entered arguments were wrong." },
+			{ IsWrongArgument, "Error in recognizing argument " },
 			{ IsDatabaseError, "A database error happend." },
 			{ IsNoUserLoggedIn, "You are not logged in." },
 			{ IsCommandAbort, "The command was not executed." },

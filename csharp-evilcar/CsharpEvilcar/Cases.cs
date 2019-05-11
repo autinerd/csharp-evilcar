@@ -3,9 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static CsharpEvilcar.CaseTypeFlags;
-using static CsharpEvilcar.Prompt.ErrorCodeFlags;
 using static CsharpEvilcar.InternalLogic;
+using static CsharpEvilcar.Prompt.ErrorCodeFlags;
 using static CsharpEvilcar.Prompt.InputOutput;
+
 namespace CsharpEvilcar
 {
 	internal class CaseDescriptor
@@ -22,39 +23,69 @@ namespace CsharpEvilcar
 		internal static ReturnValue Execute()
 		{
 			string[] parameters = GetInput();
-			CaseTypeFlags currentFlags = CaseTypeFlags.None;
-			foreach ((string param, int i) in parameters.Select((item, i) => (item, i)))
+
+			// when empty input, just do nothing
+			if (parameters.Count() == 0)
 			{
+				return ReturnValue.GetValue(ErrorCodeFlags.None);
+			}
+
+			CaseTypeFlags currentFlags = CaseTypeFlags.None;
+
+			// iterate through all parameters
+			for (int i = 0; i < parameters.Count(); i++)
+			{
+				string param = parameters.ElementAt(i);
+				// check if we have a '?' or 'help'
 				if (UserMessages.General.HelpSymbols.Contains(param))
 				{
 					return ReturnValue.GetValue(IsHelpNeeded, currentFlags.ToDescriptor());
 				}
+
+				// check if we recognize the command name
 				if (Enum.TryParse(param, true, out CaseTypeFlags flag))
 				{
 					currentFlags |= flag;
 					CaseDescriptor command = currentFlags.ToDescriptor();
+
+					// command not found
 					if (command == default)
 					{
 						return ReturnValue.GetValue(IsCommandFunctionUndefined);
 					}
-					if (!( command.SubFunction is null ))
+
+					// if user specified no parameters, ask for them
+					if (parameters.Skip(i + 1).Count() == 0 && command.ParameterLength.Item1 > 0)
 					{
-						if (parameters.Skip(i + 1).Count() == 0 && command.ParameterLength.Item1 > 0)
+						string[] newparams = GetInput(command.AskForParameters);
+						if (command.SubFunction is null)
 						{
-							parameters = GetInput(command.AskForParameters);
-							return command.SubFunction(parameters);
+							parameters = parameters.Concat(newparams).ToArray();
+							continue;
 						}
-						else if (parameters.Skip(i + 1).Any((item) => UserMessages.General.HelpSymbols.Contains(item)))
-						{
-							return ReturnValue.GetValue(IsHelpNeeded, currentFlags.ToDescriptor());
-						}
-						else if (command.ParameterLength.NumberIsBetween((uint)parameters.Skip(i + 1).Count()))
-						{
-							return ReturnValue.GetValue(IsWrongParameterLength);
-						}
+						return command.SubFunction(newparams);
+					}
+					// user wrote '?' or 'help' somewhere
+					else if (parameters.Skip(i + 1).Any((item) => UserMessages.General.HelpSymbols.Contains(item)))
+					{
+						return ReturnValue.GetValue(IsHelpNeeded, currentFlags.ToDescriptor());
+					}
+					// amount of parameters doesn't match
+					else if (!command.ParameterLength.NumberIsBetween((uint)parameters.Skip(i + 1).Count()))
+					{
+						return ReturnValue.GetValue(IsWrongParameterLength);
+					}
+
+					// command not fully recognized (just 'add' in 'add customer ...'), go to next parameter
+					if (command.SubFunction is null)
+					{
+						continue;
+					}
+					// command recognized, run function with parameters
+					else
+					{
 						return command.SubFunction(parameters.Skip(i + 1));
 					}
-					continue;
 				}
 				return ReturnValue.GetValue(IsCommandFunctionUndefined);
 			}
@@ -77,7 +108,8 @@ namespace CsharpEvilcar
 				Help = "Use this if you want to add a vehicle or a customer to the database.",
 				AskForParameters = "Do you want to add a 'vehicle' or a 'costumer':",
 				Flags = Add,
-				Syntax = "add"
+				Syntax = "add",
+				ParameterLength = (1, int.MaxValue)
 			},
 			new CaseDescriptor
 			{
@@ -101,15 +133,16 @@ namespace CsharpEvilcar
 			},
 			new CaseDescriptor
 			{
-				AskForParameters="Do you want to edit a 'vehicle' or a 'customer'?",
-				Help="Use this if you want to edit a vehicle or a customer.",
+				AskForParameters = "Do you want to edit a 'vehicle' or a 'customer'?",
+				Help = "Use this if you want to edit a vehicle or a customer.",
 				Flags = Edit,
-				Syntax = "edit"
+				Syntax = "edit",
+				ParameterLength = (1, int.MaxValue)
 			},
 			new CaseDescriptor
 			{
-				AskForParameters="Please enter the <vehicle_ID>  'numberplate' or 'fleet_ID' and <new_value>.",
-				Help="Use this if you want to edit a vehicle.",
+				AskForParameters = "Please enter the <vehicle_ID>  'numberplate' or 'fleet_ID' and <new_value>.",
+				Help = "Use this if you want to edit a vehicle.",
 				Syntax = "vehicle [<vehicle_ID> {numberplate|fleet_ID} <new_value>]",
 				ParameterLength = (3, 3),
 				Flags = Edit | Vehicle,
@@ -117,8 +150,8 @@ namespace CsharpEvilcar
 			},
 			new CaseDescriptor
 			{
-				AskForParameters="Please enter the <customer_Id> 'name' or 'residence' and <new_value>.",
-				Help="Use this if you want to edit a customer.",
+				AskForParameters = "Please enter the <customer_Id> 'name' or 'residence' and <new_value>.",
+				Help = "Use this if you want to edit a customer.",
 				Syntax = "customer [<customer_ID> {name|residence} <new_value>]",
 				ParameterLength = (3, 3),
 				SubFunction = EditCustomer,
@@ -128,13 +161,14 @@ namespace CsharpEvilcar
 			{
 				Syntax = "delete",
 				AskForParameters = "Do you want to delete a 'vehicle' or a 'customer'?",
-				Help="Use this if you want something to be deleted from the database",
+				Help = "Use this if you want something to be deleted from the database",
 				Flags = Delete,
+				ParameterLength = (1, int.MaxValue)
 			},
 			new CaseDescriptor
 			{
-				AskForParameters="Please enter the <vehicle_ID> of the vehicle you want do delete.",
-				Help="Use this command if you want to delete a vehicle from the database.",
+				AskForParameters = "Please enter the <vehicle_ID> of the vehicle you want do delete.",
+				Help = "Use this command if you want to delete a vehicle from the database.",
 				Syntax = "vehicle [<vehicle_ID>]",
 				ParameterLength = (1, 1),
 				SubFunction = DeleteVehicle,
@@ -142,8 +176,8 @@ namespace CsharpEvilcar
 			},
 			new CaseDescriptor
 			{
-				AskForParameters="Please enter the <customer_id> of the customer you want to delete.",
-				Help="Use this command if you want to delete a customer from the database.",
+				AskForParameters = "Please enter the <customer_id> of the customer you want to delete.",
+				Help = "Use this command if you want to delete a customer from the database.",
 				Syntax = "customer [<customer_ID>]",
 				ParameterLength = (1, 1),
 				SubFunction = DeleteCustomer,
@@ -152,33 +186,34 @@ namespace CsharpEvilcar
 			new CaseDescriptor
 			{
 				Syntax = "view",
-				AskForParameters="Please enter if you want to view 'branch', 'fleet', 'vehicle', 'customer' or 'bookings'.",
-				Help="Use this if you want to view data from the database.",
-				Flags = View
+				AskForParameters = "Please enter if you want to view 'branch', 'fleet', 'vehicle', 'customer' or 'bookings'.",
+				Help = "Use this if you want to view data from the database.",
+				Flags = View,
+				ParameterLength = (1, int.MaxValue)
 			},
 			new CaseDescriptor
 			{
-				AskForParameters="Please enter 'all' if you want to see all or enter <banch_ID> if you only want so see one branch.",
-				Help="Use this command if you want to view all ",
+				AskForParameters = "Please enter 'all' if you want to see all or enter <banch_ID> if you only want so see one branch.",
+				Help = "Use this command if you want to view all ",
 				Syntax = "branch [all | <branch_ID>]",
 				ParameterLength = (1, 1),
-				SubFunction=ViewBranch,
+				SubFunction = ViewBranch,
 				Flags = View | Branch
 			},
 			new CaseDescriptor
 			{
-				AskForParameters="Please enter nothing if you want to view all fleets or enter the <branch_ID> for which to see all fleets.",
-				Help="Use this command if you want do view all all fleets or the fleets of one branch.",
+				AskForParameters = "Please enter nothing if you want to view all fleets or enter the <branch_ID> for which to see all fleets.",
+				Help = "Use this command if you want do view all all fleets or the fleets of one branch.",
 				Syntax = "fleet [all | <branch_ID> all | <branch_ID> <fleet_ID>]",
 				ParameterLength = (1, 2),
-				SubFunction=ViewFleet,
+				SubFunction = ViewFleet,
 				Flags = View | Fleet
 			},
 			new CaseDescriptor
 			{
-				AskForParameters="Plase enter <branch_ID> and optional <fleet_ID> if you want to view all vehicle of a branch or a fleet in a branch.\n"+
+				AskForParameters = "Plase enter <branch_ID> and optional <fleet_ID> if you want to view all vehicle of a branch or a fleet in a branch.\n"+
 				"If you want to see a single car, please enter 'single' and than the <vehicle_ID>.",
-				Help="Use this command if you want to view one or many vehicles.",
+				Help = "Use this command if you want to view one or many vehicles.",
 				Syntax = "vehicle [all | single <vehicle_ID> | <branch_ID> <fleet_ID> | <branch_ID> all]",
 				ParameterLength = (1, 2),
 				SubFunction= ViewVehicle,
@@ -186,9 +221,18 @@ namespace CsharpEvilcar
 			},
 			new CaseDescriptor
 			{
-				AskForParameters="Fehlt noch.",
+				Flags = View | Customer,
+				AskForParameters = "Please enter the <customer_ID> of the customer you want to see or 'all' for all customers.",
+				Help = "Use this command if you want to view a customers data.",
+				Syntax = "customer [all | <customer_ID>]",
+				SubFunction = ViewCustomer,
+				ParameterLength = (1, 1)
+			},
+			new CaseDescriptor
+			{
+				AskForParameters = "Fehlt noch.",
 #warning view-booking AskForParameters falsche Übergabeparameter
-				Help="",
+				Help = "",
 #warning view-booking Help fehlt noch
 				Syntax = "booking [<branch_ID> | fleet <fleet_ID> | customer <customer_ID> | single <booking_ID>]",
 				ParameterLength = (1, 2),
@@ -207,8 +251,8 @@ namespace CsharpEvilcar
 			},
 			new CaseDescriptor
 			{
-				AskForParameters="Please enter the <vehicle_ID> and the <customer_ID> for a new booking.",
-				Help="",
+				AskForParameters = "Please enter the <vehicle_ID> and the <customer_ID> for a new booking.",
+				Help = "",
 				Syntax = "rent [<vehicle_ID> <customer_ID>]",
 				ParameterLength = (1, 2),
 				SubFunction = BookingRent,

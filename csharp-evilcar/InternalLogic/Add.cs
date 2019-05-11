@@ -17,10 +17,14 @@ namespace CsharpEvilcar
 		internal static ReturnValue AddVehicle(IEnumerable<string> parameters)
 		{
 			string numberplate = parameters.ElementAt(0), brand = parameters.ElementAt(1), model = parameters.ElementAt(2), category = parameters.ElementAt(3), fleet = parameters.ElementAt(4);
-			if (!( Regex.IsMatch(numberplate, "[A-Z]{1,3}-[A-Z]{1,2}-[0-9]{1,4}")
-				&& fleet.IsValidIndex(DatabaseObject.MyBranch.Fleets, out uint fleetnum) ))
+
+			if (!Regex.IsMatch(numberplate, "[A-Z]{1,3}-[A-Z]{1,2}-[0-9]{1,4}"))
 			{
-				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
+			}
+			if (!fleet.IsValidIndex(DatabaseObject.MyBranch.Fleets, out uint fleetnum))
+			{
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 4);
 			}
 			switch (category.ToLower(CultureInfo.CurrentCulture))
 			{
@@ -37,7 +41,7 @@ namespace CsharpEvilcar
 					DatabaseObject.MyBranch.Fleets.ElementAt(fleetnum).Vehicles.Add(new ElectricVehicle(numberplate, model, brand, false));
 					return ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);
 				default:
-					return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+					return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 3);
 			}
 		}
 
