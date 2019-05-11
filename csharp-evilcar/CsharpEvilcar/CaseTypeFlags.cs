@@ -7,7 +7,6 @@ namespace CsharpEvilcar
 	{
 		None = 0,
 		Add = 0x01,
-		Book = 0x02,
 		Delete = 0x04,
 		Edit = 0x08,
 		View = 0x10,

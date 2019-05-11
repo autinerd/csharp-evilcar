@@ -1,6 +1,7 @@
 ﻿using CsharpEvilcar.Prompt;
 using static CsharpEvilcar.Prompt.InputOutput;
 using System;
+using System.Linq;
 
 namespace CsharpEvilcar
 {
@@ -21,16 +22,35 @@ namespace CsharpEvilcar
 				ReturnValue code;
 				if (( code = Database.DatabaseController.LoadDatabase() ) == ErrorCodeFlags.IsPass)
 				{
-					ReturnValue value;
-					while (value = CaseDescriptor.Execute())
+					while (code = CaseDescriptor.Execute())
 					{
-						if (value == ErrorCodeFlags.IsHelpNeeded)
+						if (code == ErrorCodeFlags.IsHelpNeeded)
 						{
-							Print(value.Case2.Help);
+							CaseDescriptor caseDescriptor = code.Case2;
+							Print(caseDescriptor.Help);
+							var c = from d in Cases.CaseList
+									where d.Flags.HasFlag(caseDescriptor.Flags)
+									select d;
+							if (c.Count() > 1)
+							{
+								c = from item in c where item.Flags != caseDescriptor.Flags select item;
+							}
+							foreach (var item in c)
+							{
+								var tmp = item;
+								string Syntax = "";
+								while (tmp.Flags != CaseTypeFlags.None)
+								{
+									Syntax = tmp.Syntax + " " + Syntax;
+									tmp = tmp.Flags.BaseTypeOf().ToDescriptor();
+								}
+								Print(Syntax);
+							}
+							
 						}
-						else if (value == ErrorCodeFlags.IsError)
+						else if (code == ErrorCodeFlags.IsError)
 						{
-							Print(value.Text);
+							Print(code.Text);
 						}
 					}
 					//Cases.Main.Init();
@@ -49,7 +69,7 @@ namespace CsharpEvilcar
 			// close the programm
 			Print(UserMessages.General.ProgrammEnd);
 			Print("", "");
-			Console.ReadKey();
+			Console.ReadKey(true);
 
 		}
 	}

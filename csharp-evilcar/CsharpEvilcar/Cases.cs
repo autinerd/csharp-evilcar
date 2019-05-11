@@ -10,14 +10,17 @@ namespace CsharpEvilcar
 {
 	internal class CaseDescriptor
 	{
-		internal string CaseName { get; set; }
 		internal CaseTypeFlags Flags { get; set; }
-		internal CaseDescriptor[] SubCases { get; set; }
 		internal string Help { get; set; }
 		internal string AskForParameters { get; set; }
 		internal string Syntax { get; set; }
 		internal (uint, uint) ParameterLength { get; set; }
 		internal Func<IEnumerable<string>, ReturnValue> SubFunction { get; set; }
+
+		public override string ToString()
+		{
+			return $"Case {Flags.ToString().Replace(",", "").ToLower()}";
+		}
 
 		internal static ReturnValue Execute()
 		{
@@ -25,19 +28,14 @@ namespace CsharpEvilcar
 			CaseTypeFlags currentFlags = CaseTypeFlags.None;
 			foreach ((string param, int i) in parameters.Select((item, i) => (item, i)))
 			{
-				// Console.WriteLine($"Param {i}: {param}");
 				if (UserMessages.General.HelpSymbols.Contains(param))
 				{
-					return ReturnValue.GetValue(IsHelpNeeded, ( from c in Cases.CaseList
-																where c.Flags == currentFlags
-																select c ).SingleOrDefault());
+					return ReturnValue.GetValue(IsHelpNeeded, currentFlags.ToDescriptor());
 				}
 				if (Enum.TryParse(param, true, out CaseTypeFlags flag))
 				{
 					currentFlags |= flag;
-					CaseDescriptor command = ( from c in Cases.CaseList
-											   where c.Flags == currentFlags
-											   select c ).SingleOrDefault();
+					CaseDescriptor command = currentFlags.ToDescriptor();
 					if (command == default)
 					{
 						return ReturnValue.GetValue(IsCommandFunctionUndefined);
@@ -52,6 +50,14 @@ namespace CsharpEvilcar
 						{
 							parameters = GetInput(command.AskForParameters);
 							return command.SubFunction(parameters);
+						}
+						else if (parameters.Skip(i + 1).Any((item) => UserMessages.General.HelpSymbols.Contains(item)))
+						{
+							return ReturnValue.GetValue(IsHelpNeeded, currentFlags.ToDescriptor());
+						}
+						else if (parameters.Skip(i + 1).Count() < command.ParameterLength.Item1 || parameters.Skip(i + 1).Count() > command.ParameterLength.Item2)
+						{
+							return ReturnValue.GetValue(IsWrongParameterLength);
 						}
 						return command.SubFunction(parameters.Skip(i + 1));
 					}
@@ -87,9 +93,9 @@ namespace CsharpEvilcar
 				Flags = Add | Vehicle,
 				AskForParameters =
 					"Please enter now the parameters of the new vehicle in the following format:\n" +
-					"numberplate brand model class fleetNr for example: S-XY-4589 audi q5 large 3",
+					"<numberplate> <brand> <model> <category> <fleetNr> for example: S-XY-4589 audi q5 large 3",
 				Help = "Use this if you want to add a new vehicle.",
-				Syntax = "vehicle\t<numberplate>\t<brand>\t<model>\t<category>\t<fleet_ID>",
+				Syntax = "vehicle [<numberplate> <brand> <model> <category> <fleet_ID>]",
 				ParameterLength = (5, 5),
 				SubFunction = AddVehicle
 			},
@@ -98,7 +104,7 @@ namespace CsharpEvilcar
 				Flags = Add | Customer,
 				AskForParameters = "Please enter your <name> and <residence>",
 				Help = "Use this if you want to add a new customer.",
-				Syntax = "customer\t<name>\t<residence>",
+				Syntax = "customer [<name> <residence>]",
 				ParameterLength = (2, 2),
 				SubFunction = AddCustomer
 			},
@@ -113,7 +119,7 @@ namespace CsharpEvilcar
 			{
 				AskForParameters="Please enter the <vehicle_ID>  'numberplate' or 'fleet_ID' and <new_value>.",
 				Help="Use this if you want to edit a vehicle.",
-				Syntax = "vehicle\t<vehicle_ID>\t{numberplate|fleet_ID}\t<new_value>",
+				Syntax = "vehicle [<vehicle_ID> {numberplate|fleet_ID} <new_value>]",
 				ParameterLength = (3, 3),
 				Flags = Edit | Vehicle,
 				SubFunction = EditVehicle
@@ -122,7 +128,7 @@ namespace CsharpEvilcar
 			{
 				AskForParameters="Please enter the <customer_Id> 'name' or 'residence' and <new_value>.",
 				Help="Use this if you want to edit a customer.",
-				Syntax = "customer\t<customer_ID>\t{name|residence}\t<new_value>",
+				Syntax = "customer [<customer_ID> {name|residence} <new_value>]",
 				ParameterLength = (3, 3),
 				SubFunction = EditCustomer,
 				Flags = Edit | Vehicle
@@ -138,7 +144,7 @@ namespace CsharpEvilcar
 			{
 				AskForParameters="Please enter the <vehicle_ID> of the vehicle you want do delete.",
 				Help="Use this command if you want to delete a vehicle from the database.",
-				Syntax = "delete\tvehicle\t\t<vehicle_ID>",
+				Syntax = "vehicle [<vehicle_ID>]",
 				ParameterLength = (1, 1),
 				SubFunction = DeleteVehicle,
 				Flags = Delete | Vehicle
@@ -147,7 +153,7 @@ namespace CsharpEvilcar
 			{
 				AskForParameters="Please enter the <customer_id> of the customer you want to delete.",
 				Help="Use this command if you want to delete a customer from the database.",
-				Syntax = "delete\tcustomer\t<customer_ID>",
+				Syntax = "customer [<customer_ID>]",
 				ParameterLength = (1, 1),
 				SubFunction = DeleteCustomer,
 				Flags = Delete | Customer
@@ -163,7 +169,7 @@ namespace CsharpEvilcar
 			{
 				AskForParameters="Please enter 'all' if you want to see all or enter <banch_ID> if you only want so see one branch.",
 				Help="Use this command if you want to view all ",
-				Syntax = "view\tbranch\t\tall\n\t\t\t\t<branch_ID>",
+				Syntax = "branch [all | <branch_ID>]",
 				ParameterLength = (1, 1),
 				SubFunction=ViewBranch,
 				Flags = View | Branch
@@ -172,7 +178,7 @@ namespace CsharpEvilcar
 			{
 				AskForParameters="Please enter nothing if you want to view all fleets or enter the <branch_ID> for which to see all fleets.",
 				Help="Use this command if you want do view all all fleets or the fleets of one branch.",
-				Syntax = "view\tfleet\t\tall\n\t\t\t\t<branch_ID>\tall\n\t\t\t\t<branch_ID>\t<fleet_ID>",
+				Syntax = "fleet [all | <branch_ID> all | <branch_ID> <fleet_ID>]",
 				ParameterLength = (1, 2),
 				SubFunction=ViewFleet,
 				Flags = View | Fleet
@@ -182,7 +188,7 @@ namespace CsharpEvilcar
 				AskForParameters="Plase enter <branch_ID> and optional <fleet_ID> if you want to view all vehicle of a branch or a fleet in a branch.\n"+
 				"If you want to see a single car, please enter 'single' and than the <vehicle_ID>.",
 				Help="Use this command if you want to view one or many vehicles.",
-				Syntax = "view\tvehicle\t\tall\n\t\t\t\tsingle\t\t<vehicle_ID>\n\t\t\t\t<branch_ID>\t<fleet_ID>\n\t\t\t\t<branch_ID>\tall",
+				Syntax = "vehicle [all | single <vehicle_ID> | <branch_ID> <fleet_ID> | <branch_ID> all]",
 				ParameterLength = (1, 2),
 				SubFunction= ViewVehicle,
 				Flags = View | Vehicle
@@ -193,7 +199,7 @@ namespace CsharpEvilcar
 #warning view-booking AskForParameters falsche Übergabeparameter
 				Help="",
 #warning view-booking Help fehlt noch
-				Syntax = "booking\n\t\t\t\t<branch_ID>\n\t\t\t\tfleet\t\t<fleet_ID>\n\t\t\t\tcustomer\t<customer_ID>\n\t\t\t\tsingle\t\t<booking_ID>",
+				Syntax = "booking [<branch_ID> | fleet <fleet_ID> | customer <customer_ID> | single <booking_ID>]",
 				ParameterLength = (1, 2),
 				SubFunction = ViewBooking,
 				Flags = View | Booking
@@ -201,8 +207,10 @@ namespace CsharpEvilcar
 			new CaseDescriptor
 			{
 				// just for set up our database
-				AskForParameters = "Password to hash",
+				AskForParameters = "Enter Password to hash",
+				Help = "",
 				ParameterLength = (1, 1),
+				Syntax = "password <password>",
 				SubFunction = ViewPassword,
 				Flags = View | Password
 			},
@@ -210,21 +218,22 @@ namespace CsharpEvilcar
 			{
 				AskForParameters="Please enter the <vehicle_ID> and the <customer_ID> for a new booking.",
 				Help="",
-				Syntax = "rent\t<vehicle_ID>\t<customer_ID>",
+				Syntax = "rent [<vehicle_ID> <customer_ID>]",
 				ParameterLength = (1, 2),
 				SubFunction = BookingRent,
 				Flags = Rent
 			},
 			new CaseDescriptor
 			{
-				Syntax = "return\t<vehicle_ID>",
+				AskForParameters = "",
+				Help = "",
+				Syntax = "return [<vehicle_ID>]",
 				ParameterLength = (1, 1),
 				SubFunction = BookingReturn,
 				Flags = Return
 			},
 			new CaseDescriptor
 			{
-				CaseName = "logout",
 				Flags = Logout,
 				Syntax = "logout",
 				SubFunction = LogoutFromProgram,
