@@ -17,10 +17,7 @@ namespace CsharpEvilcar
 		internal (uint, uint) ParameterLength { get; set; }
 		internal Func<IEnumerable<string>, ReturnValue> SubFunction { get; set; }
 
-		public override string ToString()
-		{
-			return $"Case {Flags.ToString().Replace(",", "").ToLower()}";
-		}
+		public override string ToString() => $"Case {Flags.ToString().Replace(",", "").ToLower()}";
 
 		internal static ReturnValue Execute()
 		{

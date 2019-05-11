@@ -88,7 +88,11 @@
     <Compile Include="Database\*.cs" />
     <Compile Include="InternalLogic\*.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Prompt\*.cs" />
+    <Compile Include="Prompt\ConsoleStuff.cs" />
+    <Compile Include="Prompt\ErrorCodeFlags.cs" />
+    <Compile Include="Prompt\InputAndOutput.cs" />
+    <Compile Include="Prompt\NativeMethods.cs" />
+    <Compile Include="Prompt\ReturnValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

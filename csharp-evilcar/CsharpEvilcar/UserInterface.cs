@@ -28,16 +28,16 @@ namespace CsharpEvilcar
 						{
 							CaseDescriptor caseDescriptor = code.Case2;
 							Print(caseDescriptor.Help);
-							var c = from d in Cases.CaseList
+							System.Collections.Generic.IEnumerable<CaseDescriptor> c = from d in Cases.CaseList
 									where d.Flags.HasFlag(caseDescriptor.Flags)
 									select d;
 							if (c.Count() > 1)
 							{
 								c = from item in c where item.Flags != caseDescriptor.Flags select item;
 							}
-							foreach (var item in c)
+							foreach (CaseDescriptor item in c)
 							{
-								var tmp = item;
+								CaseDescriptor tmp = item;
 								string Syntax = "";
 								while (tmp.Flags != CaseTypeFlags.None)
 								{
