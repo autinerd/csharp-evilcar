@@ -6,7 +6,7 @@
 		internal static class General
 		{
 
-			public const string Logo =
+			public static string Logo =>
 			#region Logo
 @"
 	    ______      _ ________          
@@ -18,10 +18,9 @@
 			#endregion Logo
 			;
 
-			public const string RemindHelp = "If you need help with some command or the prompt as a whole please don't hesitate to use the '?' at any point.";
-			public const string ProgrammEnd = "See you soon!\nYour EPT-EvilProgrammingTeam";
+			public static string RemindHelp => "For help use '?' or 'help' at any point.";
+			public static string ProgrammEnd => "See you soon!\nYour EPT-EvilProgrammingTeam";
 			public static string[] HelpSymbols => new string[] {"?", "help"};
-			public const string SyntaxHead = "Syntax\nMainCase\tSubCase\t\tParameter 1\tParameter 2\t\tParameter 3\tParameter 4\t\tParameter 5";
 		}
 	}
 }

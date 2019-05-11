@@ -42,12 +42,10 @@ namespace CsharpEvilcar.Database
 			{
 				return MapToDatabase(ReadDatabaseFile());
 			}
-#pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
 			{
 				return ReturnValue.GetValue(ErrorCodeFlags.IsDatabaseError);
 			}
-#pragma warning restore CA1031 // Do not catch general exception types
 		}
 
 		/// <summary>
@@ -60,12 +58,10 @@ namespace CsharpEvilcar.Database
 			{
 				return SaveDatabaseFile();
 			}
-#pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
 			{
 				return ReturnValue.GetValue(ErrorCodeFlags.IsDatabaseError);
 			}
-#pragma warning restore CA1031 // Do not catch general exception types
 		}
 
 		private static ReturnValue SaveDatabaseFile()
@@ -76,10 +72,8 @@ namespace CsharpEvilcar.Database
 				return returnval;
 			}
 			try
-			{
-				#pragma warning disable CA1508 // Avoid dead conditional code
+			{ 
 				using (JsonTextWriter writer = new JsonTextWriter(new StreamWriter("database.json")))
-#pragma warning restore CA1508 // Avoid dead conditional code
 				{
 					jObject.WriteTo(writer);
 				}

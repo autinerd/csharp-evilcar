@@ -34,5 +34,7 @@ namespace CsharpEvilcar
 		internal static CaseTypeFlags BaseTypeOf(this CaseTypeFlags flag) => (CaseTypeFlags)( (uint)flag % (uint)Math.Pow(0x1_0000, flag.LevelOf()) );
 
 		internal static CaseDescriptor ToDescriptor(this CaseTypeFlags flag) => (from c in Cases.CaseList where c.Flags == flag select c).SingleOrDefault();
+
+		internal static bool NumberIsBetween(this (uint, uint) tuple, uint number) => number >= tuple.Item1 && number <= tuple.Item2;
 	}
 }

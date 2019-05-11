@@ -37,11 +37,7 @@ namespace CsharpEvilcar
 					{
 						return ReturnValue.GetValue(IsCommandFunctionUndefined);
 					}
-					if (command.SubFunction is null)
-					{
-						continue;
-					}
-					else
+					if (!( command.SubFunction is null ))
 					{
 						if (parameters.Skip(i + 1).Count() == 0 && command.ParameterLength.Item1 > 0)
 						{
@@ -52,17 +48,15 @@ namespace CsharpEvilcar
 						{
 							return ReturnValue.GetValue(IsHelpNeeded, currentFlags.ToDescriptor());
 						}
-						else if (parameters.Skip(i + 1).Count() < command.ParameterLength.Item1 || parameters.Skip(i + 1).Count() > command.ParameterLength.Item2)
+						else if (command.ParameterLength.NumberIsBetween((uint)parameters.Skip(i + 1).Count()))
 						{
 							return ReturnValue.GetValue(IsWrongParameterLength);
 						}
 						return command.SubFunction(parameters.Skip(i + 1));
 					}
+					continue;
 				}
-				else
-				{
-					return ReturnValue.GetValue(IsCommandFunctionUndefined);
-				}
+				return ReturnValue.GetValue(IsCommandFunctionUndefined);
 			}
 			return ReturnValue.GetValue(IsCommandFunctionUndefined);
 		}
