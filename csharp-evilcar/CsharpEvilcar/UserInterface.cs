@@ -51,7 +51,7 @@ namespace CsharpEvilcar
 						else if (code == ErrorCodeFlags.IsError)
 						{
 							Print("Error in case " + code.Case.Flags.ToString().ToLower().Replace(",", ""));
-							Print(code.Text + ( ( code == ErrorCodeFlags.IsWrongArgument ) ? ( (int)code.Options.ElementAt(0) ).ToString() : "" ));
+							Print(code.Text + ( ( code == ErrorCodeFlags.IsWrongArgument && code.Options.Count() > 0 ) ? ( (int)code.Options.ElementAt(0) ).ToString() : "" ));
 						}
 					}
 				}
