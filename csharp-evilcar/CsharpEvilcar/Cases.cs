@@ -43,7 +43,7 @@ namespace CsharpEvilcar
 				}
 
 				// check if we recognize the command name
-				if (Enum.TryParse(param, true, out CaseTypeFlags flag))
+				if (Enum.TryParse(param, true, out CaseTypeFlags flag) && !int.TryParse(param, out int _))
 				{
 					currentFlags |= flag;
 					CaseDescriptor command = currentFlags.ToDescriptor();
