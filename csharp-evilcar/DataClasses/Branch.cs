@@ -33,10 +33,11 @@ namespace CsharpEvilcar.DataClasses
 		public override string ToString() => ToString(false);
 
 		public string ToString(bool fullDetails) => fullDetails
-				? $@"Branch {Location}:
+				? $@"Branch {Database.DatabaseController.DatabaseObject.Branches.IndexOf(this)} {Location}:
 	Fleet manager: {FleetManager.ToString()}
+	Mode: {(Editable ? "(editable)" : "(readonly)")}
 	Fleets:
 		{string.Join("\n\t\t", from f in Fleets select f.ToString())}"
-				: $@"Branch {Location}: Fleet manager {FleetManager.Name}, {Fleets.Count} fleets";
+				: $@"Branch {Database.DatabaseController.DatabaseObject.Branches.IndexOf(this)} {Location}: Fleet manager {FleetManager.Name} {(Editable ? "(editable)" : "(readonly)")}, {Fleets.Count} fleets";
 	}
 }

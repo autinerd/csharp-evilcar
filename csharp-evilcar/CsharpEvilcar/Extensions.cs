@@ -73,5 +73,19 @@ namespace CsharpEvilcar
 		/// <param name="number">number to check against</param>
 		/// <returns>Whether number is in the limits or not.</returns>
 		internal static bool NumberIsBetween(this (uint, uint) tuple, uint number) => number >= tuple.Item1 && number <= tuple.Item2;
+
+		internal static int IndexOf<T>(this IEnumerable<T> enumerable, T element)
+		{
+			var a = enumerable.Select((item, index) => (item, index));
+			var b = a.Where((item) => item.item.Equals(element)).SingleOrDefault();
+			if (b.item == default)
+			{
+				return -1;
+			}
+			else
+			{
+				return b.index;
+			}
+		}
 	}
 }

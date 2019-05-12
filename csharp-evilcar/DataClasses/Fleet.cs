@@ -17,14 +17,16 @@ namespace CsharpEvilcar.DataClasses
 		/// </summary>
 		public string Location { get; set; }
 
+		public Branch BaseBranch => (from b in Database.DatabaseController.DatabaseObject.Branches where b.Fleets.Contains(this) select b).SingleOrDefault();
+
 		public override string ToString() => ToString(false);
 
 		public string ToString(bool fullDetails) => fullDetails
-				? $@"Fleet {Location}:
+				? $@"Fleet {BaseBranch.Fleets.IndexOf(this)} {Location} {(BaseBranch.Editable ? "(editable)" : "(readonly)")}:
 	{Vehicles.Count} cars ({string.Join(", ",  from v in Vehicles group v by v.Category into newGroup select newGroup.Count() + " " + System.Enum.GetName(typeof(Vehicle.CategoryEnum), newGroup.Key) )})
 	Cars:
 		{string.Join("\n\t\t",  from v in Vehicles select v.ToString() )}
 "
-				: $"Fleet {Location}: {Vehicles.Count} cars ({string.Join(", ",  from v in Vehicles group v by v.Category into newGroup select newGroup.Count() + " " + System.Enum.GetName(typeof(Vehicle.CategoryEnum), newGroup.Key) )})";
+				: $"Fleet {BaseBranch.Fleets.IndexOf(this)} {Location} {(BaseBranch.Editable ? "(editable)" : "(readonly)")}: {Vehicles.Count} cars ({string.Join(", ",  from v in Vehicles group v by v.Category into newGroup select newGroup.Count() + " " + System.Enum.GetName(typeof(Vehicle.CategoryEnum), newGroup.Key) )})";
 	}
 }
