@@ -253,7 +253,7 @@ namespace CsharpEvilcar
 				AskForParameters = "Please enter the <vehicle_ID> and the <customer_ID> for a new booking.",
 				Help = "Adds a new booking.",
 				Syntax = "rent [<vehicle_ID> <customer_ID>]",
-				ParameterLength = (1, 2),
+				ParameterLength = (2, 2),
 				SubFunction = BookingRent,
 				Flags = Rent
 			},
