@@ -15,7 +15,7 @@ namespace CsharpEvilcar
 		/// <returns><see cref="ReturnValue.Undefined(CaseTyps.Base)"/></returns>
 		internal static ReturnValue ViewBranch(IEnumerable<string> parameters)
 		{
-			_ = InputOutput.Print("    ", "");
+			InputOutput.Print("    ", "");
 
 			return parameters.ElementAtOrDefault(0).AllOrNullOrEmpty()
 				? InputOutput.Print(string.Join("\n", from b in DatabaseObject.Branches
@@ -32,7 +32,7 @@ namespace CsharpEvilcar
 		/// <returns></returns>
 		internal static ReturnValue ViewFleet(IEnumerable<string> parameters)
 		{
-			_ = InputOutput.Print("    ", "");
+			InputOutput.Print("    ", "");
 
 			if (parameters.ElementAtOrDefault(0).AllOrNullOrEmpty())
 			{
@@ -61,7 +61,7 @@ namespace CsharpEvilcar
 		/// <returns></returns>
 		internal static ReturnValue ViewVehicle(IEnumerable<string> parameters)
 		{
-			_ = InputOutput.Print("    ", "");
+			InputOutput.Print("    ", "");
 
 			if (parameters.ElementAt(0) == "single")
 			{
@@ -106,7 +106,7 @@ namespace CsharpEvilcar
 		/// <returns></returns>
 		internal static ReturnValue ViewCustomer(IEnumerable<string> parameters)
 		{
-			_ = InputOutput.Print("    ", "");
+			InputOutput.Print("    ", "");
 
 			return parameters.ElementAtOrDefault(0).AllOrNullOrEmpty()
 					? InputOutput.Print(string.Join("\n", from c in DatabaseObject.Customers
@@ -125,6 +125,8 @@ namespace CsharpEvilcar
 		/// <returns></returns>
 		internal static ReturnValue ViewBooking(IEnumerable<string> parameters)
 		{
+			InputOutput.Print("    ", "");
+			
 			if (parameters.ElementAt(0).IsValidIndex(DatabaseObject.Branches, out uint branchID))
 			{
 				return InputOutput.Print(string.Join("\n", from c in DatabaseObject.Customers
