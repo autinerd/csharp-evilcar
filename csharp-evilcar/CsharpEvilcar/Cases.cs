@@ -156,7 +156,7 @@ namespace CsharpEvilcar
 				Syntax = "customer [<customer_ID> {name|residence} <new_value>]",
 				ParameterLength = (3, 3),
 				SubFunction = EditCustomer,
-				Flags = Edit | Vehicle
+				Flags = Edit | Customer
 			},
 			new CaseDescriptor
 			{
