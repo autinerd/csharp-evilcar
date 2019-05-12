@@ -32,7 +32,7 @@ namespace CsharpEvilcar.Prompt
 		{
 			if (str != null)
 			{
-				Console.Write(( withPrompt ? ">>> " : "" ) +
+				Console.Write(( withPrompt ? ">>> " : "    " ) +
 					Regex.Replace(str, @"\n", "\n    ") +
 					( end ?? "\n" ));
 			}
