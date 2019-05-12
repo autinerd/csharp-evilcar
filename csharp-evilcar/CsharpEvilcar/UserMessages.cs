@@ -15,7 +15,7 @@ namespace CsharpEvilcar
 			{ IsWrongArgument, "Error in recognizing argument " },
 			{ IsDatabaseError, "A database error happend." },
 			{ IsNoUserLoggedIn, "You are not logged in." },
-			{ IsCommandAbort, "The command was not executed." },
+			{ IsCommandAbort, "Command aborted." },
 			{ IsWrongParameterLength, "The amount of entered parameters doesn't match the amount needed." },
 			{ IsCommandFunctionUndefined, "The command could not be understood." },
 			{ None, "" }

@@ -58,6 +58,10 @@ namespace CsharpEvilcar
 					if (parameters.Skip(i + 1).Count() == 0 && command.ParameterLength.Item1 > 0)
 					{
 						string[] newparams = GetInput(command.AskForParameters);
+						if (newparams.Count() == 0)
+						{
+							return ReturnValue.GetValue(IsCommandAbort);
+						}
 						parameters = parameters.Concat(newparams).ToArray();
 						i = 0;
 						continue;
