@@ -22,7 +22,7 @@ namespace CsharpEvilcar
 													  select b.ToString(false)))
 				: parameters.ElementAtOrDefault(0).IsValidIndex(DatabaseObject.Branches, out uint branchID)
 					? InputOutput.Print(DatabaseObject.Branches.ElementAt(branchID).ToString(true))
-					: ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+					: ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
 		}
 
 		/// <summary>
@@ -48,10 +48,10 @@ namespace CsharpEvilcar
 														  select f.ToString(false)))
 					: parameters.ElementAtOrDefault(1).IsValidIndex(branch.Fleets, out uint fleetID)
 						? InputOutput.Print(branch.Fleets.ElementAt(fleetID).ToString(true))
-						: ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+						: ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 1);
 
 			}
-			return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+			return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
 		}
 
 		/// <summary>
@@ -71,7 +71,7 @@ namespace CsharpEvilcar
 										  from v in f.Vehicles
 										  where v.VehicleID == vehicleID
 										  select v.ToString() ).SingleOrDefault())
-					: ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+					: ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 1);
 			}
 			else if (parameters.ElementAt(0).AllOrNullOrEmpty())
 			{
@@ -94,9 +94,9 @@ namespace CsharpEvilcar
 					return InputOutput.Print(string.Join("\n", from v in branch.Fleets.ElementAt(fleetID).Vehicles
 															   select v.ToString()));
 				}
-				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 1);
 			}
-			return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+			return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
 		}
 
 		/// <summary>
@@ -115,13 +115,13 @@ namespace CsharpEvilcar
 						? InputOutput.Print(( from c in DatabaseObject.Customers
 											  where c.CustomerID == i
 											  select c.ToString(true) ).SingleOrDefault())
-						: ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+						: ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
 		}
 
 		/// <summary>
 		/// View booking(s)
 		/// </summary>
-		/// <param name="parameters">(0): branchID | "vehicle" | "customer" | "booking" </param>
+		/// <param name="parameters">(0): branchID | "vehicle" | "customer" | "booking", </param>
 		/// <returns></returns>
 		internal static ReturnValue ViewBooking(IEnumerable<string> parameters)
 		{
@@ -132,7 +132,11 @@ namespace CsharpEvilcar
 														   where DatabaseObject.Branches.ElementAt(branchID).Fleets.Any((f) => f.Vehicles.Contains(book.Vehicle))
 														   select book));
 			}
-			else if (int.TryParse(parameters.ElementAt(1), out int ID))
+			if (parameters.Count() == 1)
+			{
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
+			}
+			if (int.TryParse(parameters.ElementAt(1), out int ID))
 			{
 				switch (parameters.ElementAt(0))
 				{
@@ -155,10 +159,13 @@ namespace CsharpEvilcar
 												   from b in c.Bookings
 												   select b ).SingleOrDefault().ToString(true));
 					default:
-						break;
+						return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
 				}
 			}
-			return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+			else
+			{
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 1);
+			}
 		}
 
 		internal static ReturnValue ViewPassword(IEnumerable<string> parameters) => InputOutput.Print(encoder.Encode(parameters.First()));

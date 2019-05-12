@@ -16,21 +16,27 @@ namespace CsharpEvilcar
 		/// <returns>Error code</returns>
 		internal static ReturnValue BookingRent(IEnumerable<string> parameters)
 		{
-			if (!( int.TryParse(parameters.ElementAt(0), out int vehID)
-				&& int.TryParse(parameters.ElementAt(1), out int cusID) ))
+			if (!int.TryParse(parameters.ElementAt(0), out int vehID))
 			{
-				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
+			}
+			if (!int.TryParse(parameters.ElementAt(1), out int cusID))
+			{
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 1);
 			}
 			IEnumerable<Customer> cc = from c in DatabaseObject.Customers
 									   where c.CustomerID == cusID
 									   select c;
-			if (!( ( from f in DatabaseObject.MyBranch.Fleets
-					 from v in f.Vehicles
-					 where v.VehicleID == vehID
-					 select v ).Count() == 1
-				  && cc.Count() == 1 ))
+			if (( from f in DatabaseObject.MyBranch.Fleets
+				   from v in f.Vehicles
+				   where v.VehicleID == vehID
+				   select v ).Count() != 1)
 			{
-				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
+			}
+			if (cc.Count() != 1)
+			{
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 1);
 			}
 			cc.Single().Bookings.Add(new Booking(false)
 			{
@@ -49,7 +55,7 @@ namespace CsharpEvilcar
 		{
 			if (!int.TryParse(parameters.ElementAt(0), out int vehID))
 			{
-				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
 			}
 			IEnumerable<Booking> vc = from c in DatabaseObject.Customers
 									  from b in c.Bookings
@@ -57,7 +63,7 @@ namespace CsharpEvilcar
 									  select b;
 			if (vc.Count() != 1)
 			{
-				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
 			}
 			vc.Single().Enddate = DateTime.Today;
 			return ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);

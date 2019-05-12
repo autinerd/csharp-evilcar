@@ -40,6 +40,11 @@ namespace CsharpEvilcar.Prompt
 
 		public override int GetHashCode() => Flags.GetHashCode();
 
+		public static ReturnValue operator +(ReturnValue first, CaseDescriptor second)
+		{
+			first.Case = second;
+			return first;
+		}
 		public static implicit operator bool(ReturnValue value) => value.Flags != ErrorCodeFlags.IsRequestedLogout;
 	}
 }

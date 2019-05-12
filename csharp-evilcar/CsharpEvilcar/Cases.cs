@@ -63,7 +63,7 @@ namespace CsharpEvilcar
 							parameters = parameters.Concat(newparams).ToArray();
 							continue;
 						}
-						return command.SubFunction(newparams);
+						return command.SubFunction(newparams) + command;
 					}
 					// user wrote '?' or 'help' somewhere
 					else if (parameters.Skip(i + 1).Any((item) => UserMessages.General.HelpSymbols.Contains(item)))
@@ -84,7 +84,7 @@ namespace CsharpEvilcar
 					// command recognized, run function with parameters
 					else
 					{
-						return command.SubFunction(parameters.Skip(i + 1));
+						return command.SubFunction(parameters.Skip(i + 1)) + command;
 					}
 				}
 				return ReturnValue.GetValue(IsCommandFunctionUndefined);
@@ -187,14 +187,14 @@ namespace CsharpEvilcar
 			{
 				Syntax = "view",
 				AskForParameters = "Please enter if you want to view 'branch', 'fleet', 'vehicle', 'customer' or 'bookings'.",
-				Help = "Use this if you want to view data from the database.",
+				Help = "Displays database data.",
 				Flags = View,
 				ParameterLength = (1, int.MaxValue)
 			},
 			new CaseDescriptor
 			{
 				AskForParameters = "Please enter 'all' if you want to see all or enter <banch_ID> if you only want so see one branch.",
-				Help = "Use this command if you want to view all ",
+				Help = "Displays one or all branches",
 				Syntax = "branch [all | <branch_ID>]",
 				ParameterLength = (1, 1),
 				SubFunction = ViewBranch,
@@ -203,7 +203,7 @@ namespace CsharpEvilcar
 			new CaseDescriptor
 			{
 				AskForParameters = "Please enter nothing if you want to view all fleets or enter the <branch_ID> for which to see all fleets.",
-				Help = "Use this command if you want do view all all fleets or the fleets of one branch.",
+				Help = "Displays one or multiple fleets.",
 				Syntax = "fleet [all | <branch_ID> all | <branch_ID> <fleet_ID>]",
 				ParameterLength = (1, 2),
 				SubFunction = ViewFleet,
@@ -213,7 +213,7 @@ namespace CsharpEvilcar
 			{
 				AskForParameters = "Plase enter <branch_ID> and optional <fleet_ID> if you want to view all vehicle of a branch or a fleet in a branch.\n"+
 				"If you want to see a single car, please enter 'single' and than the <vehicle_ID>.",
-				Help = "Use this command if you want to view one or many vehicles.",
+				Help = "Displays one or multiple vehicles.",
 				Syntax = "vehicle [all | single <vehicle_ID> | <branch_ID> <fleet_ID> | <branch_ID> all]",
 				ParameterLength = (1, 2),
 				SubFunction= ViewVehicle,
@@ -223,17 +223,15 @@ namespace CsharpEvilcar
 			{
 				Flags = View | Customer,
 				AskForParameters = "Please enter the <customer_ID> of the customer you want to see or 'all' for all customers.",
-				Help = "Use this command if you want to view a customers data.",
+				Help = "Displays one or all customers.",
 				Syntax = "customer [all | <customer_ID>]",
 				SubFunction = ViewCustomer,
 				ParameterLength = (1, 1)
 			},
 			new CaseDescriptor
 			{
-				AskForParameters = "Fehlt noch.",
-#warning view-booking AskForParameters falsche Übergabeparameter
-				Help = "",
-#warning view-booking Help fehlt noch
+				AskForParameters = "Please enter the <branch_ID> or one of ('fleet', 'customer') with their respective IDs or 'single' with the <booking_ID>",
+				Help = "Displays one or multiple bookings.",
 				Syntax = "booking [<branch_ID> | fleet <fleet_ID> | customer <customer_ID> | single <booking_ID>]",
 				ParameterLength = (1, 2),
 				SubFunction = ViewBooking,
@@ -252,7 +250,7 @@ namespace CsharpEvilcar
 			new CaseDescriptor
 			{
 				AskForParameters = "Please enter the <vehicle_ID> and the <customer_ID> for a new booking.",
-				Help = "",
+				Help = "Adds a new booking.",
 				Syntax = "rent [<vehicle_ID> <customer_ID>]",
 				ParameterLength = (1, 2),
 				SubFunction = BookingRent,
@@ -260,8 +258,8 @@ namespace CsharpEvilcar
 			},
 			new CaseDescriptor
 			{
-				AskForParameters = "",
-				Help = "",
+				AskForParameters = "Please enter the <vehicle_ID> to return the vehicle and close the specific booking.",
+				Help = "Returns a vehicle and closes the booking.",
 				Syntax = "return [<vehicle_ID>]",
 				ParameterLength = (1, 1),
 				SubFunction = BookingReturn,

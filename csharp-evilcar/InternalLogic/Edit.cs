@@ -18,7 +18,7 @@ namespace CsharpEvilcar
 		{
 			if (!int.TryParse(parameters.ElementAt(0), out int vehID))
 			{
-				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
 			}
 			IEnumerable<Fleet> fleets = from f in DatabaseObject.MyBranch.Fleets
 										from v in f.Vehicles
@@ -27,7 +27,7 @@ namespace CsharpEvilcar
 
 			if (!( fleets.Count() == 1 && fleets.Single().Vehicles.Count((v) => v.VehicleID == vehID) == 1 ))
 			{
-				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
 			}
 
 			Vehicle veh = ( from ve in fleets.Single().Vehicles where ve.VehicleID == vehID select ve ).Single();
@@ -40,12 +40,12 @@ namespace CsharpEvilcar
 						veh.Numberplate = parameters.ElementAt(2);
 						return ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);
 					}
-					return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+					return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 2);
 				case "fleet":
 					int fleetnum;
 					if (!int.TryParse(parameters.ElementAt(2), out fleetnum) || DatabaseObject.MyBranch.Fleets.Count() <= fleetnum)
 					{
-						return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+						return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 2);
 					}
 					if (fleets.Single() == DatabaseObject.MyBranch.Fleets.ElementAt(fleetnum))
 					{
@@ -54,11 +54,13 @@ namespace CsharpEvilcar
 					else
 					{
 						DatabaseObject.MyBranch.Fleets.ElementAt(fleetnum).Vehicles.Add(veh);
-						return fleets.Single().Vehicles.Remove(veh) ? ReturnValue.GetValue(ErrorCodeFlags.IsSuccess) : ReturnValue.GetValue(ErrorCodeFlags.IsDatabaseError);
+						return fleets.Single().Vehicles.Remove(veh) 
+							? ReturnValue.GetValue(ErrorCodeFlags.IsSuccess) 
+							: ReturnValue.GetValue(ErrorCodeFlags.IsDatabaseError);
 
 					}
 				default:
-					return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+					return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 1);
 			}
 		}
 
@@ -72,7 +74,7 @@ namespace CsharpEvilcar
 			if (!( int.TryParse(parameters.ElementAt(0), out int cusID)
 				&& DatabaseObject.Customers.Any((c) => c.CustomerID == cusID) ))
 			{
-				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+				return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
 			}
 			Customer customer = ( from c in DatabaseObject.Customers where c.CustomerID == cusID select c ).Single();
 			switch (parameters.ElementAt(1))
@@ -84,7 +86,7 @@ namespace CsharpEvilcar
 					customer.Residence = parameters.ElementAt(2);
 					return ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);
 				default:
-					return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument);
+					return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 1);
 			}
 		}
 	}
