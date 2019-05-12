@@ -20,9 +20,9 @@ namespace CsharpEvilcar
 
 		public override string ToString() => $"Case {Flags.ToString().Replace(",", "").ToLower()}";
 
-		internal static ReturnValue Execute()
+		internal static ReturnValue Execute(string[] args)
 		{
-			string[] parameters = GetInput();
+			string[] parameters = args ?? GetInput();
 
 			// when empty input, just do nothing
 			if (parameters.Count() == 0)
@@ -54,19 +54,16 @@ namespace CsharpEvilcar
 						return ReturnValue.GetValue(IsCommandFunctionUndefined);
 					}
 
-					// if user specified no parameters, ask for them
+					// if user specified no parameters, ask for them and begin recognizing again
 					if (parameters.Skip(i + 1).Count() == 0 && command.ParameterLength.Item1 > 0)
 					{
 						string[] newparams = GetInput(command.AskForParameters);
-						if (command.SubFunction is null)
-						{
-							parameters = parameters.Concat(newparams).ToArray();
-							continue;
-						}
-						return command.SubFunction(newparams) + command;
+						parameters = parameters.Concat(newparams).ToArray();
+						i = 0;
+						continue;
 					}
 					// user wrote '?' or 'help' somewhere
-					else if (parameters.Skip(i + 1).Any((item) => UserMessages.General.HelpSymbols.Contains(item)))
+					else if (UserMessages.General.HelpSymbols.Contains(parameters.ElementAtOrDefault(i + 1)))
 					{
 						return ReturnValue.GetValue(IsHelpNeeded, currentFlags.ToDescriptor());
 					}

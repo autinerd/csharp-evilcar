@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 
 namespace CsharpEvilcar.Prompt
 {
-
 	internal static class InputOutput
 	{
 		internal static string[] GetInput(string message = null)
@@ -40,8 +39,12 @@ namespace CsharpEvilcar.Prompt
 			return returns ?? ReturnValue.GetValue(ErrorCodeFlags.IsSuccess);
 		}
 
-		internal static bool Login()
+		internal static bool Login((string, string) userpass = default)
 		{
+			if (userpass.Item1 != null && userpass.Item2 != null)
+			{
+				return Database.DatabaseController.CheckUserCredentials(userpass.Item1, userpass.Item2);
+			}
 			_ = Print("");
 			_ = Print(UserMessages.Login.AskForUsername, "");
 			return InputAndCheckPassword(Console.ReadLine()); // read username and go on with password query and password check

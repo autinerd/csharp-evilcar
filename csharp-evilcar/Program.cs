@@ -2,6 +2,6 @@
 {
 	internal static class Program
 	{
-		private static void Main() => UserInterface.Main();
+		private static int Main(string[] args) => UserInterface.Main(args);
 	}
 }

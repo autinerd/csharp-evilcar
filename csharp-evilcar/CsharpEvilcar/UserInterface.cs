@@ -7,22 +7,29 @@ namespace CsharpEvilcar
 {
 	internal static class UserInterface
 	{
-		public static void Main()
+		public static int Main(string[] args)
 		{
+			bool have_args = args.Count() > 2;
 			#if NET472
 			ConsoleStuff.EnableQuickEdit();
 			#endif
 			// print programm begin info
-			Print(UserMessages.General.Logo);
-			// login and run the prompt
-			if (Login())
+			if (!have_args)
 			{
-				Print(UserMessages.Login.Successful);
-				Print(UserMessages.General.RemindHelp);
+				Print(UserMessages.General.Logo);
+			}
+			// login and run the prompt
+			if (Login(have_args ? (args[0], args[1]) : default))
+			{
+				if (!have_args)
+				{
+					Print(UserMessages.Login.Successful);
+					Print(UserMessages.General.RemindHelp);
+				}
 				ReturnValue code;
 				if (( code = Database.DatabaseController.LoadDatabase() ) == ErrorCodeFlags.IsPass)
 				{
-					while (code = CaseDescriptor.Execute())
+					while (code = CaseDescriptor.Execute(have_args ? args.Skip(2).ToArray() : null))
 					{
 						if (code == ErrorCodeFlags.IsHelpNeeded)
 						{
@@ -50,8 +57,19 @@ namespace CsharpEvilcar
 						}
 						else if (code == ErrorCodeFlags.IsError)
 						{
-							Print("Error in case " + code.Case.Flags.ToString().ToLower().Replace(",", ""));
+							if (code.Case != null)
+							{
+								Print("Error in case " + code.Case.Flags.ToString().ToLower().Replace(",", ""));
+							}
 							Print(code.Text + ( ( code == ErrorCodeFlags.IsWrongArgument && code.Options.Count() > 0 ) ? ( (int)code.Options.ElementAt(0) ).ToString() : "" ));
+							if (have_args)
+							{
+								return (int)code.Flags;
+							}
+						}
+						if (have_args)
+						{
+							break;
 						}
 					}
 				}
@@ -63,13 +81,17 @@ namespace CsharpEvilcar
 			else
 			{
 				Print(UserMessages.Login.Failed);
+				return 1;
 			}
 
 			// close the programm
-			Print(UserMessages.General.ProgrammEnd);
-			Print("", "");
-			Console.ReadKey(true);
-
+			if (!have_args)
+			{
+				Print(UserMessages.General.ProgrammEnd);
+				Print("", "");
+				Console.ReadKey(true);
+			}
+			return 0;
 		}
 	}
 
