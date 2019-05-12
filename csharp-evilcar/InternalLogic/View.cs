@@ -153,10 +153,11 @@ namespace CsharpEvilcar
 																	 ( from c in DatabaseObject.Customers
 																	   from b in c.Bookings
 																	   where c.CustomerID == ID
-																	   select b.Price ).Sum())));
+																	   select b.Price ).Sum() + " EUR")));
 					case "single":
 						return InputOutput.Print(( from c in DatabaseObject.Customers
 												   from b in c.Bookings
+												   where b.BookingID == ID
 												   select b ).SingleOrDefault().ToString(true));
 					default:
 						return ReturnValue.GetValue(ErrorCodeFlags.IsWrongArgument, null, 0);
